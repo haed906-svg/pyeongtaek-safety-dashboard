@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>안전방재반 SOP 보고자료</title>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red:#A50034; --red2:#c0003d; --red3:#fff0f3;
+  --dark:#1a2332; --dark2:#3d4f61; --dark3:#7a8fa6;
+  --bg:#f5f7fa; --white:#fff;
+  --border:#dde3ea; --border2:#c8d0dc;
+  --shadow:0 1px 4px rgba(0,0,0,.08);
+  --shadow2:0 2px 12px rgba(0,0,0,.10);
+  --green:#1b5e20; --green2:#2e7d32; --green3:#e8f5e9;
+  --orange:#d4600a; --orange3:#fff8f0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--dark);font-size:14px;line-height:1.5}
+
+/* ── 헤더 ── */
+.hdr{background:var(--red);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:52px;box-shadow:0 2px 8px rgba(165,0,52,.25);position:sticky;top:0;z-index:200}
+.hdr-logo{display:flex;align-items:center;gap:10px}
+.hdr-logo .lg-mark{background:#fff;border-radius:3px;padding:2px 7px;font-size:13px;font-weight:900;color:var(--red);letter-spacing:.5px}
+.hdr-title{color:rgba(255,255,255,.9);font-size:14px;font-weight:600;letter-spacing:-.3px}
+.hdr-date{color:rgba(255,255,255,.7);font-size:11px}
+
+/* ── 레이아웃 ── */
+.wrap{max-width:720px;margin:0 auto;padding:20px 16px 60px;display:flex;flex-direction:column;gap:18px}
+
+/* ── 섹션 라벨 ── */
+.sec-label{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;color:var(--dark);padding:6px 14px 6px 10px;margin-bottom:-8px;background:var(--white);border-left:4px solid var(--red);border-radius:0 6px 6px 0;box-shadow:var(--shadow)}
+.sec-label .lnum{background:var(--red);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:20px}
+
+/* ── 카드 ── */
+.card{background:var(--white);border-radius:12px;overflow:hidden;box-shadow:var(--shadow2)}
+.card-hdr{background:var(--red);padding:12px 18px;display:flex;align-items:center;gap:10px}
+.card-hdr h2{font-size:14px;font-weight:700;color:#fff}
+.card-badge{font-size:10px;font-weight:700;background:rgba(0,0,0,.2);color:rgba(255,255,255,.85);padding:2px 8px;border-radius:20px;white-space:nowrap}
+.card-body{padding:16px 18px}
+
+/* ── 표지 ── */
+.cover{background:var(--dark);border-radius:12px;overflow:hidden;box-shadow:var(--shadow2)}
+.cover-body{padding:32px 22px 22px;position:relative;overflow:hidden}
+.cover-body::before{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;border:2px solid rgba(165,0,52,.12)}
+.cover-tag{display:inline-block;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:3px 10px;letter-spacing:1.5px;border-radius:2px;margin-bottom:12px}
+.cover-title{font-size:22px;font-weight:900;color:var(--dark);line-height:1.3;letter-spacing:-.5px;margin-bottom:6px}
+.cover-title span{color:var(--red)}
+.cover-sub{font-size:12px;color:var(--dark3);margin-bottom:20px}
+.cover-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.chip{background:var(--bg);border:1px solid var(--border2);border-radius:20px;padding:4px 12px}
+.chip label{display:block;font-size:9px;color:var(--dark3);letter-spacing:1px;text-transform:uppercase}
+.chip span{font-size:11px;color:var(--dark);font-weight:600}
+.source-box{background:#fff0f3;border:1px solid #ffd0d8;border-radius:8px;padding:11px 14px}
+.source-box .src-label{font-size:9px;font-weight:700;color:var(--red);letter-spacing:1.5px;margin-bottom:5px}
+.source-box p{font-size:11px;color:var(--dark2);line-height:1.7}
+.source-box strong{color:var(--red)}
+
+/* ── 필요성 항목 ── */
+.need-list{display:flex;flex-direction:column;gap:8px}
+.need-item{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--border)}
+.need-item.accent{background:var(--red3);border-color:#ffd0d8}
+.need-icon{font-size:20px;flex-shrink:0}
+.need-text h3{font-size:13px;font-weight:700;margin-bottom:2px}
+.need-item.accent .need-text h3{color:var(--red)}
+.need-text p{font-size:12px;color:var(--dark2);line-height:1.6}
+.quote-box{margin-top:12px;background:var(--dark);border-radius:8px;padding:11px 14px}
+.quote-box p{font-size:11.5px;color:rgba(255,255,255,.8);line-height:1.7}
+.quote-box strong{color:#ffb3c1}
+
+/* ── 아코디언 비교 섹션 ── */
+.compare-intro{display:flex;gap:8px;margin-bottom:14px}
+.cmp-stat{flex:1;border-radius:10px;padding:14px 12px;text-align:center}
+.cmp-stat.dark{background:var(--dark)}
+.cmp-stat.red{background:var(--red3);border:1px solid #ffd0d8}
+.cmp-stat .val{font-size:36px;font-weight:900;line-height:1;display:block;margin-bottom:2px}
+.cmp-stat.dark .val{color:#fff}
+.cmp-stat.red .val{color:var(--red)}
+.cmp-stat .sub{font-size:10px}
+.cmp-stat.dark .sub{color:rgba(255,255,255,.5)}
+.cmp-stat.red .sub{color:var(--dark2)}
+.cmp-stat .note{font-size:10px;margin-top:6px}
+.cmp-stat.dark .note{color:rgba(255,255,255,.3)}
+.cmp-stat.red .note{color:#aaa}
+.cmp-arrow{display:flex;align-items:center;justify-content:center;flex-shrink:0;flex-direction:column;gap:3px}
+.cmp-arrow span{font-size:16px;color:var(--red)}
+.cmp-arrow small{font-size:9px;color:var(--dark3);text-align:center;line-height:1.3}
+
+/* 아코디언 */
+.chapter{margin-bottom:8px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.chap-btn{width:100%;background:none;border:none;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:10px;padding:11px 14px;text-align:left;background:var(--dark);transition:background .15s}
+.chap-btn:hover{background:#2a3545}
+.chap-icon{font-size:14px;flex-shrink:0}
+.chap-title{font-size:13px;font-weight:700;color:#fff;flex:1}
+.chap-count{font-size:10px;font-weight:700;background:var(--red);color:#fff;padding:2px 8px;border-radius:20px;flex-shrink:0}
+.chap-arrow{font-size:11px;color:rgba(255,255,255,.4);transition:transform .25s;flex-shrink:0}
+.chap-btn.open .chap-arrow{transform:rotate(180deg)}
+
+.chap-body{display:none;padding:10px 12px;background:#f9f9fb;border-top:1px solid var(--border)}
+.chap-body.open{display:block}
+.sop-item-row{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:6px;transition:background .12s}
+.sop-item-row:hover{background:#f0f0f5}
+.sop-code{font-size:10px;font-weight:700;color:var(--dark3);min-width:54px;flex-shrink:0}
+.sop-name{font-size:12px;color:var(--dark2);flex:1;line-height:1.4}
+.sop-tag{font-size:9px;font-weight:700;padding:1px 7px;border-radius:20px;flex-shrink:0;white-space:nowrap}
+.sop-tag.apply{background:var(--red3);color:var(--red);border:1px solid #ffd0d8}
+.sop-tag.ssg-tag{background:#e8f0ff;color:#1a3a6b;border:1px solid #c8d9f5}
+
+/* SSG 아코디언은 파란 헤더 */
+.chap-btn.ssg-hdr{background:#1a3a6b}
+.chap-btn.ssg-hdr:hover{background:#22498a}
+.chap-count.ssg-cnt{background:#e8f0ff;color:#1a3a6b}
+
+/* ── 안전방재반 현황 패널 ── */
+.team-panel{background:var(--red3);border:1px solid #ffd0d8;border-radius:10px;padding:14px 16px;margin-top:12px}
+.team-panel-title{font-size:11px;font-weight:700;color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.team-panel-title::before{content:'';width:3px;height:12px;background:var(--red);border-radius:2px;display:inline-block}
+
+.prog-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #ffd0d8}
+.prog-item:last-child{border-bottom:none}
+.prog-num{font-size:10px;font-weight:700;color:var(--red);min-width:16px;text-align:center;flex-shrink:0}
+.prog-name{flex:1;font-size:12px;font-weight:500;color:var(--dark);line-height:1.4}
+.prog-name small{display:block;font-size:10px;color:var(--dark3);font-weight:400}
+.prog-wrap{min-width:70px;text-align:right;flex-shrink:0}
+.prog-bg{width:62px;height:5px;background:rgba(165,0,52,.15);border-radius:3px;overflow:hidden;margin-left:auto;margin-bottom:2px}
+.prog-fill{height:100%;border-radius:3px}
+.f70{background:var(--orange)} .f50{background:var(--red)} .f0{background:#ccc}
+.prog-pct{font-size:10px;font-weight:700;display:block}
+.t70{color:var(--orange)} .t50{color:var(--red)} .t0{color:#bbb}
+
+/* ── 화재절차 예시 ── */
+.flow-steps{display:flex;flex-direction:column;gap:0}
+.flow-step{display:flex;gap:14px;position:relative}
+.flow-step:not(:last-child)::after{content:'';position:absolute;left:19px;top:40px;width:2px;height:calc(100% - 20px);background:var(--border)}
+.step-circle{width:40px;height:40px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1}
+.step-circle span{font-size:12px;font-weight:900;color:#fff}
+.step-right{flex:1;padding-bottom:18px}
+.step-title{font-size:14px;font-weight:700;color:var(--dark);margin:8px 0 7px}
+.step-items{display:flex;flex-direction:column;gap:4px}
+.step-item{display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:var(--bg);border-radius:6px}
+.step-bdg{font-size:9px;font-weight:700;color:var(--red);background:var(--red3);border:1px solid #ffd0d8;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.step-item p{font-size:12px;color:var(--dark);line-height:1.55}
+.flow-note{margin-top:12px;padding:10px 14px;background:#fff8e6;border:1px solid #ffd080;border-radius:8px;font-size:12px;color:#7a4800;line-height:1.6}
+
+/* ── Summary ── */
+.sum-grid{display:flex;gap:8px;margin-bottom:12px}
+.sum-chip{flex:1;border-radius:10px;padding:12px 8px;text-align:center;border:1px solid var(--border)}
+.sum-chip .val{font-size:28px;font-weight:900;display:block;line-height:1;margin-bottom:3px}
+.sum-chip small{font-size:10px;color:var(--dark3)}
+.sum-chip.done{background:var(--green3);border-color:#a5d6a7} .sum-chip.done .val{color:var(--green2)}
+.sum-chip.ing{background:var(--orange3);border-color:#ffd0a0} .sum-chip.ing .val{color:var(--orange)}
+.sum-chip.none{background:var(--bg)} .sum-chip.none .val{color:#bbb}
+.bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--dark3);margin-bottom:5px}
+.bar-label strong{color:var(--red);font-size:13px}
+.bar-bg{height:9px;background:#eee;border-radius:5px;overflow:hidden;margin-bottom:14px}
+.bar-fill{height:100%;width:52%;background:linear-gradient(to right,var(--green2),var(--red));border-radius:5px}
+.action-grid{display:flex;flex-direction:column;gap:8px}
+.action-item{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;border-radius:8px;border:1px solid var(--border)}
+.action-item.red-c{background:var(--red3);border-color:#ffd0d8}
+.action-item.blue-c{background:#f0f6ff;border-color:#c8d9f5}
+.action-icon{font-size:18px;flex-shrink:0}
+.action-text h3{font-size:13px;font-weight:700;margin-bottom:5px}
+.action-item.red-c .action-text h3{color:var(--red)}
+.action-item.blue-c .action-text h3{color:#1a3a6b}
+.action-text ul{list-style:none;display:flex;flex-direction:column;gap:3px}
+.action-text ul li{font-size:12px;color:var(--dark);padding-left:12px;position:relative;line-height:1.55}
+.action-text ul li::before{content:'›';position:absolute;left:0;font-weight:700}
+.action-item.red-c ul li::before{color:var(--red)}
+.action-item.blue-c ul li::before{color:#1a3a6b}
+.dark-box{background:var(--dark);border-radius:8px;padding:13px 16px;margin-top:12px;display:flex;align-items:flex-start;gap:10px}
+.dark-box p{font-size:12px;color:rgba(255,255,255,.85);line-height:1.7}
+.dark-box strong{color:#ffb3c1}
+
+/* ── SSG 정의 ── */
+.ssg-cmp{display:flex;gap:8px;margin-bottom:14px}
+.ssg-box{flex:1;border-radius:10px;padding:13px 12px;text-align:center}
+.ssg-box.d{background:var(--dark)}
+.ssg-box.r{background:var(--red3);border:1px solid #ffd0d8}
+.ssg-box .ssg-lbl{font-size:9px;letter-spacing:1.5px;margin-bottom:5px}
+.ssg-box.d .ssg-lbl{color:rgba(255,255,255,.35)}
+.ssg-box.r .ssg-lbl{color:var(--red)}
+.ssg-box .ssg-name{font-size:13px;font-weight:800;margin-bottom:4px}
+.ssg-box.d .ssg-name{color:#fff}
+.ssg-box.r .ssg-name{color:var(--red)}
+.ssg-box .ssg-desc{font-size:11px;line-height:1.5}
+.ssg-box.d .ssg-desc{color:rgba(255,255,255,.5)}
+.ssg-box.r .ssg-desc{color:var(--dark3)}
+.ssg-box .ssg-quote{margin-top:8px;padding:7px 10px;border-radius:6px;font-size:11px;line-height:1.5}
+.ssg-box.d .ssg-quote{background:rgba(255,255,255,.06);color:rgba(255,255,255,.55)}
+.ssg-box.r .ssg-quote{background:#fff0f3;color:var(--dark3)}
+.ssg-plus{display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;color:var(--red)}
+
+.ssg-list{display:flex;flex-direction:column;gap:5px}
+.ssg-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px}
+.ssg-row.key{background:var(--red3);border:1px solid #ffd0d8}
+.ssg-row.norm{background:var(--bg);border:1px solid var(--border)}
+.ssg-badge{font-size:9px;font-weight:800;color:#fff;padding:2px 7px;border-radius:20px;flex-shrink:0}
+.ssg-row.key .ssg-badge{background:var(--red)}
+.ssg-row.norm .ssg-badge{background:var(--dark3)}
+.ssg-row-name{flex:1;font-size:12.5px;font-weight:500;color:var(--dark)}
+.ssg-core-tag{font-size:9px;font-weight:700;color:var(--red);background:#fff0f3;border:1px solid #ffd0d8;padding:1px 7px;border-radius:20px;flex-shrink:0;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-logo">
+    <span class="lg-mark">LG</span>
+    <span style="width:1px;height:16px;background:rgba(255,255,255,.3)"></span>
+    <span class="hdr-title">평택사업장 · 안전방재반</span>
+  </div>
+  <span class="hdr-date">2026년 6월</span>
+</div>
+
+<div class="wrap">
+
+<!-- ══ 표지 ══ -->
+<div class="cover" style="background:#fff;">
+  <div class="cover-body" style="padding-top:28px;">
+    <h1 class="cover-title">비상대응<br><span>표준작전절차(SOP)</span><br>현황 및 보완 계획</h1>
+    <p class="cover-sub">소방청 재난현장 SOP 기반 · 안전방재반 매뉴얼 현황 비교</p>
+    <div class="cover-chips">
+      <div class="chip"><label>보고일</label><span>2026년 6월</span></div>
+      <div class="chip"><label>발행</label><span>소방청 (2023.02)</span></div>
+      <div class="chip"><label>법적 근거</label><span>긴급구조대응활동 및 현장지휘에 관한 규칙 제10조</span></div>
+    </div>
+    <div class="source-box">
+      <div class="src-label">📌 출처 안내</div>
+      <p>본 참고자료는 <strong>소방청장</strong>이 「긴급구조대응활동 및 현장지휘에 관한 규칙」 제10조에 의거 제정·배포한 <strong>재난현장 표준작전절차(SOP) 2023년 2월판</strong>을 참조 기준으로 작성되었습니다. SOP는 전국 소방기관의 재난 현장 대응 표준화를 목적으로 하며, 소방청 훈령에 따라 전국 시·도 소방본부에 시달되는 공식 지침입니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 00. SOP 정의 ══ -->
+<p class="sec-label"><span class="lnum">00</span> SOP 정의</p>
+<div class="card">
+  <div class="card-hdr"><span class="card-badge">SOP란?</span><h2>Standard Operating Procedure</h2></div>
+  <div class="card-body">
+    <div style="text-align:center;padding:14px 0 12px;">
+      <div style="font-size:11px;color:var(--dark3);letter-spacing:3px;margin-bottom:10px;">S · O · P</div>
+      <div style="display:flex;justify-content:center;gap:6px;flex-wrap:nowrap;margin-bottom:14px;">
+        <div style="background:var(--dark);border-radius:8px;padding:10px 0;flex:1;text-align:center;">
+          <div style="font-size:15px;font-weight:900;color:#fff;line-height:1;margin-bottom:3px;white-space:nowrap;"><span style="font-size:22px;color:var(--red);">S</span>tandard</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.45);">표준화된</div>
+        </div>
+        <div style="background:var(--dark);border-radius:8px;padding:10px 0;flex:1;text-align:center;">
+          <div style="font-size:15px;font-weight:900;color:#fff;line-height:1;margin-bottom:3px;white-space:nowrap;"><span style="font-size:22px;color:var(--red);">O</span>perating</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.45);">운영·작전</div>
+        </div>
+        <div style="background:var(--dark);border-radius:8px;padding:10px 0;flex:1;text-align:center;">
+          <div style="font-size:15px;font-weight:900;color:#fff;line-height:1;margin-bottom:3px;white-space:nowrap;"><span style="font-size:22px;color:var(--red);">P</span>rocedure</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.45);">절차서</div>
+        </div>
+      </div>
+      <p style="font-size:15px;font-weight:700;color:var(--dark);line-height:1.5;">"<span style="color:var(--red);">누가, 무엇을, 언제, 어떻게</span> 해야 하는지를<br>표준화하여 정리한 절차서"</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-top:4px;">
+      <div style="display:flex;align-items:center;gap:11px;padding:9px 13px;background:var(--bg);border-radius:8px;border-left:3px solid var(--red);">
+        <span style="font-size:11px;font-weight:900;color:var(--red);flex-shrink:0;min-width:28px;text-align:center;">1.</span>
+        <div><span style="font-size:11px;font-weight:700;color:var(--red);display:block;margin-bottom:1px;">WHO — 누가</span><span style="font-size:12px;color:var(--dark);">현장 대원부터 지휘관까지, 역할별 행동이 명확히 정해져 있음</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:11px;padding:9px 13px;background:var(--bg);border-radius:8px;border-left:3px solid var(--red);">
+        <span style="font-size:11px;font-weight:900;color:var(--red);flex-shrink:0;min-width:28px;text-align:center;">2.</span>
+        <div><span style="font-size:11px;font-weight:700;color:var(--red);display:block;margin-bottom:1px;">WHAT — 무엇을</span><span style="font-size:12px;color:var(--dark);">화재·누출·구조 등 비상상황 유형별로 해야 할 행동이 규정됨</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:11px;padding:9px 13px;background:var(--bg);border-radius:8px;border-left:3px solid var(--red);">
+        <span style="font-size:11px;font-weight:900;color:var(--red);flex-shrink:0;min-width:28px;text-align:center;">3.</span>
+        <div><span style="font-size:11px;font-weight:700;color:var(--red);display:block;margin-bottom:1px;">WHEN · HOW — 언제, 어떻게</span><span style="font-size:12px;color:var(--dark);">출동지령 → 이동 → 현장대응 → 복귀, 단계마다 순서와 방법이 명시됨</span></div>
+      </div>
+    </div>
+    <div style="margin-top:12px;background:var(--dark);border-radius:8px;padding:12px 14px;">
+      <p style="font-size:12px;color:rgba(255,255,255,.85);line-height:1.7;text-align:center;"><strong style="color:#ffb3c1;">경험과 판단에만 의존하지 않고</strong> — 누구든 같은 상황에서<br>동일한 수준의 대응을 할 수 있도록 만든 <strong style="color:#ffb3c1;">행동의 설계도</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 05. SSG 정의 ══ -->
+<p class="sec-label"><span class="lnum">01</span> SSG — 현장 안전관리 표준지침</p>
+<div class="card">
+  <div class="card-hdr"><span class="card-badge">SSG란?</span><h2>Standard Safety Guideline</h2></div>
+  <div class="card-body">
+    <div class="ssg-cmp">
+      <div class="ssg-box d">
+        <div class="ssg-lbl">SOP</div>
+        <div class="ssg-name">표준작전절차</div>
+        <div class="ssg-desc">재난 유형별<br><strong style="color:#ffb3c1;">대응 절차</strong></div>
+        <div class="ssg-quote">"화재 나면<br>이렇게 진압해라"</div>
+      </div>
+      <div class="ssg-plus" style="font-size:14px;font-weight:700;color:var(--dark3);">+</div>
+      <div class="ssg-box r">
+        <div class="ssg-lbl">SSG</div>
+        <div class="ssg-name">현장안전지침</div>
+        <div class="ssg-desc">현장에서<br><strong style="color:var(--red);">다치지 않는 방법</strong></div>
+        <div class="ssg-quote">"진압하러 들어갈 때<br>이렇게 해야 안 다친다"</div>
+      </div>
+    </div>
+    <div style="font-size:11px;font-weight:700;color:var(--dark3);letter-spacing:1px;margin-bottom:8px;">SSG 전체 7개 항목</div>
+    <div class="ssg-list">
+      <div class="ssg-row key"><span class="ssg-badge">SSG 1</span><span class="ssg-row-name">현장 안전관리 공통 표준지침</span><span class="ssg-core-tag">핵심 참조</span></div>
+      <div class="ssg-row key"><span class="ssg-badge">SSG 2</span><span class="ssg-row-name">임무별 안전관리 표준지침</span><span class="ssg-core-tag">핵심 참조</span></div>
+      <div class="ssg-row key"><span class="ssg-badge">SSG 3</span><span class="ssg-row-name">상황별 안전관리 표준지침</span><span class="ssg-core-tag">핵심 참조</span></div>
+      <div class="ssg-row norm"><span class="ssg-badge">SSG 4</span><span class="ssg-row-name">구조·구급대원 감염관리 표준지침</span></div>
+      <div class="ssg-row norm"><span class="ssg-badge">SSG 5</span><span class="ssg-row-name">소방차량 안전운행 표준지침</span></div>
+      <div class="ssg-row norm"><span class="ssg-badge">SSG 6</span><span class="ssg-row-name">교육훈련 안전관리 표준지침</span></div>
+      <div class="ssg-row norm"><span class="ssg-badge">SSG 7</span><span class="ssg-row-name">현장 심리적 응급처치 표준지침</span></div>
+    </div>
+    <div style="margin-top:12px;background:var(--dark);border-radius:8px;padding:13px 15px;">
+      <div style="font-size:10px;color:rgba(255,255,255,.35);letter-spacing:1px;margin-bottom:7px;">안전방재반 활용 포인트</div>
+      <p style="font-size:12px;color:rgba(255,255,255,.8);line-height:1.75;">SOP가 <strong style="color:#ffb3c1;">"무엇을 어떻게 할 것인가"</strong>를 정한다면, SSG는 <strong style="color:#ffb3c1;">"어떻게 해야 다치지 않는가"</strong>를 정합니다.<br>매뉴얼 수립 시 <strong style="color:#ffb3c1;">SSG 1·2·3</strong>을 함께 참조하여 절차와 안전관리를 동시에 반영하는 것이 핵심입니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 01. 도입 배경 ══ -->
+<p class="sec-label"><span class="lnum">02</span> 도입 배경 및 필요성</p>
+<div class="card">
+  <div class="card-hdr"><span class="card-badge">WHY SOP</span><h2>표준작전절차(SOP)가 필요한 이유</h2></div>
+  <div class="card-body">
+    <div class="need-list">
+      <div class="need-item"><span class="need-icon" style="font-size:11px;font-weight:900;color:var(--dark3);flex-shrink:0;min-width:20px;text-align:center;">1.</span><div class="need-text"><h3>최소 행동 기준</h3><p>"가장 기본적이고 일반적인 방침" — 비상 시 행동의 하한선이자 사고 조사 시 적정성 판단 근거</p></div></div>
+      <div class="need-item accent"><span class="need-icon" style="font-size:11px;font-weight:900;color:var(--red);flex-shrink:0;min-width:20px;text-align:center;">2.</span><div class="need-text"><h3>위험성평가를 대체</h3><p>화재·누출 등 긴박한 비상 출동 시 사전 위험성평가를 실시하고 출동할 수 없음 → SOP가 행동 기준으로 작동</p></div></div>
+      <div class="need-item"><span class="need-icon" style="font-size:11px;font-weight:900;color:var(--dark3);flex-shrink:0;min-width:20px;text-align:center;">3.</span><div class="need-text"><h3>책임 근거 확보</h3><p>절차에 따른 행동 → 사고 발생 시 법적 보호 및 면책 근거 / 담당자 과실 여부 판단 기준</p></div></div>
+    </div>
+    <div class="quote-box">
+      <p>소방청 원문 — "재난상황과 대원 및 지휘관의 <strong>상황판단에 따라 본 SOP 내용과 다르게 운영될 수 있다.</strong>"<br>"전 대원 <strong>수시 현장안전평가</strong> 실시하여 위험요소 발견 시 전파 및 제거" (SSG 1)</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 02. 소방청 SOP 전체 vs 안전방재반 비교 ══ -->
+<p class="sec-label"><span class="lnum">03</span> 소방청 표준작전절차(SOP·SSG)와 안전방재반 비교</p>
+<div class="card">
+  <div class="card-hdr"><span class="card-badge">COMPARISON</span><h2>소방청 전체 항목 vs 안전방재반 현황</h2></div>
+  <div class="card-body">
+
+    <!-- 숫자 비교 -->
+    <div class="compare-intro">
+      <div style="flex:1;display:flex;flex-direction:column;gap:0;">
+        <div class="cmp-stat dark" style="border-radius:10px 10px 0 0;">
+          <span class="val">98</span>
+          <div class="sub">SOP 91개 + SSG 7개</div>
+          <div class="note">전국 소방기관 공통 기준</div>
+        </div>
+        <div style="background:#1a2332;color:rgba(255,255,255,.7);font-size:10px;font-weight:700;text-align:center;padding:6px 8px;border-radius:0 0 10px 10px;letter-spacing:.5px;border-top:1px solid rgba(255,255,255,.08);">소방청 표준작전절차</div>
+      </div>
+      <div class="cmp-arrow"><span>→</span><small>참조<br>기준</small></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:0;">
+        <div class="cmp-stat red" style="border-radius:10px 10px 0 0;border-bottom:none;">
+          <span class="val">10</span>
+          <div class="sub">비상상황 항목 수립 중</div>
+          <div class="note">지속 보완 필요</div>
+        </div>
+        <div style="background:#ffd0d8;color:var(--red);font-size:10px;font-weight:700;text-align:center;padding:6px 8px;border-radius:0 0 10px 10px;letter-spacing:.5px;">안전방재반 절차</div>
+      </div>
+    </div>
+
+    <!-- 소방청 표준작전절차 제목 -->
+    <div style="display:flex;align-items:center;gap:8px;margin:16px 0 10px;">
+      <div style="width:3px;height:18px;background:var(--dark);border-radius:2px;flex-shrink:0;"></div>
+      <span style="font-size:14px;font-weight:800;color:var(--dark);letter-spacing:-.3px;">소방청 표준작전절차</span>
+      <span style="font-size:10px;color:var(--dark3);font-weight:500;">SOP + SSG 총 98개 항목</span>
+    </div>
+    <!-- ■ SOP 아코디언 -->
+    <div style="font-size:11px;font-weight:700;color:var(--dark3);letter-spacing:1px;margin-bottom:8px;">■ SOP — 표준작전절차 (91개)</div>
+
+    <!-- Ⅰ 지휘통제절차 -->
+    <div class="chapter">
+      <button class="chap-btn" onclick="toggle(this)">
+        
+        <span class="chap-title">Ⅰ 지휘통제절차</span>
+        <span class="chap-count">9개 항목</span>
+        <span class="chap-arrow">▼</span>
+      </button>
+      <div class="chap-body">
+        <div class="sop-item-row"><span class="sop-code">SOP 100</span><span class="sop-name">현장지휘절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 101</span><span class="sop-name">현장지휘소(통제단) 설치·운영기준</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 102</span><span class="sop-name">지휘 이양절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 103</span><span class="sop-name">지휘활동기준 및 통합지휘절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 104</span><span class="sop-name">위험구역 진입절차 및 대원 긴급탈출절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 105</span><span class="sop-name">항공지휘·통제절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 106</span><span class="sop-name">상황판단회의 운영절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 107</span><span class="sop-name">재난현장 브리핑절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 108</span><span class="sop-name">출동대 복귀절차</span></div>
+      </div>
+    </div>
+
+    <!-- Ⅱ 화재유형별 -->
+    <div class="chapter">
+      <button class="chap-btn" onclick="toggle(this)">
+        
+        <span class="chap-title">Ⅱ 화재유형별 표준작전절차</span>
+        <span class="chap-count">40개 항목</span>
+        <span class="chap-arrow">▼</span>
+      </button>
+      <div class="chap-body">
+        <div class="sop-item-row"><span class="sop-code">SOP 200</span><span class="sop-name">화재대응 공통 표준작전절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 201</span><span class="sop-name">화재대응 안전관리 표준작전절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 202</span><span class="sop-name">화재대응 일반절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 203</span><span class="sop-name">인명구조 작전절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 204</span><span class="sop-name">대원고립상황 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 205</span><span class="sop-name">낙하물·붕괴 위험 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 206</span><span class="sop-name">방수임무 수행절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 207</span><span class="sop-name">방수포 및 사다리 활용절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 208</span><span class="sop-name">소방호스 연장 표준작전절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 209</span><span class="sop-name">굴절차 및 고가사다리차 활용절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 210</span><span class="sop-name">특수현상 징후 및 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 211</span><span class="sop-name">헬기동원 화재진압 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 212</span><span class="sop-name">일반 건축물화재 대응절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 213</span><span class="sop-name">아파트화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 214</span><span class="sop-name">주택화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 215</span><span class="sop-name">지하철화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 216</span><span class="sop-name">지하가화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 217</span><span class="sop-name">지하층화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 218</span><span class="sop-name">지하공동구화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 219</span><span class="sop-name">도로터널화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 220</span><span class="sop-name">지하 압기공사장화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 221</span><span class="sop-name">금속화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 222</span><span class="sop-name">고층건물 화재 대응절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 223</span><span class="sop-name">초고층건물 화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 224</span><span class="sop-name">산림화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 225</span><span class="sop-name">차량화재 대응절차 (전기차 포함)</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 226</span><span class="sop-name">궁현 트러스 구조물 화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 227</span><span class="sop-name">선박화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 228</span><span class="sop-name">목조문화재 화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 229</span><span class="sop-name">석유화학단지 화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 230</span><span class="sop-name">화력발전소 화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 231</span><span class="sop-name">원자력발전소 화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 232</span><span class="sop-name">가연성 외장재 필로티건물 화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 233</span><span class="sop-name">전통시장 화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 234</span><span class="sop-name">항공기 화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 235</span><span class="sop-name">소방시설 활용절차방법</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 236</span><span class="sop-name">석유 등 위험물 저장시설 화재 대응절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 237</span><span class="sop-name">가스저장시설 화재 대응절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 238</span><span class="sop-name">에너지저장장치(ESS) 화재 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 239</span><span class="sop-name">데이터센터 화재 대응절차</span></div>
+      </div>
+    </div>
+
+    <!-- Ⅲ 사고유형별 -->
+    <div class="chapter">
+      <button class="chap-btn" onclick="toggle(this)">
+        
+        <span class="chap-title">Ⅲ 사고유형별 표준작전절차</span>
+        <span class="chap-count">25개 항목</span>
+        <span class="chap-arrow">▼</span>
+      </button>
+      <div class="chap-body">
+        <div class="sop-item-row"><span class="sop-code">SOP 300</span><span class="sop-name">구조 공통 표준작전절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 301</span><span class="sop-name">구조 안전관리 표준작전절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 302</span><span class="sop-name">전기사고 대응절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 303</span><span class="sop-name">기계사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 304</span><span class="sop-name">승강기사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 305</span><span class="sop-name">맨홀사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 306</span><span class="sop-name">건축물 붕괴사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 307</span><span class="sop-name">차량사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 308</span><span class="sop-name">친환경차량 사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 309</span><span class="sop-name">철도사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 310</span><span class="sop-name">유해화학물질사고 대응절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 311</span><span class="sop-name">방사능 누출사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 312</span><span class="sop-name">폭발물사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 313</span><span class="sop-name">수난사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 314</span><span class="sop-name">산악사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 315</span><span class="sop-name">매몰사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 316</span><span class="sop-name">고소작업 사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 317</span><span class="sop-name">크레인 사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 318</span><span class="sop-name">교량 다중교통사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 319</span><span class="sop-name">의료시설 사고 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 320</span><span class="sop-name">생활안전활동 안전관리 표준작전절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 321</span><span class="sop-name">벌집제거, 동물 포획 대응절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 322</span><span class="sop-name">위험시설물 안전조치 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 323</span><span class="sop-name">생활민원처리절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 324</span><span class="sop-name">지하공간 침수사고 대응절차</span><span class="sop-tag apply">적용</span></div>
+      </div>
+    </div>
+
+    <!-- Ⅳ 구급 -->
+    <div class="chapter">
+      <button class="chap-btn" onclick="toggle(this)">
+        
+        <span class="chap-title">Ⅳ 구급 단계별 표준작전절차</span>
+        <span class="chap-count">11개 항목</span>
+        <span class="chap-arrow">▼</span>
+      </button>
+      <div class="chap-body">
+        <div class="sop-item-row"><span class="sop-code">SOP 400</span><span class="sop-name">구급 공통 표준작전절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 401</span><span class="sop-name">구급 안전관리 표준작전절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 402</span><span class="sop-name">다수 사상자 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 403</span><span class="sop-name">범죄 관련 현장 대응절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 404</span><span class="sop-name">명백한 사망 환자 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 405</span><span class="sop-name">구급대원 폭행피해 방지 대응절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 406</span><span class="sop-name">주취자 대응절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 407</span><span class="sop-name">정신질환자 대응절차</span><span class="sop-tag apply">적용</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 408</span><span class="sop-name">노숙자 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 409</span><span class="sop-name">법적분쟁 또는 민원발생 예방 대응절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 410</span><span class="sop-name">감염병(의심) 환자 대응절차</span></div>
+      </div>
+    </div>
+
+    <!-- Ⅴ 상황 단계별 -->
+    <div class="chapter">
+      <button class="chap-btn" onclick="toggle(this)">
+        
+        <span class="chap-title">Ⅴ 상황 단계별 표준작전절차</span>
+        <span class="chap-count">5개 항목</span>
+        <span class="chap-arrow">▼</span>
+      </button>
+      <div class="chap-body">
+        <div class="sop-item-row"><span class="sop-code">SOP 500</span><span class="sop-name">상황관리 공통 표준작전절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 501</span><span class="sop-name">상황관리 단계별 표준작전절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 502</span><span class="sop-name">위치정보 상황관리 표준작전절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 503</span><span class="sop-name">신고통합 공동대응 및 생활안전신고 처리절차</span></div>
+        <div class="sop-item-row"><span class="sop-code">SOP 504</span><span class="sop-name">상황보고 절차</span></div>
+      </div>
+    </div>
+
+    <!-- ■ SSG -->
+    <div style="font-size:11px;font-weight:700;color:var(--dark3);letter-spacing:1px;margin:12px 0 8px;">■ SSG — 현장 안전관리 표준지침 (7개)</div>
+    <div class="chapter">
+      <button class="chap-btn ssg-hdr" onclick="toggle(this)">
+        
+        <span class="chap-title">Ⅵ 현장 안전관리 표준지침</span>
+        <span class="chap-count ssg-cnt">7개 항목</span>
+        <span class="chap-arrow">▼</span>
+      </button>
+      <div class="chap-body">
+        <div class="sop-item-row"><span class="sop-code" style="color:#1a3a6b;">SSG 1</span><span class="sop-name">현장 안전관리 공통 표준지침</span><span class="sop-tag ssg-tag">핵심 참조</span></div>
+        <div class="sop-item-row"><span class="sop-code" style="color:#1a3a6b;">SSG 2</span><span class="sop-name">임무별 안전관리 표준지침</span><span class="sop-tag ssg-tag">핵심 참조</span></div>
+        <div class="sop-item-row"><span class="sop-code" style="color:#1a3a6b;">SSG 3</span><span class="sop-name">상황별 안전관리 표준지침</span><span class="sop-tag ssg-tag">핵심 참조</span></div>
+        <div class="sop-item-row"><span class="sop-code" style="color:#1a3a6b;">SSG 4</span><span class="sop-name">구조·구급대원 감염관리 표준지침</span></div>
+        <div class="sop-item-row"><span class="sop-code" style="color:#1a3a6b;">SSG 5</span><span class="sop-name">소방차량 안전운행 표준지침</span></div>
+        <div class="sop-item-row"><span class="sop-code" style="color:#1a3a6b;">SSG 6</span><span class="sop-name">교육훈련 안전관리 표준지침</span></div>
+        <div class="sop-item-row"><span class="sop-code" style="color:#1a3a6b;">SSG 7</span><span class="sop-name">현장 심리적 응급처치 표준지침</span></div>
+      </div>
+    </div>
+
+    <!-- 안전방재반 절차 제목 -->
+    <div style="display:flex;align-items:center;gap:8px;margin:16px 0 10px;">
+      <div style="width:3px;height:18px;background:var(--red);border-radius:2px;flex-shrink:0;"></div>
+      <span style="font-size:14px;font-weight:800;color:var(--red);letter-spacing:-.3px;">안전방재반 절차</span>
+      <span style="font-size:10px;color:var(--dark3);font-weight:500;">현재 수립 중 · 10개 항목</span>
+    </div>
+    <!-- 안전방재반 현황 패널 -->
+    <div class="team-panel">
+      <div class="team-panel-title">안전방재반 매뉴얼 수립 현황 (10개)</div>
+      <div style="font-size:11px;color:var(--dark3);margin-bottom:8px;">※ 소방청 SOP/SSG 적용 항목 기준</div>
+      <div class="prog-item">
+        <span class="prog-num">①</span>
+        <div class="prog-name">화재 대응 절차 매뉴얼<small>건물내·전기차·전기화재·상황별</small></div>
+        <div class="prog-wrap"><div class="prog-bg"><div class="prog-fill f70" style="width:70%"></div></div><span class="prog-pct t70">70%</span></div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-num">②</span>
+        <div class="prog-name">화학물질 누출 대응 매뉴얼</div>
+        <div class="prog-wrap"><div class="prog-bg"><div class="prog-fill f70" style="width:70%"></div></div><span class="prog-pct t70">70%</span></div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-num">③</span>
+        <div class="prog-name">위험물 누출·화재 대응</div>
+        <div class="prog-wrap"><div class="prog-bg"><div class="prog-fill f70" style="width:70%"></div></div><span class="prog-pct t70">70%</span></div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-num">④</span>
+        <div class="prog-name">LNG 가스 누출 대응<small>SOP 237 연계</small></div>
+        <div class="prog-wrap"><div class="prog-bg"><div class="prog-fill f50" style="width:50%"></div></div><span class="prog-pct t50">50%</span></div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-num">⑤</span>
+        <div class="prog-name">비화재보 대응 매뉴얼</div>
+        <div class="prog-wrap"><div class="prog-bg"><div class="prog-fill f50" style="width:50%"></div></div><span class="prog-pct t50">50%</span></div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-num">⑥</span>
+        <div class="prog-name">기상특보 대응 매뉴얼<small>호우·대설·지진·폭염·강풍</small></div>
+        <div class="prog-wrap"><div class="prog-bg"><div class="prog-fill f50" style="width:50%"></div></div><span class="prog-pct t50">50%</span></div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-num">⑦</span>
+        <div class="prog-name">칼부림 대응<small style="color:var(--red);font-weight:600;">SOP 403·405 참조 필요</small></div>
+        <div class="prog-wrap"><div class="prog-bg"><div class="prog-fill f0" style="width:3%"></div></div><span class="prog-pct t0">미착수</span></div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-num">⑧</span>
+        <div class="prog-name">정신질환 난동 대응<small style="color:var(--red);font-weight:600;">SOP 407 참조 필요</small></div>
+        <div class="prog-wrap"><div class="prog-bg"><div class="prog-fill f0" style="width:3%"></div></div><span class="prog-pct t0">미착수</span></div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-num">⑨</span>
+        <div class="prog-name">주취자 대응<small>SOP 406 연계</small></div>
+        <div class="prog-wrap"><div class="prog-bg"><div class="prog-fill f50" style="width:50%"></div></div><span class="prog-pct t50">50%</span></div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-num">⑩</span>
+        <div class="prog-name">가축·들짐승 대응<small>SOP 321 연계</small></div>
+        <div class="prog-wrap"><div class="prog-bg"><div class="prog-fill f50" style="width:50%"></div></div><span class="prog-pct t50">50%</span></div>
+      </div>
+    </div>
+
+    <div style="margin-top:10px;padding:10px 14px;background:#fff8e6;border:1px solid #ffd080;border-radius:8px;font-size:12px;color:#7a4800;line-height:1.6;">
+      <strong>💡 적용 태그 설명</strong> — <span style="background:var(--red3);color:var(--red);border:1px solid #ffd0d8;padding:1px 6px;border-radius:10px;font-size:10px;font-weight:700;">적용</span> : 안전방재반 10개 매뉴얼과 직접 연계되는 소방청 SOP 항목 &nbsp;|&nbsp; <span style="background:#e8f0ff;color:#1a3a6b;border:1px solid #c8d9f5;padding:1px 6px;border-radius:10px;font-size:10px;font-weight:700;">핵심 참조</span> : SSG 중 안전방재반 매뉴얼 수립 시 반드시 참조해야 할 항목
+    </div>
+  </div>
+</div>
+
+<!-- ══ 04. 종합 현황 ══ -->
+<p class="sec-label"><span class="lnum">04</span> 종합 현황 및 보완 계획</p>
+<div class="card">
+  <div class="card-hdr"><span class="card-badge">SUMMARY</span><h2>종합 현황 및 보완 방향</h2></div>
+  <div class="card-body">
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <div style="flex:1;display:flex;flex-direction:column;">
+        <div class="cmp-stat dark" style="border-radius:10px 10px 0 0;padding:12px 10px;">
+          <span class="val" style="font-size:32px;">98</span>
+          <div class="sub">SOP 91 + SSG 7</div>
+          <div class="note">소방청 전체 기준</div>
+        </div>
+        <div style="background:#1a2332;color:rgba(255,255,255,.7);font-size:10px;font-weight:700;text-align:center;padding:6px 8px;border-radius:0 0 10px 10px;letter-spacing:.5px;border-top:1px solid rgba(255,255,255,.08);">소방청 표준작전절차</div>
+      </div>
+      <div class="cmp-arrow"><span>→</span><small>참조<br>기준</small></div>
+      <div style="flex:1;display:flex;flex-direction:column;">
+        <div class="cmp-stat red" style="border-radius:10px 10px 0 0;padding:12px 10px;border-bottom:none;">
+          <span class="val" style="font-size:32px;">10</span>
+          <div class="sub">수립 중 (약 52%)</div>
+          <div class="note">지속 보완 필요</div>
+        </div>
+        <div style="background:#ffd0d8;color:var(--red);font-size:10px;font-weight:700;text-align:center;padding:6px 8px;border-radius:0 0 10px 10px;letter-spacing:.5px;">안전방재반 절차</div>
+      </div>
+    </div>
+    <div class="sum-grid">
+      <div class="sum-chip done" onclick="toggleSum('sum-done')" style="cursor:pointer;">
+        <span class="val">3</span><small>70% 이상 ▾</small>
+      </div>
+      <div class="sum-chip ing" onclick="toggleSum('sum-ing')" style="cursor:pointer;">
+        <span class="val">5</span><small>50% 진행 중 ▾</small>
+      </div>
+      <div class="sum-chip none" onclick="toggleSum('sum-none')" style="cursor:pointer;">
+        <span class="val">2</span><small>미착수 ▾</small>
+      </div>
+    </div>
+    <!-- 70% 이상 -->
+    <div id="sum-done" style="display:none;background:var(--green3);border:1px solid #a5d6a7;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
+      <div style="font-size:11px;font-weight:700;color:var(--green2);margin-bottom:6px;">70% 이상 항목 (3개)</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <div style="font-size:12px;color:var(--dark);padding:4px 8px;background:rgba(255,255,255,.6);border-radius:5px;">① 화재 대응 절차 매뉴얼 — <strong style="color:var(--green2);">70%</strong></div>
+        <div style="font-size:12px;color:var(--dark);padding:4px 8px;background:rgba(255,255,255,.6);border-radius:5px;">② 화학물질 누출 대응 매뉴얼 — <strong style="color:var(--green2);">70%</strong></div>
+        <div style="font-size:12px;color:var(--dark);padding:4px 8px;background:rgba(255,255,255,.6);border-radius:5px;">③ 위험물 누출·화재 대응 — <strong style="color:var(--green2);">70%</strong></div>
+      </div>
+    </div>
+    <!-- 50% 진행 중 -->
+    <div id="sum-ing" style="display:none;background:var(--orange3);border:1px solid #ffd0a0;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
+      <div style="font-size:11px;font-weight:700;color:var(--orange);margin-bottom:6px;">50% 진행 중 항목 (5개)</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <div style="font-size:12px;color:var(--dark);padding:4px 8px;background:rgba(255,255,255,.6);border-radius:5px;">④ LNG 가스 누출 대응 — <strong style="color:var(--orange);">50%</strong></div>
+        <div style="font-size:12px;color:var(--dark);padding:4px 8px;background:rgba(255,255,255,.6);border-radius:5px;">⑤ 비화재보 대응 매뉴얼 — <strong style="color:var(--orange);">50%</strong></div>
+        <div style="font-size:12px;color:var(--dark);padding:4px 8px;background:rgba(255,255,255,.6);border-radius:5px;">⑥ 기상특보 대응 매뉴얼 — <strong style="color:var(--orange);">50%</strong></div>
+        <div style="font-size:12px;color:var(--dark);padding:4px 8px;background:rgba(255,255,255,.6);border-radius:5px;">⑨ 주취자 대응 — <strong style="color:var(--orange);">50%</strong></div>
+        <div style="font-size:12px;color:var(--dark);padding:4px 8px;background:rgba(255,255,255,.6);border-radius:5px;">⑩ 가축·들짐승 대응 — <strong style="color:var(--orange);">50%</strong></div>
+      </div>
+    </div>
+    <!-- 미착수 -->
+    <div id="sum-none" style="display:none;background:#fff0f3;border:1px solid #ffd0d8;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:6px;">미착수 항목 (2개) — 우선 착수 필요</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <div style="font-size:12px;color:var(--dark);padding:4px 8px;background:rgba(255,255,255,.7);border-radius:5px;">⑦ 칼부림 대응 — <strong style="color:var(--red);">0%</strong> · SOP 403·405 참조 필요</div>
+        <div style="font-size:12px;color:var(--dark);padding:4px 8px;background:rgba(255,255,255,.7);border-radius:5px;">⑧ 정신질환 난동 대응 — <strong style="color:var(--red);">0%</strong> · SOP 407 참조 필요</div>
+      </div>
+    </div>
+    <div class="bar-label"><span>전체 진행률 (10개 항목 기준)</span><strong>약 52%</strong></div>
+    <div class="bar-bg"><div class="bar-fill"></div></div>
+    <div class="action-grid">
+      <div class="action-item red-c">
+        
+        <div class="action-text">
+          <h3>소방청 SOP 활용 방향</h3>
+          <ul>
+            <li>10개 항목의 행동 기준 참조문서로 활용</li>
+            <li>4단계 절차 구조 그대로 적용</li>
+            <li>비상 출동 시 위험성평가를 대체하는 절차 기준</li>
+            <li>사고 조사 시 대원 행동의 적정성 판단 근거</li>
+          </ul>
+        </div>
+      </div>
+      <div class="action-item blue-c">
+        
+        <div class="action-text">
+          <h3>안전방재반 보완 계획</h3>
+          <ul>
+            <li><strong>미착수(⑦⑧) 우선 착수</strong> — SOP 403·407 즉시 참조</li>
+            <li>50% 항목 — SOP 구조 반영하여 완성도 제고</li>
+            <li>평택사업장 특성(LNG·화학물질·고층) 맞춤 반영</li>
+            <li>완성 후 비상훈련 연계 및 정기 개정 체계 수립</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="dark-box">
+      <span style="font-size:11px;font-weight:800;color:#ffb3c1;flex-shrink:0;">TIP</span>
+      <p><strong>핵심 메시지</strong> — 안전방재반은 소방청 SOP를 참조 기준으로 삼아 비상대응 매뉴얼을 <strong>단계적으로 수립 중</strong>이며, 정기 위험성평가(일상 작업)와 SOP(비상 출동)의 역할을 명확히 구분하여 운영할 예정입니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 03. 화재 SOP 절차 예시 ══ -->
+<p class="sec-label"><span class="lnum">05</span> 화재 대응 절차 예시</p>
+<div class="card">
+  <div class="card-hdr"><span class="card-badge">SOP 200~202</span><h2>화재대응 표준작전절차 — 4단계 구조</h2></div>
+  <div class="card-body">
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-circle"><span>1</span></div>
+        <div class="step-right">
+          <div class="step-title">출동지령</div>
+          <div class="step-items">
+            <div class="step-item"><span class="step-bdg">청취</span><p>출동지령 정확히 청취, 소속 대원 출동 여부 확인</p></div>
+            <div class="step-item"><span class="step-bdg">정보</span><p>대상물 규모·소재·화재 상황·출동로 확인</p></div>
+            <div class="step-item"><span class="step-bdg">장비</span><p>개인안전장구 착용, 차량 탑승 전 이상 유무 보고</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-circle"><span>2</span></div>
+        <div class="step-right">
+          <div class="step-title">출동 이동</div>
+          <div class="step-items">
+            <div class="step-item"><span class="step-bdg">장비확인</span><p>개인안전장비 정상작동 상태 확인</p></div>
+            <div class="step-item"><span class="step-bdg">통신</span><p>상황실 무전 청취, 추가정보 수집 및 대응방안 구상</p></div>
+            <div class="step-item"><span class="step-bdg">경로</span><p>교차로 진입 시 안전확인, 예비 소방용수 2개소 이상 선정</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-circle"><span>3</span></div>
+        <div class="step-right">
+          <div class="step-title">현장 대응</div>
+          <div class="step-items">
+            <div class="step-item"><span class="step-bdg">안전평가</span><p>현장 도착 즉시 위험요소 평가, 경계구역 설정</p></div>
+            <div class="step-item"><span class="step-bdg">인명</span><p>구조 대상자 파악, 발화점·직상층 우선 탐색</p></div>
+            <div class="step-item"><span class="step-bdg">진압</span><p>전기·가스 차단 후 2인 1조 진입, 현장변화 수시 보고</p></div>
+            <div class="step-item"><span class="step-bdg">잔화</span><p>불씨 잠복지점 확인, 재발화 대비 소방력 대기</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-circle"><span>4</span></div>
+        <div class="step-right">
+          <div class="step-title">복귀</div>
+          <div class="step-items">
+            <div class="step-item"><span class="step-bdg">인계</span><p>현장 안전조치 사항 소방서·관계기관 인계</p></div>
+            <div class="step-item"><span class="step-bdg">확인</span><p>전 대원·장비 이상 유무 최종 점검 후 보고</p></div>
+            <div class="step-item"><span class="step-bdg">정비</span><p>장비 세척·소독, 피복 세탁, 재출동 대비 즉시 조치</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flow-note"><strong>적용 원칙</strong> — 이 4단계 구조는 소방청 SOP 전 항목에 공통 적용되는 뼈대입니다. 안전방재반 매뉴얼도 동일한 단계 구조로 작성 중입니다.</div>
+    <div style="margin-top:20px;border-top:2px dashed var(--border);padding-top:16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+        <div style="width:3px;height:18px;background:#1a3a6b;border-radius:2px;flex-shrink:0;"></div>
+        <span style="font-size:14px;font-weight:800;color:#1a3a6b;">SSG — 화재 현장 안전관리 지침 예시</span>
+        <span style="font-size:10px;background:#e8f0ff;color:#1a3a6b;border:1px solid #c8d9f5;padding:2px 8px;border-radius:20px;font-weight:700;">SSG 1·2·3</span>
+      </div>
+
+      <!-- 출동지령 단계 -->
+      <div style="margin-bottom:10px;">
+        <div style="font-size:11px;font-weight:700;color:#1a3a6b;background:#e8f0ff;padding:5px 12px;border-radius:6px;margin-bottom:6px;display:inline-block;">STEP 1 · 출동지령 — 안전 점검</div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:var(--bg);border-radius:6px;">
+            <span style="font-size:9px;font-weight:700;color:#1a3a6b;background:#e8f0ff;border:1px solid #c8d9f5;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px;">장비확인</span>
+            <p style="font-size:12px;color:var(--dark);line-height:1.55;">방화복·헬멧·안전화·안전장갑·방화두건·<strong>공기호흡기·인명구조경보기(PASS)</strong> 착용 — 대원 상호 간 착용 상태 점검 후 지휘관 보고</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:var(--bg);border-radius:6px;">
+            <span style="font-size:9px;font-weight:700;color:#1a3a6b;background:#e8f0ff;border:1px solid #c8d9f5;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px;">건강상태</span>
+            <p style="font-size:12px;color:var(--dark);line-height:1.55;">현장 투입 전 대원 신체·정신 건강상태 확인 — 이상 시 즉시 지휘관 보고</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 현장 도착 단계 -->
+      <div style="margin-bottom:10px;">
+        <div style="font-size:11px;font-weight:700;color:#1a3a6b;background:#e8f0ff;padding:5px 12px;border-radius:6px;margin-bottom:6px;display:inline-block;">STEP 3 · 현장 대응 — 안전관리</div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:var(--bg);border-radius:6px;">
+            <span style="font-size:9px;font-weight:700;color:#1a3a6b;background:#e8f0ff;border:1px solid #c8d9f5;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px;">안전평가</span>
+            <p style="font-size:12px;color:var(--dark);line-height:1.55;">도착 즉시 <strong>건축물 붕괴·낙하물 위험성 현장안전평가</strong> → 위험요소 제거 후 대응방법 결정 (SSG 2)</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:var(--bg);border-radius:6px;">
+            <span style="font-size:9px;font-weight:700;color:#1a3a6b;background:#e8f0ff;border:1px solid #c8d9f5;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px;">경계구역</span>
+            <p style="font-size:12px;color:var(--dark);line-height:1.55;">경계구역·안전거리 설정, Fire-Line 통제선 설치 및 출입 통제 (SSG 2)</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:var(--bg);border-radius:6px;">
+            <span style="font-size:9px;font-weight:700;color:#1a3a6b;background:#e8f0ff;border:1px solid #c8d9f5;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px;">2인 1조</span>
+            <p style="font-size:12px;color:var(--dark);line-height:1.55;">현장 진입 시 <strong>반드시 2인 1조</strong> — 지휘부에서 진입 대원 현황 파악·관리 (SSG 2)</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:var(--bg);border-radius:6px;">
+            <span style="font-size:9px;font-weight:700;color:#1a3a6b;background:#e8f0ff;border:1px solid #c8d9f5;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px;">수시평가</span>
+            <p style="font-size:12px;color:var(--dark);line-height:1.55;"><strong>전 대원 수시 현장안전평가</strong> 실시 — 위험요소 발견 시 즉시 전파·제거 (SSG 1)</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:#fff8e6;border:1px solid #ffd080;border-radius:6px;">
+            <span style="font-size:9px;font-weight:700;color:#a05800;background:#fff3cc;border:1px solid #ffd080;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px;">긴급탈출</span>
+            <p style="font-size:12px;color:#7a4800;line-height:1.55;">붕괴·플래시오버 징후 감지 즉시 긴급탈출 지시 — 무전기·사이렌으로 <strong>『긴급탈출』5회 반복</strong> 전파</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 복귀 단계 -->
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#1a3a6b;background:#e8f0ff;padding:5px 12px;border-radius:6px;margin-bottom:6px;display:inline-block;">STEP 4 · 복귀 — 사후 안전관리</div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:var(--bg);border-radius:6px;">
+            <span style="font-size:9px;font-weight:700;color:#1a3a6b;background:#e8f0ff;border:1px solid #c8d9f5;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px;">최종확인</span>
+            <p style="font-size:12px;color:var(--dark);line-height:1.55;">현장 안전 최종확인 — 전 대원 및 장비 이상 유무 파악 후 철수</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:var(--bg);border-radius:6px;">
+            <span style="font-size:9px;font-weight:700;color:#1a3a6b;background:#e8f0ff;border:1px solid #c8d9f5;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px;">위생관리</span>
+            <p style="font-size:12px;color:var(--dark);line-height:1.55;">귀서 후 개인위생관리 — 오염 피복 세탁, 공기호흡기 세척·충전, 손 씻기</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOP vs SSG 역할 구분 안내 -->
+      <div style="margin-top:12px;background:var(--dark);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;">
+        <span style="font-size:11px;font-weight:800;color:#ffb3c1;flex-shrink:0;">TIP</span>
+        <p style="font-size:11.5px;color:rgba(255,255,255,.85);line-height:1.75;">
+          <strong style="color:#ffb3c1;">SOP (빨간 뱃지)</strong> = 화재 진압·대응 절차 &nbsp;|&nbsp; <strong style="color:#b3c8ff;">SSG (파란 뱃지)</strong> = 그 과정에서 대원이 다치지 않도록 지켜야 할 안전 규칙<br>
+          두 절차를 <strong style="color:#ffb3c1;">병행</strong>하는 것이 소방청 표준의 핵심입니다.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- ══ 결론 ══ -->
+  <p class="sec-label"><span class="lnum">06</span> 결론</p>
+  <div class="card">
+    <div class="card-hdr"><span class="card-badge">CONCLUSION</span><h2>안전방재반 SOP 도입 핵심 요약</h2></div>
+    <div class="card-body">
+      <div style="background:var(--dark);border-radius:8px;padding:16px 18px;">
+        <p style="font-size:13px;color:rgba(255,255,255,.9);line-height:1.9;text-align:center;font-weight:500;">
+          소방청 표준작전절차(SOP)를 안전방재반 업무에 적용하여<br>
+          <strong style="color:#ffb3c1;">비상대응 역량을 표준화</strong>하고,<br>
+          교육·훈련을 통한 숙달 수준 향상 및 위험성평가 연계를 통해<br>
+          지속적으로 개선함으로써<br>
+          <strong style="color:#ffb3c1;">임직원과 안전방재반 인원의 안전을 확보한다.</strong>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+function toggle(btn) {
+  btn.classList.toggle('open');
+  const body = btn.nextElementSibling;
+  body.classList.toggle('open');
+}
+function toggleSum(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+</body>
+</html>
