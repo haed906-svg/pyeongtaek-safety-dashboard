@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>평택 안전방재반 · AI 활용 종합 분석</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans KR',sans-serif;background:#f5f5f5;color:#1a1a1a;line-height:1.6;}
+:root{
+  --lg-red:#A50034;
+  --lg-dark:#1a1a1a;
+  --lg-gray:#767676;
+  --lg-light:#f5f5f5;
+  --lg-white:#ffffff;
+  --lg-border:#e0e0e0;
+  --lg-red-light:#fdf0f3;
+  --lg-red-mid:#f5c6d0;
+  --lg-green:#1a6b45;
+}
+.container{max-width:960px;margin:0 auto;padding:56px 24px;}
+.header{border-left:4px solid var(--lg-red);padding-left:20px;margin-bottom:56px;}
+.header-label{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--lg-red);text-transform:uppercase;margin-bottom:10px;}
+.header-title{font-size:34px;font-weight:700;color:var(--lg-dark);line-height:1.2;}
+.header-sub{font-size:13px;color:var(--lg-gray);margin-top:8px;}
+.section{margin-bottom:64px;}
+.section-num{font-size:11px;font-weight:700;color:var(--lg-red);letter-spacing:.1em;margin-bottom:6px;}
+.section-title{font-size:20px;font-weight:700;color:var(--lg-dark);padding-bottom:14px;border-bottom:2px solid var(--lg-dark);}
+.section-desc{font-size:13px;color:var(--lg-gray);margin-top:10px;margin-bottom:24px;}
+hr.divider{border:none;border-top:1px solid var(--lg-border);margin:56px 0;}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--lg-border);border:1px solid var(--lg-border);margin-bottom:32px;}
+.kpi{background:var(--lg-white);padding:24px 20px;}
+.kpi-label{font-size:11px;color:var(--lg-gray);margin-bottom:8px;font-weight:500;letter-spacing:.04em;}
+.kpi-val{font-size:28px;font-weight:700;color:var(--lg-dark);}
+.kpi-val.red{color:var(--lg-red);}
+.kpi-sub{font-size:11px;color:#aaa;margin-top:5px;}
+
+/* Field cards */
+.field-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.field-card{background:var(--lg-white);border:1px solid var(--lg-border);padding:24px 20px;}
+.field-accent{height:3px;margin-bottom:16px;}
+.field-title{font-size:12px;font-weight:700;letter-spacing:.06em;margin-bottom:8px;}
+.field-count{font-size:32px;font-weight:700;margin-bottom:6px;}
+.field-sub{font-size:11px;color:var(--lg-gray);margin-bottom:16px;line-height:1.7;}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.bar-lbl{font-size:10px;color:var(--lg-gray);width:54px;text-align:right;flex-shrink:0;}
+.bar-track{flex:1;background:#f0f0f0;height:10px;}
+.bar-fill{height:100%;}
+.bar-num{font-size:10px;color:var(--lg-gray);width:20px;flex-shrink:0;}
+.field-note{font-size:10px;font-weight:700;margin-top:12px;padding-top:10px;border-top:1px solid var(--lg-border);}
+
+/* AI 전환 */
+.ai-transfer-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.ai-card{background:var(--lg-white);border:1px solid var(--lg-border);padding:22px;}
+.ai-card-head{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--lg-border);}
+.ai-badge{font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 8px;display:inline-block;margin-bottom:5px;}
+.ai-title{font-size:13px;font-weight:700;color:var(--lg-dark);}
+.ai-sub{font-size:11px;color:var(--lg-gray);margin-top:2px;}
+.task-row{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:12px;color:#444;}
+.task-row:last-child{border-bottom:none;}
+.task-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px;}
+
+/* AI 보조 - 클릭 가능한 카드 */
+.assist-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.assist-card{background:var(--lg-white);border:1px solid var(--lg-border);padding:0;overflow:hidden;}
+.assist-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px;cursor:pointer;
+  border-bottom:1px solid var(--lg-border);
+  user-select:none;transition:background .15s;
+}
+.assist-head:hover{background:#fdf5f7;}
+.assist-head-left{display:flex;align-items:center;gap:10px;}
+.assist-num{width:26px;height:26px;background:var(--lg-red);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.assist-title{font-size:13px;font-weight:700;}
+.assist-count{font-size:11px;font-weight:700;color:var(--lg-red);background:var(--lg-red-light);padding:2px 7px;border-radius:2px;}
+.assist-toggle{font-size:11px;color:var(--lg-gray);transition:transform .2s;}
+.assist-toggle.open{transform:rotate(180deg);}
+.assist-body{display:none;padding:14px 18px;}
+.assist-body.open{display:block;}
+.assist-sub-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px;color:#444;}
+.assist-sub-row:last-child{border-bottom:none;}
+.assist-sub-name{flex:1;}
+.assist-sub-cnt{font-size:11px;font-weight:700;color:var(--lg-gray);flex-shrink:0;}
+
+/* 로드맵 */
+.roadmap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--lg-border);}
+.phase-card{padding:24px;border-right:1px solid var(--lg-border);}
+.phase-card:last-child{border-right:none;}
+.phase-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.phase-num{width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
+.phase-label{font-size:12px;font-weight:700;}
+.phase-period{font-size:10px;color:var(--lg-gray);margin-bottom:14px;}
+.phase-items{list-style:none;font-size:12px;color:#444;line-height:2;}
+.phase-items li{display:flex;align-items:flex-start;gap:6px;}
+.phase-items li::before{content:"";width:4px;height:4px;background:var(--lg-gray);border-radius:50%;margin-top:8px;flex-shrink:0;}
+
+/* 추가 제안 */
+.add-card{background:var(--lg-white);border:1px solid var(--lg-border);border-left:3px solid var(--lg-red);padding:20px 22px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start;}
+.add-num{font-size:11px;font-weight:700;color:var(--lg-red);width:20px;flex-shrink:0;padding-top:2px;}
+.add-title{font-size:13px;font-weight:700;margin-bottom:5px;}
+.add-desc{font-size:12px;color:#555;line-height:1.7;}
+.effect-tag{display:inline-block;font-size:10px;padding:2px 8px;background:var(--lg-red-light);color:var(--lg-red);font-weight:700;margin-top:7px;}
+
+/* 비교 분석 */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.compare-card{background:var(--lg-white);border:1px solid var(--lg-border);padding:22px;}
+.compare-card-head{font-size:11px;font-weight:700;letter-spacing:.08em;padding:4px 10px;display:inline-block;margin-bottom:14px;}
+.compare-card-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.compare-card-sub{font-size:11px;color:var(--lg-gray);margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--lg-border);}
+.compare-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f5f5f5;font-size:12px;}
+.compare-row:last-child{border-bottom:none;}
+.compare-key{color:var(--lg-gray);}
+.compare-val{font-weight:700;}
+.diff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.diff-card{background:var(--lg-white);border:1px solid var(--lg-border);padding:18px;}
+.diff-num{width:28px;height:28px;background:var(--lg-dark);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.diff-title{font-size:12px;font-weight:700;margin-bottom:6px;}
+.diff-desc{font-size:11px;color:#555;line-height:1.6;}
+.agree-section{background:var(--lg-red-light);border:1px solid var(--lg-red-mid);padding:20px 22px;}
+.agree-title{font-size:12px;font-weight:700;color:var(--lg-red);margin-bottom:12px;letter-spacing:.04em;}
+.agree-list{list-style:none;font-size:12px;color:#333;line-height:2.1;}
+.agree-list li{display:flex;align-items:flex-start;gap:8px;}
+.agree-list li::before{content:"✓";color:var(--lg-red);font-weight:700;flex-shrink:0;}
+.footer{text-align:center;font-size:11px;color:#aaa;padding:32px 0 16px;border-top:1px solid var(--lg-border);margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <p class="header-label">LG Electronics · Pyeongtaek · Safety &amp; Disaster Prevention</p>
+    <h1 class="header-title">평택 안전방재반<br>AI 활용 종합 분석</h1>
+    <p class="header-sub">직무 분석 및 AI 전환 로드맵 · 2026</p>
+  </div>
+
+  <!-- 01 -->
+  <div class="section">
+    <p class="section-num">01</p>
+    <h2 class="section-title">직무 총량 한눈에 보기</h2>
+    <div style="margin-top:20px;" class="kpi-grid">
+      <div class="kpi">
+        <p class="kpi-label">전체 업무 항목</p>
+        <p class="kpi-val">227건</p>
+        <p class="kpi-sub">14개 직무 대분류</p>
+      </div>
+      <div class="kpi">
+        <p class="kpi-label">AI 전환·보조 가능</p>
+        <p class="kpi-val red">57건 (25%)</p>
+        <p class="kpi-sub">전환 22 + 보조 35</p>
+      </div>
+      <div class="kpi">
+        <p class="kpi-label">Human Only 필수</p>
+        <p class="kpi-val" style="color:#767676;">170건 (75%)</p>
+        <p class="kpi-sub">현장·신체 수행</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="section">
+    <p class="section-num">02</p>
+    <h2 class="section-title">안전·방재·공통 분야 분류</h2>
+    <div style="margin-top:20px;" class="field-grid">
+      <div class="field-card">
+        <div class="field-accent" style="background:#A50034;"></div>
+        <p class="field-title" style="color:#A50034;">안전 분야</p>
+        <p class="field-count" style="color:#A50034;">38건</p>
+        <p class="field-sub">산업안전보건 직무 26<br>안전작업허가 심사 12</p>
+        <div class="bar-row"><span class="bar-lbl">AI 전환</span><div class="bar-track"><div class="bar-fill" style="width:84%;background:#A50034;"></div></div><span class="bar-num">32</span></div>
+        <div class="bar-row"><span class="bar-lbl">AI 보조</span><div class="bar-track"><div class="bar-fill" style="width:5%;background:#f5c6d0;"></div></div><span class="bar-num">2</span></div>
+        <div class="bar-row"><span class="bar-lbl">Human</span><div class="bar-track"><div class="bar-fill" style="width:11%;background:#d0d0d0;"></div></div><span class="bar-num">4</span></div>
+        <p class="field-note" style="color:#A50034;">AI 전환율 89% — 최우선 대상</p>
+      </div>
+      <div class="field-card">
+        <div class="field-accent" style="background:#1a6b45;"></div>
+        <p class="field-title" style="color:#1a6b45;">방재 분야</p>
+        <p class="field-count" style="color:#1a6b45;">119건</p>
+        <p class="field-sub">소방설비·공사·도면<br>위험물·소방차·응급 등</p>
+        <div class="bar-row"><span class="bar-lbl">AI 전환</span><div class="bar-track"><div class="bar-fill" style="width:5%;background:#1a6b45;"></div></div><span class="bar-num">6</span></div>
+        <div class="bar-row"><span class="bar-lbl">AI 보조</span><div class="bar-track"><div class="bar-fill" style="width:21%;background:#84c9a8;"></div></div><span class="bar-num">25</span></div>
+        <div class="bar-row"><span class="bar-lbl">Human</span><div class="bar-track"><div class="bar-fill" style="width:74%;background:#d0d0d0;"></div></div><span class="bar-num">88</span></div>
+        <p class="field-note" style="color:#1a6b45;">DB 분석·법기준 검토에서 AI 효과적</p>
+      </div>
+      <div class="field-card">
+        <div class="field-accent" style="background:#444;"></div>
+        <p class="field-title" style="color:#444;">공통 분야</p>
+        <p class="field-count" style="color:#444;">70건</p>
+        <p class="field-sub">화재·비상 대응 훈련 63<br>안전체험관·해외법인 7+7</p>
+        <div class="bar-row"><span class="bar-lbl">AI 전환</span><div class="bar-track"><div class="bar-fill" style="width:1%;background:#444;"></div></div><span class="bar-num">1</span></div>
+        <div class="bar-row"><span class="bar-lbl">AI 보조</span><div class="bar-track"><div class="bar-fill" style="width:16%;background:#aaa;"></div></div><span class="bar-num">11</span></div>
+        <div class="bar-row"><span class="bar-lbl">Human</span><div class="bar-track"><div class="bar-fill" style="width:83%;background:#d0d0d0;"></div></div><span class="bar-num">58</span></div>
+        <p class="field-note" style="color:#444;">보고·교육자료 작성에서 AI 보조 가능</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 03 -->
+  <div class="section">
+    <p class="section-num">03</p>
+    <h2 class="section-title">AI 전환 가능 업무 <span style="font-size:16px;font-weight:400;color:var(--lg-red);margin-left:10px;">총 22건</span></h2>
+    <p class="section-desc">서류 검토, 기준 비교, 문서 생성처럼 데이터·텍스트로 완결되는 업무. 사람 없이 AI가 처리할 수 있는 항목.</p>
+    <div class="ai-transfer-grid">
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <span class="ai-badge" style="background:#fdf0f3;color:#A50034;">안전 분야</span>
+          <p class="ai-title">안전작업허가 서류 심사</p>
+          <p class="ai-sub">12건 · 핵심 자동화 대상</p>
+        </div>
+        <div class="task-row"><div class="task-dot" style="background:#A50034;"></div>공사 서류 완비 여부 자동 검토</div>
+        <div class="task-row"><div class="task-dot" style="background:#A50034;"></div>교육·자격·서류버전 관리 검토</div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <span class="ai-badge" style="background:#f0faf5;color:#1a6b45;">방재 분야</span>
+          <p class="ai-title">소방공사 법기준 검토</p>
+          <p class="ai-sub">5건</p>
+        </div>
+        <div class="task-row"><div class="task-dot" style="background:#1a6b45;"></div>NFSC 기준 현장설명 자료 작성</div>
+        <div class="task-row"><div class="task-dot" style="background:#1a6b45;"></div>설계도면·시방서 적합성 검토</div>
+        <div class="task-row"><div class="task-dot" style="background:#1a6b45;"></div>준공 품질점검 체크리스트 생성</div>
+        <div class="task-row"><div class="task-dot" style="background:#1a6b45;"></div>공사 내역·예상단가 검토 보조</div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <span class="ai-badge" style="background:#f0faf5;color:#1a6b45;">방재 분야</span>
+          <p class="ai-title">소방설비 도면 관리</p>
+          <p class="ai-sub">5건</p>
+        </div>
+        <div class="task-row"><div class="task-dot" style="background:#1a6b45;"></div>변경사항 반영 목록 자동 정리</div>
+        <div class="task-row"><div class="task-dot" style="background:#1a6b45;"></div>도면 번호 체계 기준 문서화</div>
+        <div class="task-row"><div class="task-dot" style="background:#1a6b45;"></div>출력기준 체크리스트 자동 생성</div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <span class="ai-badge" style="background:#f5f5f5;color:#444;">공통 분야</span>
+          <p class="ai-title">응급·사고 기록 작성</p>
+          <p class="ai-sub">1건</p>
+        </div>
+        <div class="task-row"><div class="task-dot" style="background:#444;"></div>응급대응 기록 자동 작성</div>
+        <div class="task-row"><div class="task-dot" style="background:#444;"></div>사례 분석 보고서 초안 생성</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 04 AI 보조 — 클릭 가능 -->
+  <div class="section">
+    <p class="section-num">04</p>
+    <h2 class="section-title">AI 보조 활용 업무 <span style="font-size:16px;font-weight:400;color:var(--lg-red);margin-left:10px;">총 35건</span></h2>
+    <p class="section-desc">사람이 최종 판단, AI가 준비·정리하는 업무. 현장 수행 후 문서화·분석·보고 영역. 제목을 클릭하면 세부 항목을 확인할 수 있습니다.</p>
+    <div class="assist-grid">
+
+      <!-- 보고서 초안 -->
+      <div class="assist-card">
+        <div class="assist-head" onclick="toggleAssist(this)">
+          <div class="assist-head-left">
+            <div class="assist-num">01</div>
+            <span class="assist-title">보고서 초안</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="assist-count">10건</span>
+            <span class="assist-toggle">▼</span>
+          </div>
+        </div>
+        <div class="assist-body">
+          <div class="assist-sub-row"><span class="assist-sub-name">비상대응 — 화학사고 대응 — 지휘통제</span><span class="assist-sub-cnt">상황보고·기록</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">비상대응 — 재난대응 — 비상대책위 지원</span><span class="assist-sub-cnt">브리핑 자료 작성</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">비상대응 — 상황보고 — 초기상황</span><span class="assist-sub-cnt">1차 상황보고</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">비상대응 — 상황보고 — 경과 보고</span><span class="assist-sub-cnt">2차 상황보고</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">비상대응 — 상황보고 — 종결 보고</span><span class="assist-sub-cnt">3차 상황보고</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">비상대응 — 상황보고 — 유관기관</span><span class="assist-sub-cnt">소방서·지자체 보고</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">비상대응 — 상황보고 — 본사 보고</span><span class="assist-sub-cnt">SHEE 보고</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">비상대응 — 상황보고 — 상황판 운용</span><span class="assist-sub-cnt">정보 집약·관리</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">화재예방점검 — 통계·보고</span><span class="assist-sub-cnt">결과 분석·공유</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">해외법인점검 — 보고서</span><span class="assist-sub-cnt">경영보고서 작성</span></div>
+        </div>
+      </div>
+
+      <!-- 법규 기준 -->
+      <div class="assist-card">
+        <div class="assist-head" onclick="toggleAssist(this)">
+          <div class="assist-head-left">
+            <div class="assist-num">02</div>
+            <span class="assist-title">법규 기준 검색·비교</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="assist-count">8건</span>
+            <span class="assist-toggle">▼</span>
+          </div>
+        </div>
+        <div class="assist-body">
+          <div class="assist-sub-row"><span class="assist-sub-name">소방공사 — 공사 의뢰 접수</span><span class="assist-sub-cnt">법적기준 검토</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">소방공사 — 공사 의뢰 산정</span><span class="assist-sub-cnt">공사 내역 검토</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">소방공사 — 설계·시방서</span><span class="assist-sub-cnt">발주전 법적기준 검토</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">위험물 — 사전심사 — 신규물질</span><span class="assist-sub-cnt">MSDS·위험물 법규</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">해외법인 — 글로벌기준</span><span class="assist-sub-cnt">LFC 적합성 검토</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">해외법인 — 국내법기준</span><span class="assist-sub-cnt">소방법 Gap 분석</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">해외법인 — 국내법기준</span><span class="assist-sub-cnt">산업안전보건법 비교</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">해외법인 — 현지법규</span><span class="assist-sub-cnt">국가별 기준 준수확인</span></div>
+        </div>
+      </div>
+
+      <!-- 교육자료 -->
+      <div class="assist-card">
+        <div class="assist-head" onclick="toggleAssist(this)">
+          <div class="assist-head-left">
+            <div class="assist-num">03</div>
+            <span class="assist-title">교육자료·체크리스트</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="assist-count">8건</span>
+            <span class="assist-toggle">▼</span>
+          </div>
+        </div>
+        <div class="assist-body">
+          <div class="assist-sub-row"><span class="assist-sub-name">안전체험관 — 법정교육 — 산업안전보건법</span><span class="assist-sub-cnt">교육진행 자료</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">안전체험관 — 법정교육 — 정기교육</span><span class="assist-sub-cnt">강의 교안</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">안전체험관 — 법정교육 — 특별교육</span><span class="assist-sub-cnt">체험형 시나리오</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">안전체험관 — 강사육성</span><span class="assist-sub-cnt">강의법·코칭 자료</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">안전체험관 — 교육준비</span><span class="assist-sub-cnt">교보재·장비 점검표</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">안전체험관 — 평가</span><span class="assist-sub-cnt">효과측정·이수기록</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">안전체험관 — 홍보·운영</span><span class="assist-sub-cnt">연간 교육 로드맵</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">위험물 — 법정업무 — 관계자 교육</span><span class="assist-sub-cnt">취급·비상조치 교육</span></div>
+        </div>
+      </div>
+
+      <!-- 데이터 분석 -->
+      <div class="assist-card">
+        <div class="assist-head" onclick="toggleAssist(this)">
+          <div class="assist-head-left">
+            <div class="assist-num">04</div>
+            <span class="assist-title">데이터 분석</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="assist-count">3건</span>
+            <span class="assist-toggle">▼</span>
+          </div>
+        </div>
+        <div class="assist-body">
+          <div class="assist-sub-row"><span class="assist-sub-name">소방설비 운영 — DB관리</span><span class="assist-sub-cnt">72개 건물 현황 분석</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">소방설비 운영 — 이력관리</span><span class="assist-sub-cnt">점검·고장 이력 통계</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">위험물 — 장부관리</span><span class="assist-sub-cnt">입출고 자동 집계</span></div>
+        </div>
+      </div>
+
+      <!-- 기상·상황 -->
+      <div class="assist-card">
+        <div class="assist-head" onclick="toggleAssist(this)">
+          <div class="assist-head-left">
+            <div class="assist-num">05</div>
+            <span class="assist-title">기상·상황 정보 수집</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="assist-count">4건</span>
+            <span class="assist-toggle">▼</span>
+          </div>
+        </div>
+        <div class="assist-body">
+          <div class="assist-sub-row"><span class="assist-sub-name">비상대응 — 화학사고 — 정보시스템</span><span class="assist-sub-cnt">피해예측·상황판</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">비상대응 — 기상특보 — 모니터링</span><span class="assist-sub-cnt">특보 수신·단계 파악</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">비상대응 — 기상특보 — 비상근무</span><span class="assist-sub-cnt">비상근무 편성·운영</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">종합상황실 — 기상특보 대응</span><span class="assist-sub-cnt">특보 수신·전파</span></div>
+        </div>
+      </div>
+
+      <!-- 위험성평가 -->
+      <div class="assist-card">
+        <div class="assist-head" onclick="toggleAssist(this)">
+          <div class="assist-head-left">
+            <div class="assist-num">06</div>
+            <span class="assist-title">위험성평가 보조</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="assist-count">2건</span>
+            <span class="assist-toggle">▼</span>
+          </div>
+        </div>
+        <div class="assist-body">
+          <div class="assist-sub-row"><span class="assist-sub-name">안전작업허가 — 위험성 평가</span><span class="assist-sub-cnt">JSA 적정성 검토</span></div>
+          <div class="assist-sub-row"><span class="assist-sub-name">화재예방점검 — 예방관리</span><span class="assist-sub-cnt">개선조치 Follow-up</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 05 로드맵 -->
+  <div class="section">
+    <p class="section-num">05</p>
+    <h2 class="section-title">단계별 AI 도입 순서</h2>
+    <div style="margin-top:20px;" class="roadmap-grid">
+      <div class="phase-card" style="background:#fdf0f3;">
+        <div class="phase-top">
+          <div class="phase-num" style="background:#A50034;">1</div>
+          <span class="phase-label" style="color:#A50034;">즉시 시작</span>
+        </div>
+        <p class="phase-period" style="color:#A50034;">1 ~ 2개월</p>
+        <ul class="phase-items">
+          <li>안전작업허가 서류 AI 검토</li>
+          <li>사고보고서 초안 자동 생성</li>
+          <li>법규 기준 AI 조회 활용</li>
+        </ul>
+      </div>
+      <div class="phase-card" style="background:#f5f5f5;">
+        <div class="phase-top">
+          <div class="phase-num" style="background:#767676;">2</div>
+          <span class="phase-label" style="color:#444;">단기</span>
+        </div>
+        <p class="phase-period" style="color:#767676;">3 ~ 6개월</p>
+        <ul class="phase-items">
+          <li>공수 분석 대시보드 배포</li>
+          <li>소방설비 DB 이상 알림</li>
+          <li>위험성평가 JSA 보조 생성</li>
+        </ul>
+      </div>
+      <div class="phase-card" style="background:#f0faf5;">
+        <div class="phase-top">
+          <div class="phase-num" style="background:#1a6b45;">3</div>
+          <span class="phase-label" style="color:#1a6b45;">중기</span>
+        </div>
+        <p class="phase-period" style="color:#1a6b45;">6개월+</p>
+        <ul class="phase-items">
+          <li>교육이수 자동 관리 시스템</li>
+          <li>카카오 알림톡 연동</li>
+          <li>Firebase DB 통합 운영</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 06 추가 제안 -->
+  <div class="section">
+    <p class="section-num">06</p>
+    <h2 class="section-title">추가 제안 — 더 집중할 수 있게 만드는 AI 활용 방안</h2>
+    <div style="margin-top:20px;">
+      <div class="add-card"><span class="add-num">01</span><div><p class="add-title">안전작업허가 AI 자동 심사 시스템</p><p class="add-desc">협력업체 서류 업로드 → AI 항목별 1차 검토 → 누락·불일치 자동 표시 → 담당자 최종 승인. 현재 진행 중인 웹앱(safety6119)에 탭으로 바로 통합 가능.</p><span class="effect-tag">심사 시간 70% 단축 예상</span></div></div>
+      <div class="add-card"><span class="add-num">02</span><div><p class="add-title">소방설비 이상 자동 알림</p><p class="add-desc">72개 건물 점검 이력 DB를 AI가 분석 → 결함 반복 구역, 유효기간 임박 설비 자동 알림. 카카오 알림톡 연동 계획과 결합 가능.</p><span class="effect-tag">우선순위 점검 집중 가능</span></div></div>
+      <div class="add-card"><span class="add-num">03</span><div><p class="add-title">사고보고서 자동 초안 생성</p><p class="add-desc">사고 시각·장소·유형·조치내용 입력 → SHEE Portal 기준 1·2·3차 보고서 초안 자동 완성. 골든타임 내 보고 품질 향상.</p><span class="effect-tag">초동 보고 시간 단축</span></div></div>
+      <div class="add-card"><span class="add-num">04</span><div><p class="add-title">업무 공수 분석 대시보드</p><p class="add-desc">월 투입공수(Hr) 데이터 기반 과부하 업무·인력 집중 시점 시각화. 경영층 인력 효율화 근거 자료. GitHub Pages 배포.</p><span class="effect-tag">인력 운영 근거 데이터화</span></div></div>
+      <div class="add-card"><span class="add-num">05</span><div><p class="add-title">법정교육 이수 자동 관리</p><p class="add-desc">부서별 교육 이수 현황 자동 집계 → 미이수자 알림 → 교육 로드맵 초안 자동 생성. 안전체험관 반복 일정관리 AI 대체.</p><span class="effect-tag">교육 행정 업무 자동화</span></div></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 07 인사노경 비교 -->
+  <div class="section">
+    <p class="section-num">07</p>
+    <h2 class="section-title">인사노경 분석과의 비교 검토</h2>
+    <p class="section-desc">인사노경(Anti-Gravity)이 수행한 외부 직무분석 결과와 자체 분석 결과를 비교해 핵심 차이점과 공통 결론을 정리했습니다.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <span class="compare-card-head" style="background:#fdf0f3;color:#A50034;">자체 분석 (안전방재반)</span>
+        <p class="compare-card-title">직무 분석 및 AI 전환 로드맵</p>
+        <p class="compare-card-sub">직무분석 엑셀 기반 · 2026</p>
+        <div class="compare-row"><span class="compare-key">총 업무 수</span><span class="compare-val">227건</span></div>
+        <div class="compare-row"><span class="compare-key">AI 전환 가능</span><span class="compare-val">21건</span></div>
+        <div class="compare-row"><span class="compare-key">AI 보조 활용</span><span class="compare-val">38건</span></div>
+        <div class="compare-row"><span class="compare-key">Human Only</span><span class="compare-val">170건 (75%)</span></div>
+        <div class="compare-row"><span class="compare-key">분석 관점</span><span class="compare-val">업무 유형별 전환 가능성</span></div>
+      </div>
+      <div class="compare-card">
+        <span class="compare-card-head" style="background:#f5f5f5;color:#444;">인사노경 분석 (Anti-Gravity)</span>
+        <p class="compare-card-title">Workflow 직무분석 보고서</p>
+        <p class="compare-card-sub">평택안전환경계 전체 · 2026-04-08</p>
+        <div class="compare-row"><span class="compare-key">총 Activity</span><span class="compare-val">228건</span></div>
+        <div class="compare-row"><span class="compare-key">즉시 자동화</span><span class="compare-val">8건</span></div>
+        <div class="compare-row"><span class="compare-key">부분 자동화</span><span class="compare-val">5건</span></div>
+        <div class="compare-row"><span class="compare-key">Human 필수</span><span class="compare-val">200건 (AI 28건)</span></div>
+        <div class="compare-row"><span class="compare-key">분석 관점</span><span class="compare-val">RPA·자동화 효율화 중심</span></div>
+      </div>
+    </div>
+
+    <p style="font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--lg-gray);margin-bottom:12px;">핵심 차이점</p>
+    <div class="diff-grid">
+      <div class="diff-card">
+        <div class="diff-num">01</div>
+        <p class="diff-title">분석 범위</p>
+        <p class="diff-desc">자체 분석은 <strong>안전·방재·공통 분야</strong>를 구분해 AI 전환 우선순위 도출. 인사노경은 자동화 가능 여부를 <strong>즉시·부분·어려움</strong> 3단계로 분류.</p>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">02</div>
+        <p class="diff-title">절감 효과 산출</p>
+        <p class="diff-desc">인사노경 분석은 업무별 <strong>Hr 절감량을 수치화</strong>(총 약 690Hr/월 절감 예상). 자체 분석은 전환 가능 건수·비율 중심으로 정리.</p>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">03</div>
+        <p class="diff-title">종합상황실 주목</p>
+        <p class="diff-desc">인사노경은 <strong>종합상황실 24시간 근무</strong>(65.5Hr/월 × 5건)를 단순반복 최대 업무로 별도 부각. 자체 분석에서는 Human Only로 분류.</p>
+      </div>
+    </div>
+
+    <div class="agree-section">
+      <p class="agree-title">양측 분석이 일치하는 핵심 결론</p>
+      <ul class="agree-list">
+        <li>안전작업허가 심사(12건) — 두 분석 모두 AI 자동화 최우선 대상으로 지목</li>
+        <li>소방설비 도면·DB 관리 — 즉시 자동화 가능한 반복 문서 업무로 공통 확인</li>
+        <li>화재진압·인명구조·응급처치 — 물리적 현장 수행으로 자동화 불가 공통 결론</li>
+        <li>보고서·상황보고 자동 초안 생성 — 양측 모두 AI 보조 핵심 영역으로 선정</li>
+        <li>위험물 입출고·차량 점검 기록 — 디지털화·자동화로 즉시 효율 개선 가능</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">
+    LG Electronics · 평택 안전방재반 · AI 활용 종합 분석 · 2026
+  </div>
+
+</div>
+
+<script>
+function toggleAssist(el) {
+  const body = el.nextElementSibling;
+  const arrow = el.querySelector('.assist-toggle');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  arrow.classList.toggle('open', !isOpen);
+}
+</script>
+</body>
+</html>
