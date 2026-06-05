@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>26년 상반기 소방설비 법적점검 개선현황 v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ── 개선1: 모든 숫자 자동계산, 개선5: @media print ── */
+:root{
+  --red:#A50034;--red-dk:#7B0026;--red-lt:#FDF0F3;
+  --done:#1A7A4A;--done-lt:#E8F6EE;
+  --blue:#1B4F8A;--blue-lt:#EAF0F8;
+  --warn:#B35900;--warn-lt:#FEF3E8;
+  --ing:#E67E22;--ing-lt:#FEF5EC;
+  --ing2:#1B4F8A;--ing2-lt:#EAF0F8;
+  --plan:#2980B9;--plan-lt:#EBF5FB;
+  --query:#8E44AD;--query-lt:#F5EEF8;
+  --gray1:#F4F2EF;--gray2:#EEEBE7;--gray3:#C8C2BC;
+  --text:#1A1A1A;--text2:#666;--text3:#999;
+  --card:#fff;--border:#E4E0DB;
+  --shadow:0 3px 12px rgba(0,0,0,0.10);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--gray1);color:var(--text);font-size:13px;}
+
+.hdr{background:var(--red);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 4px 16px rgba(0,0,0,.22);}
+.hdr-titles h1{font-size:16px;font-weight:700;color:#fff;line-height:1.4;}
+.hdr-titles p{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;}
+.hdr-right{text-align:right;font-size:11px;color:rgba(255,255,255,.75);line-height:1.9;}
+
+.tabs{background:#fff;border-bottom:3px solid var(--red);display:flex;padding:0 24px;gap:2px;position:sticky;top:0;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.10);overflow-x:auto;}
+.tab{padding:13px 18px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);border-bottom:3px solid transparent;margin-bottom:-3px;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.tab:hover{color:var(--red);background:#FDF0F3;border-radius:6px 6px 0 0;}
+.tab.active{color:#fff;background:var(--red);border-bottom-color:var(--red);border-radius:6px 6px 0 0;}
+.tab.active:hover{color:#fff;}
+
+.panel{display:none;max-width:1100px;margin:0 auto;padding:28px 20px 48px;}
+.panel.active{display:block;}
+
+.notice-box{background:#fff;border:1px solid #D0E4F5;border-left:5px solid var(--blue);border-radius:10px;padding:14px 18px;margin-bottom:20px;box-shadow:var(--shadow-md);}
+.notice-box .notice-title{font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.notice-box .notice-title::before{content:'📋';font-size:13px;}
+.notice-rows{display:flex;flex-direction:column;gap:10px;}
+.notice-row{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--text2);line-height:1.6;}
+.notice-row .nr-dot{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.notice-row strong{color:var(--text);font-weight:700;}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:var(--shadow);}
+.card-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.card-title::before{content:'';display:block;width:3px;height:15px;background:var(--red);border-radius:2px;}
+.mb{margin-bottom:18px;}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 14px;border-top:4px solid;box-shadow:var(--shadow-md);text-align:center;}
+.kpi.total{border-top-color:#455A64;}
+.kpi.k-done{border-top-color:var(--done);}
+.kpi.k-ing{border-top-color:var(--ing);}
+.kpi.k-ing2{border-top-color:var(--ing2);}
+.kpi.k-plan{border-top-color:var(--plan);}
+.kpi.k-query{border-top-color:var(--query);}
+.kpi-num{font-size:36px;font-weight:900;line-height:1;margin-bottom:4px;}
+.kpi-lbl{font-size:11px;color:var(--text2);font-weight:600;line-height:1.3;}
+.kpi-sub{font-size:11px;color:var(--text3);margin-top:3px;}
+.kpi-pct{display:inline-block;font-size:12px;font-weight:700;margin-top:7px;padding:3px 9px;border-radius:10px;}
+
+.sec{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.sec h2{font-size:14px;font-weight:700;white-space:nowrap;}
+.sec-line{flex:1;height:1px;background:var(--border);}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;}
+
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;}
+.b-done{background:var(--done-lt);color:var(--done);}
+.b-ing{background:var(--ing-lt);color:var(--ing);}
+.b-ing2{background:var(--ing2-lt);color:var(--ing2);}
+.b-plan{background:var(--plan-lt);color:var(--plan);}
+.b-query{background:var(--query-lt);color:var(--query);}
+.b-up{background:var(--done-lt);color:var(--done);}
+.b-dn{background:var(--red-lt);color:var(--red);}
+.b-eq{background:var(--gray2);color:var(--text2);}
+
+.prog-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.prog-lbl{font-size:12px;font-weight:600;min-width:64px;}
+.prog-track{flex:1;height:10px;background:var(--gray2);border-radius:10px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:10px;}
+.prog-val{font-size:12px;font-weight:700;min-width:40px;text-align:right;}
+
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead th{background:#555;color:#fff;padding:10px 10px;text-align:center;font-weight:600;white-space:nowrap;box-shadow:inset 0 -3px 0 rgba(0,0,0,.2);}
+thead th:first-child{text-align:left;}
+tbody tr:nth-child(even){background:#F5F3F0;}
+tbody tr:last-child{background:#ECEAE6;font-weight:700;}
+tbody tr:hover:not(:last-child){background:#FDF0F3;}
+tbody td{padding:10px 10px;border-bottom:1px solid #E8E4DF;vertical-align:middle;}
+tbody tr{transition:background .15s;}
+.tc{text-align:center;}
+
+.eq-row{display:grid;grid-template-columns:84px 1fr 44px;align-items:center;gap:8px;margin-bottom:8px;font-size:11px;}
+.eq-lbl{color:var(--text2);font-weight:600;}
+.eq-cnt{font-weight:700;text-align:right;}
+
+.filter-bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;}
+.filter-bar select,.filter-bar input{border:1px solid var(--border);border-radius:6px;padding:5px 9px;font-size:12px;font-family:inherit;outline:none;background:#fff;}
+.filter-bar select:focus,.filter-bar input:focus{border-color:var(--red);}
+.filter-btn{padding:5px 12px;background:var(--red);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;}
+.cnt-badge{background:var(--red);color:#fff;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:700;}
+.content-cell{max-width:280px;word-break:keep-all;line-height:1.4;}
+.list-tbl th,.list-tbl td{padding:6px 8px;}
+
+.compare-hero{display:grid;grid-template-columns:1fr 44px 1fr;align-items:stretch;border-radius:12px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-md);margin-bottom:20px;}
+.hero-col{padding:20px 22px;}
+.hero-col.c1{background:#F4F6F9;}
+.hero-col.c2{background:var(--done-lt);}
+.hero-mid{background:var(--gray2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:0 6px;}
+.hero-mid span{color:var(--text2);font-size:11px;font-weight:700;writing-mode:vertical-rl;}
+.hero-arrow{color:var(--text2);font-size:18px;}
+.hero-report{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px;}
+.r1{color:#5A7299;}.r2{color:var(--done);}
+.hero-total{font-size:12px;color:var(--text2);margin-bottom:12px;}
+.hero-total strong{font-size:24px;font-weight:900;color:var(--text);}
+.h-rows{display:flex;flex-direction:column;gap:12px;}
+.h-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:8px;background:rgba(0,0,0,.04);}
+.h-row.h-done{background:rgba(26,122,74,.1);}
+.h-row.h-warn{background:rgba(179,89,0,.07);}
+.h-lbl{font-size:11px;color:var(--text2);font-weight:500;}
+.h-val{font-size:16px;font-weight:800;}
+.h-delta{font-size:10px;font-weight:700;margin-left:4px;}
+
+.delta-strip{background:var(--text);border-radius:12px;padding:14px 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;box-shadow:var(--shadow-md);}
+.ds-item{text-align:center;}
+.ds-cat{font-size:10px;color:rgba(255,255,255,.5);font-weight:600;letter-spacing:.04em;margin-bottom:5px;}
+.ds-flow{display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;}
+.ds-from{color:rgba(255,255,255,.45);}
+.ds-arr{color:rgba(255,255,255,.3);}
+.ds-to{font-size:17px;font-weight:900;}
+.up{color:#5AEBB0;}.dn{color:#FF8080;}.eq-c{color:rgba(255,255,255,.6);}
+.ds-badge{display:inline-block;margin-top:4px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;}
+.db-up{background:rgba(90,235,176,.15);color:#5AEBB0;}
+.db-dn{background:rgba(255,128,128,.15);color:#FF8080;}
+.db-eq{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);}
+
+.rc3{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.rc-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);}
+.rc-head{padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.rc-name{font-size:12px;font-weight:700;}
+.rc-tag{font-size:10px;font-weight:600;padding:2px 6px;border-radius:8px;}
+.t-공사{background:var(--blue-lt);color:var(--blue);}
+.t-자체{background:var(--done-lt);color:var(--done);}
+.t-시설{background:var(--warn-lt);color:var(--warn);}
+.rc-body{padding:14px;}
+.vs-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.vs-cell{background:var(--gray1);border-radius:7px;padding:9px 10px;text-align:center;}
+.vs-cell.vc-active{background:var(--done-lt);}
+.vs-cell.vc-warn{background:var(--warn-lt);}
+.vs-label{font-size:10px;color:var(--text3);font-weight:600;margin-bottom:3px;}
+.vs-num{font-size:18px;font-weight:800;}
+.vs-sub{font-size:10px;color:var(--text2);margin-top:2px;}
+.bar2-wrap{margin-top:8px;}
+.bar2-lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--text2);margin-bottom:3px;}
+.bar2-track{height:7px;background:var(--gray2);border-radius:6px;overflow:hidden;margin-bottom:5px;}
+.bar2-fill{height:100%;border-radius:6px;}
+.rc-delta{text-align:center;font-size:11px;font-weight:700;margin-top:8px;}
+
+.alert{background:#FEF8F0;border:1px solid #F5D9B0;border-left:4px solid var(--warn);border-radius:0 10px 10px 0;padding:11px 14px;display:flex;gap:10px;margin-bottom:20px;box-shadow:var(--shadow);}
+.alert h3{font-size:12px;font-weight:700;color:var(--warn);margin-bottom:3px;}
+.alert p{font-size:11px;color:#7A5A30;line-height:1.5;}
+
+.prog2-row{display:grid;grid-template-columns:68px 1fr 1fr 50px;align-items:center;gap:10px;margin-bottom:10px;}
+.prog2-lbl{font-size:12px;font-weight:700;}
+.prog2-pair{display:flex;flex-direction:column;gap:3px;}
+.prog2-bar{display:flex;align-items:center;gap:5px;}
+.prog2-blbl{font-size:9px;color:var(--text3);width:12px;text-align:right;flex-shrink:0;}
+.prog2-track{flex:1;height:7px;background:var(--gray2);border-radius:6px;overflow:hidden;}
+.prog2-fill{height:100%;border-radius:6px;}
+.prog2-pct{font-size:11px;font-weight:600;min-width:32px;text-align:right;}
+.prog2-change{font-size:12px;font-weight:700;text-align:center;}
+
+.footer{text-align:center;padding:16px;font-size:10px;color:var(--text3);}
+
+/* ── 개선4: 향후계획 액션 테이블 ── */
+.action-tbl th{background:#2C3E50;color:#fff;font-size:11px;font-weight:600;padding:8px 10px;}
+.action-tbl td{font-size:11px;padding:8px 10px;vertical-align:middle;}
+.action-tbl tr:hover:not(:last-child){background:#FDF0F3;}
+.status-done{background:var(--done-lt);color:var(--done);padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap;}
+.status-ing{background:var(--ing-lt);color:var(--ing);padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap;}
+.status-plan{background:var(--plan-lt);color:var(--plan);padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap;}
+
+/* ── 개선5: @media print ── */
+@media print {
+  body{background:#fff;font-size:11px;}
+  .tabs{display:none!important;}
+  .hdr{print-color-adjust:exact;-webkit-print-color-adjust:exact;box-shadow:none;}
+  .panel{display:block!important;max-width:100%;padding:16px 12px 24px;}
+  .panel::before{content:attr(data-title);display:block;font-size:14px;font-weight:700;color:var(--red);border-bottom:2px solid var(--red);margin-bottom:12px;padding-bottom:6px;}
+  .card{box-shadow:none;border:1px solid #ccc;}
+  .filter-bar,.filter-btn,#xl_input,.tab{display:none!important;}
+  .notice-box{border:1px solid #ccc;}
+  table{font-size:10px;}
+  thead th{background:#555!important;print-color-adjust:exact;-webkit-print-color-adjust:exact;}
+  .kpi-grid{grid-template-columns:repeat(4,1fr);}
+  .g2,.rc3{grid-template-columns:1fr 1fr;}
+  .compare-hero{grid-template-columns:1fr 44px 1fr;}
+  .delta-strip{background:#333!important;print-color-adjust:exact;-webkit-print-color-adjust:exact;}
+  .footer{border-top:1px solid #ccc;margin-top:20px;}
+  @page{margin:15mm;size:A4;}
+}
+
+@media(max-width:820px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr);}
+  .g2,.g3,.rc3{grid-template-columns:1fr 1fr;}
+  .compare-hero{grid-template-columns:1fr;}
+  .hero-mid{flex-direction:row;height:36px;padding:0 10px;}
+  .hero-mid span{writing-mode:unset;}
+  .delta-strip{grid-template-columns:repeat(2,1fr);}
+  .prog2-row{grid-template-columns:60px 1fr 1fr 40px;}
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-titles">
+    <h1>26년 상반기 소방설비 법적점검 지적사항 개선 현황</h1>
+    <p>평택안전방재반</p>
+  </div>
+  <div class="hdr-right" id="hdr_info">기준일 : 2026. 06. 03 &nbsp;|&nbsp; 총 230건</div>
+</div>
+
+<div style="background:#fff;height:8px;box-shadow:inset 0 -2px 4px rgba(0,0,0,.04);"></div>
+<div class="tabs">
+  <div class="tab active" onclick="go(0)">① 종합 현황</div>
+  <div class="tab" onclick="go(1)">② 추가내용 분석</div>
+  <div class="tab" onclick="go(2)">③ 동별 분석</div>
+  <div class="tab" onclick="go(3)">④ 설비·보수 분석</div>
+  <div class="tab" onclick="go(4)">⑤ 전체 목록</div>
+  <div class="tab" onclick="go(5)">⑥ 향후 계획</div>
+  <div class="tab" onclick="go(6)">⑦ 데이터 입력</div>
+  <div class="tab" onclick="window.print()" style="margin-left:auto;background:#f5f5f5;color:#555;">🖨️ 인쇄/PDF</div>
+</div>
+
+<!-- ══ TAB 0 : 종합 현황 ══ -->
+<div class="panel active" id="t0" data-title="① 종합 현황">
+
+  <!-- 점검 일정 섹션 타이틀 -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+    <span style="display:block;width:4px;height:18px;background:#A50034;border-radius:2px;flex-shrink:0;"></span>
+    <span style="font-size:14px;font-weight:700;">점검 일정 현황</span>
+  </div>
+  <!-- 점검 진행률 박스 -->
+  <div style="background:#fff;border:1px solid #D0E4F5;border-radius:10px;padding:14px 18px;margin-bottom:14px;box-shadow:0 4px 16px rgba(0,0,0,.10);">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+      <div style="background:#F7F5F3;border-radius:8px;padding:12px 14px;border:1px solid #E4E0DB;">
+        <div style="font-size:10px;font-weight:700;color:#666;letter-spacing:.04em;margin-bottom:6px;">점검 진행률</div>
+        <div style="font-size:26px;font-weight:900;color:#1A7A4A;line-height:1;">85%</div>
+        <div style="font-size:11px;color:#666;margin-top:4px;">전체 점검 완료</div>
+        <div style="height:6px;background:#EEEBE7;border-radius:4px;margin-top:8px;overflow:hidden;"><div style="width:85%;height:100%;background:#1A7A4A;border-radius:4px;"></div></div>
+      </div>
+      <div style="background:#F7F5F3;border-radius:8px;padding:12px 14px;border:1px solid #E4E0DB;">
+        <div style="font-size:10px;font-weight:700;color:#666;letter-spacing:.04em;margin-bottom:6px;">남은 건물</div>
+        <div style="font-size:26px;font-weight:900;color:#B35900;line-height:1;">5개</div>
+        <div style="font-size:11px;color:#B35900;margin-top:4px;line-height:1.6;">R1동 · G1동 · G2동<br>F1동 · F2동</div>
+      </div>
+      <div style="background:#F7F5F3;border-radius:8px;padding:12px 14px;border:1px solid #E4E0DB;">
+        <div style="font-size:10px;font-weight:700;color:#666;letter-spacing:.04em;margin-bottom:6px;">점검 일정</div>
+        <div style="font-size:16px;font-weight:900;color:#1B4F8A;line-height:1.3;">~6월 13일</div>
+        <div style="font-size:10px;color:#666;margin-top:4px;line-height:1.6;">5. 31 ~ 6. 13<br><span style="color:#A50034;font-weight:600;">초기 48일 + 10일 연장</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 집계 공지 박스 -->
+
+
+  <!-- ★개선1: KPI - RECORDS 기반 자동계산 -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+    <span style="display:block;width:4px;height:18px;background:#A50034;border-radius:2px;flex-shrink:0;"></span>
+    <span style="font-size:14px;font-weight:700;">문제점 개선 현황</span>
+    <span id="kpi_total_badge" style="margin-left:auto;font-size:11px;background:#A50034;color:#fff;padding:2px 9px;border-radius:10px;font-weight:600;"></span>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi total">
+      <div class="kpi-num" style="color:#455A64" id="kpi_total">-</div>
+      <div class="kpi-lbl">총 지적건수</div>
+      <div class="kpi-sub" id="kpi_total_sub">1차 241건 → 2차 ?건</div>
+    </div>
+    <div class="kpi k-done">
+      <div class="kpi-num" style="color:var(--done)" id="kpi_done">-</div>
+      <div class="kpi-lbl">완  료</div>
+      <span class="kpi-pct b-done" id="kpi_done_pct">-</span>
+    </div>
+    <div class="kpi k-ing" style="display:flex;align-items:center;gap:12px;text-align:left;padding:16px 14px;">
+      <div style="flex:1;text-align:center;">
+        <div class="kpi-num" style="color:var(--ing)" id="kpi_ing">-</div>
+        <div class="kpi-lbl" style="text-align:center;">공사 진행 중</div>
+        <span class="kpi-pct b-ing" id="kpi_ing_pct" style="margin-top:6px;">-</span>
+      </div>
+      <div id="kpi_ing_detail" style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;"></div>
+    </div>
+    <div class="kpi k-plan">
+      <div class="kpi-num" style="color:var(--plan)" id="kpi_plan">-</div>
+      <div class="kpi-lbl">소방자체보수 진행중</div>
+      <span class="kpi-pct b-plan" id="kpi_plan_pct">-</span>
+    </div>
+  </div>
+
+  <!-- 미완료·질의 카드 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px;">
+    <div class="card" style="display:flex;align-items:center;gap:20px;padding:16px 20px;box-shadow:var(--shadow-md);">
+      <div style="text-align:center;flex:1;">
+        <div id="kpi_remain" style="font-size:32px;font-weight:900;color:var(--red)">-</div>
+        <div style="font-size:11px;font-weight:600;color:var(--text2);margin-top:2px">총 미완료 잔여</div>
+        <span class="badge b-dn" id="kpi_remain_pct" style="margin-top:6px">-%</span>
+      </div>
+      <div style="width:1px;height:50px;background:var(--border)"></div>
+      <div id="kpi_remain_detail" style="flex:2;font-size:11px;color:var(--text2);line-height:1.7"></div>
+    </div>
+    <div class="card" style="display:flex;align-items:center;gap:20px;padding:16px 20px;box-shadow:var(--shadow-md);">
+      <div style="text-align:center;flex:1;">
+        <div id="kpi_query" style="font-size:32px;font-weight:900;color:var(--query)">-</div>
+        <div style="font-size:11px;font-weight:600;color:var(--text2);margin-top:2px">소방청 질의 회신 대기</div>
+        <span class="badge b-query" id="kpi_query_pct" style="margin-top:6px">-%</span>
+      </div>
+      <div style="width:1px;height:50px;background:var(--border)"></div>
+      <div style="flex:2;font-size:11px;color:var(--text2);line-height:1.7">
+        <strong style="color:var(--query)">이중덧문 관련 소방청 질의 10건</strong><br>
+        방화셔터 비상구 이중덧문 항목에 대해 소방청에 법령 해석 질의 후<br>회신 결과에 따라 조치 방향 결정 예정
+      </div>
+    </div>
+  </div>
+
+  <!-- 동별 진행률 -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+    <span style="display:block;width:4px;height:18px;background:#A50034;border-radius:2px;flex-shrink:0;"></span>
+    <span style="font-size:14px;font-weight:700;">건물별 현황</span>
+  </div>
+  <div class="card-title">동별 완료 진행률</div>
+  <div class="card mb">
+    <div id="t0_prog"></div>
+  </div>
+  <div class="card-title">동별·결과별 집계 현황</div>
+  <div class="card">
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="background:#2C3E50">구분</th>
+            <th class="tc" style="background:#455A64">합계</th>
+            <th class="tc" style="background:#1A7A4A">완료</th>
+            <th class="tc" style="background:#C0612B">소방공사<br>진행중</th>
+            <th class="tc" style="background:#1B4F8A">시설공사<br>진행중</th>
+            <th class="tc" style="background:#2471A3">소방자체<br>보수진행중</th>
+            <th class="tc" style="background:#7D3C98">소방청<br>질의</th>
+            <th class="tc" style="background:#196F3D">완료율</th>
+            <th class="tc" style="background:#922B21">미완료</th>
+          </tr>
+        </thead>
+        <tbody id="t0_tbl"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB 1 : 추가내용 분석 ══ -->
+<div class="panel" id="t1" data-title="② 추가내용 분석">
+
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+    <span style="display:block;width:4px;height:18px;background:#A50034;border-radius:2px;flex-shrink:0;"></span>
+    <span style="font-size:14px;font-weight:700;">추가내용 분석</span>
+    <span style="font-size:11px;color:var(--text2);margin-left:6px;">※ 엑셀 업로드 시 2차 수치 자동 반영</span>
+  </div>
+
+  <!-- 상하 배치: 1차 위, 2차 아래 -->
+  <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
+    <div style="background:#F4F6F9;border:1px solid var(--border);border-radius:12px;padding:14px 18px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <span style="font-size:10px;font-weight:700;color:#5A7299;background:#E8EDF4;padding:2px 10px;border-radius:10px;">1차 보고</span>
+        <span style="font-size:13px;font-weight:700;">총 <strong>241건</strong></span>
+        <span style="font-size:11px;color:var(--text2);">2026. 03. 31 ~ 05. 26</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:stretch;">
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;flex:1;">
+          <div style="background:#fff;border-radius:8px;padding:8px 6px;text-align:center;border:1px solid var(--border);"><div style="font-size:15px;font-weight:900;color:var(--done);">92</div><div style="font-size:9px;color:var(--text2);margin-top:2px;">완료</div><div style="font-size:9px;font-weight:600;color:var(--done);">38.2%</div></div>
+          <div style="background:#fff;border-radius:8px;padding:8px 6px;text-align:center;border:1px solid var(--border);"><div style="font-size:15px;font-weight:900;color:#5A7299;">5</div><div style="font-size:9px;color:var(--text2);margin-top:2px;">소방공사<br>완료</div><div style="font-size:9px;font-weight:600;color:#5A7299;">6.7%</div></div>
+          <div style="background:#fff;border-radius:8px;padding:8px 6px;text-align:center;border:1px solid var(--border);"><div style="font-size:15px;font-weight:900;color:#5A7299;">87</div><div style="font-size:9px;color:var(--text2);margin-top:2px;">소방자체<br>완료</div><div style="font-size:9px;font-weight:600;color:#5A7299;">75.0%</div></div>
+          <div style="background:#fff;border-radius:8px;padding:8px 6px;text-align:center;border:1px solid var(--border);"><div style="font-size:15px;font-weight:900;color:var(--ing);">70</div><div style="font-size:9px;color:var(--text2);margin-top:2px;">소방공사<br>진행중</div></div>
+          <div style="background:#fff;border-radius:8px;padding:8px 6px;text-align:center;border:1px solid var(--border);"><div style="font-size:15px;font-weight:900;color:var(--ing2);">40</div><div style="font-size:9px;color:var(--text2);margin-top:2px;">시설공사<br>진행중</div></div>
+        </div>
+        <div style="background:#FDF0F3;border:2px solid #A50034;border-radius:10px;padding:10px 14px;text-align:center;min-width:72px;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-size:22px;font-weight:900;color:#A50034;line-height:1;">149</div>
+          <div style="font-size:9px;color:#A50034;font-weight:700;margin-top:3px;">미완료</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:12px;font-weight:700;color:var(--done);">▼ 개선</div>
+    <div style="background:var(--done-lt);border:1px solid #A8D8BC;border-radius:12px;padding:14px 18px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <span style="font-size:10px;font-weight:700;color:var(--done);background:#C8EEDA;padding:2px 10px;border-radius:10px;">2차 보고</span>
+        <span style="font-size:13px;font-weight:700;">총 <strong id="cmp_total">-</strong>건</span>
+        <span style="font-size:11px;color:var(--text2);">2026. 05. 27 ~ 06. 03</span>
+      </div>
+      <div id="cmp_rows" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;"><!-- JS 자동생성 --></div>
+    </div>
+  </div>
+
+  <!-- delta-strip 밝은색 + 소방청질의 분리 5칸 -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+    <span style="display:block;width:4px;height:18px;background:#A50034;border-radius:2px;flex-shrink:0;"></span>
+    <span style="font-size:14px;font-weight:700;">개선 진행률</span>
+  </div>
+  <div id="delta_strip" style="background:#F4F6F9;border:1px solid var(--border);border-radius:12px;padding:14px 20px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px;box-shadow:var(--shadow);"><!-- JS 자동생성 --></div>
+
+
+
+  <div class="sec"><h2>1차 → 2차 진행률 비교</h2><div class="sec-line"></div></div>
+  <div class="card">
+    <div style="display:grid;grid-template-columns:68px 1fr 120px 60px;gap:10px;font-size:10px;color:var(--text3);font-weight:700;letter-spacing:.04em;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px;">
+      <span></span><span>1차 → 2차 완료율 비교</span><span style="text-align:center">상세</span><span style="text-align:center">변화</span>
+    </div>
+    <div id="t1_prog_rows"><!-- JS 자동생성 --></div>
+  </div>
+</div>
+
+<!-- ══ TAB 2 : 동별 분석 ══ -->
+<div class="panel" id="t2" data-title="③ 동별 분석">
+  <div class="card-title">동별 상세 현황</div>
+  <div class="card mb">
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="background:#2C3E50">구분</th>
+            <th class="tc" style="background:#455A64">합계</th>
+            <th class="tc" style="background:#1A7A4A">완료</th>
+            <th class="tc" style="background:#C0612B">소방공사<br>진행중</th>
+            <th class="tc" style="background:#1B4F8A">시설공사<br>진행중</th>
+            <th class="tc" style="background:#2471A3">소방자체<br>보수진행중</th>
+            <th class="tc" style="background:#7D3C98">소방청질의</th>
+            <th class="tc" style="background:#196F3D">완료율</th>
+            <th class="tc" style="background:#922B21">미완료</th>
+          </tr>
+        </thead>
+        <tbody id="t2_tbl"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-title">동별 완료 진행률</div>
+  <div class="card mb">
+    <div id="t2_prog"></div>
+  </div>
+
+
+  <div class="card-title">동별 × 설비분류별 지적 건수 (히트맵)</div>
+  <div class="card mb">
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="background:#2C3E50;min-width:76px">구분</th>
+            <th style="background:#C0392B">경보설비</th>
+            <th style="background:#E74C3C">소화설비</th>
+            <th style="background:#E67E22">방화문</th>
+            <th style="background:#F39C12">피난설비</th>
+            <th style="background:#27AE60">소화활동<br>설비</th>
+            <th style="background:#2980B9">방화셔터</th>
+            <th style="background:#8E44AD">방화구획</th>
+            <th style="background:#455A64">소방설비</th>
+            <th style="background:#196F3D">합계</th>
+          </tr>
+        </thead>
+        <tbody id="heatmap_body"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text2);">
+      <span style="font-weight:600">농도 범례 :</span>
+      <span style="background:#FFF5F5;border:1px solid #eee;padding:2px 10px;border-radius:4px;">0건</span>
+      <span style="background:#FFCCCC;padding:2px 10px;border-radius:4px;">1~3건</span>
+      <span style="background:#FF8888;padding:2px 10px;border-radius:4px;">4~9건</span>
+      <span style="background:#CC2200;color:#fff;padding:2px 10px;border-radius:4px;">10건 이상</span>
+    </div>
+  </div>
+  <div class="card-title">동별 설비분류 구성 비율</div>
+  <div class="card mb">
+    <div id="equip_dist_bars"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;">
+    <div class="card" style="text-align:center;padding:16px 12px;">
+      <div style="font-size:12px;font-weight:700;color:#C0392B;margin-bottom:8px;">경보설비</div>
+      <div style="position:relative;height:130px;"><canvas id="pie_keongbo"></canvas></div>
+      <div id="pie_keongbo_leg" style="margin-top:8px;font-size:10px;line-height:1.8;"></div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px 12px;">
+      <div style="font-size:12px;font-weight:700;color:#E74C3C;margin-bottom:8px;">소화설비</div>
+      <div style="position:relative;height:130px;"><canvas id="pie_sohwa"></canvas></div>
+      <div id="pie_sohwa_leg" style="margin-top:8px;font-size:10px;line-height:1.8;"></div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px 12px;">
+      <div style="font-size:12px;font-weight:700;color:#E67E22;margin-bottom:8px;">방화문</div>
+      <div style="position:relative;height:130px;"><canvas id="pie_bangmun"></canvas></div>
+      <div id="pie_bangmun_leg" style="margin-top:8px;font-size:10px;line-height:1.8;"></div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px 12px;">
+      <div style="font-size:12px;font-weight:700;color:#F39C12;margin-bottom:8px;">피난설비</div>
+      <div style="position:relative;height:130px;"><canvas id="pie_pinan"></canvas></div>
+      <div id="pie_pinan_leg" style="margin-top:8px;font-size:10px;line-height:1.8;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB 3 : 설비·보수 분석 ══ -->
+<div class="panel" id="t3" data-title="④ 설비·보수 분석">
+  <div class="card-title">보수구분별 상세</div>
+  <div class="card mb">
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="background:#2C3E50">보수구분</th>
+            <th class="tc" style="background:#455A64">합계</th>
+            <th class="tc" style="background:#1A7A4A">완료</th>
+            <th class="tc" style="background:#C0612B">소방공사<br>진행중</th>
+            <th class="tc" style="background:#1B4F8A">시설공사<br>진행중</th>
+            <th class="tc" style="background:#2471A3">소방자체<br>보수진행중</th>
+            <th class="tc" style="background:#7D3C98">소방청<br>질의중</th>
+            <th class="tc" style="background:#196F3D">완료율</th>
+          </tr>
+        </thead>
+        <tbody id="t3_repair_tbl"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-title">설비분류별 건수 순위</div>
+  <div class="card mb">
+    <div id="t3_equip"></div>
+  </div>
+  <div class="card-title">보수구분별 진행률 (2차 기준)</div>
+  <div class="card">
+    <div id="t3_prog_bars"></div>
+  </div>
+</div>
+
+<!-- ══ TAB 4 : 전체 목록 ══ -->
+<div class="panel" id="t4" data-title="⑤ 전체 목록">
+  <div class="card">
+    <div class="filter-bar">
+      <select id="f_round" onchange="filt()" style="border-left:3px solid #A50034;"><option value="">전체 차수</option><option value="2">2차 (기본)</option></select>
+      <select id="f_dong" onchange="filt()"><option value="">전체 구분</option><option>공장동</option><option>기숙사</option><option>러닝센터</option><option>생기원</option></select>
+      <select id="f_result" onchange="filt()">
+        <option value="">전체 결과</option>
+        <option>완료</option>
+        <option value="ing_soco">공사진행중 (소방공사)</option>
+        <option value="ing_siso">공사진행중 (시설공사)</option>
+        <option>소방자체보수 진행중</option>
+        <option>소방청 질의 회신</option>
+      </select>
+      <select id="f_repair" onchange="filt()"><option value="">전체 보수구분</option><option>소방자체</option><option>소방공사</option><option>시설공사</option><option>소방청질의</option></select>
+      <select id="f_equip" onchange="filt()"><option value="">전체 설비</option><option>경보설비</option><option>소화설비</option><option>방화문</option><option>피난설비</option><option>소화활동설비</option><option>방화셔터</option><option>방화구획</option></select>
+      <input type="text" id="f_search" placeholder="내용 검색..." oninput="filt()" style="width:150px">
+      <button class="filter-btn" onclick="resetF()">초기화</button>
+      <span class="cnt-badge" id="f_cnt">-건</span>
+    </div>
+    <div class="tbl-wrap" style="max-height:560px;overflow-y:auto;">
+      <table class="list-tbl">
+        <thead><tr>
+          <th style="width:38px;background:#455A64">NO</th>
+          <th style="width:44px;background:#A50034">차수</th>
+          <th style="width:68px;background:#2C3E50">구분</th>
+          <th style="width:120px;background:#1B4F8A">동/층</th>
+          <th style="width:80px;background:#7D3C98">설비분류</th>
+          <th style="width:72px;background:#C0612B">보수구분</th>
+          <th style="background:#196F3D">점검결과 (내용)</th>
+          <th style="width:130px;background:#1A7A4A">결과</th>
+        </tr></thead>
+        <tbody id="list_tb"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB 5 : 향후 계획 ══ -->
+<div class="panel" id="t5" data-title="⑥ 향후 계획">
+
+  <div style="background:#fff;border:1px solid #E4E0DB;border-left:5px solid #A50034;border-radius:10px;padding:16px 20px;margin-bottom:18px;box-shadow:0 4px 16px rgba(0,0,0,.10);">
+    <div style="font-size:13px;font-weight:700;color:#A50034;margin-bottom:10px;">⚡ 현황 분석 기반 소방설비 유지관리 방안</div>
+    <div style="font-size:12px;color:#444;line-height:1.9;">
+      이번 법적점검(230건) 결과, 지적사항의 대부분이 <strong>일상적 유지관리로 예방 가능한 항목</strong>임이 확인되었습니다.<br>
+      경보설비 불량(78건·34%), 방화문 미작동(44건·19%), 소화설비 이상(56건·24%) 등은 정기 점검 루틴을 통해 조기 발견·조치가 가능합니다.<br>
+      <strong>평택안전방재반</strong>은 아래 관리 방안을 수립·시행하여 <strong>향후 동일 문제 발생을 최소화</strong>하겠습니다.
+    </div>
+  </div>
+
+  <!-- 방안 카드 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px;">
+    <div style="background:#fff;border:1px solid #E4E0DB;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08);">
+      <div style="background:#A50034;padding:12px 16px;">
+        <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.7);margin-bottom:2px;">방안 01</div>
+        <div style="font-size:13px;font-weight:700;color:#fff;">일일점검 계획 수립</div>
+      </div>
+      <div style="padding:14px 16px;">
+        <div style="font-size:12px;color:#333;line-height:1.8;margin-bottom:10px;">단순 기구 불량, 감지기·방화문·방화셔터·경종·발신기 등 작동 기능에 대한 <strong>일상 점검 체크리스트</strong> 운영</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="background:#FDF0F3;border-radius:6px;padding:6px 10px;font-size:11px;color:#7B0026;">✔ 감지기 작동 상태 육안 확인</div>
+          <div style="background:#FDF0F3;border-radius:6px;padding:6px 10px;font-size:11px;color:#7B0026;">✔ 방화문·방화셔터 폐쇄 기능 점검</div>
+          <div style="background:#FDF0F3;border-radius:6px;padding:6px 10px;font-size:11px;color:#7B0026;">✔ 경종·발신기 작동 이상 확인</div>
+          <div style="background:#FDF0F3;border-radius:6px;padding:6px 10px;font-size:11px;color:#7B0026;">✔ 소화기·유도등 상태 점검</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E4E0DB;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08);">
+      <div style="background:#1B4F8A;padding:12px 16px;">
+        <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.7);margin-bottom:2px;">방안 02</div>
+        <div style="font-size:13px;font-weight:700;color:#fff;">일·주·월 단위 관리 체계</div>
+      </div>
+      <div style="padding:14px 16px;">
+        <div style="font-size:12px;color:#333;line-height:1.7;margin-bottom:10px;">주기별 점검 항목을 구분하여 <strong>체계적 관리 루틴</strong> 확립</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="background:#EAF0F8;border-radius:6px;padding:8px 10px;">
+            <div style="font-size:10px;font-weight:700;color:#1B4F8A;margin-bottom:3px;">📅 일일</div>
+            <div style="font-size:11px;color:#333;">수신기 이상 확인, 유도등 점등 상태, 소화기 위치</div>
+          </div>
+          <div style="background:#EAF0F8;border-radius:6px;padding:8px 10px;">
+            <div style="font-size:10px;font-weight:700;color:#1B4F8A;margin-bottom:3px;">📆 주간</div>
+            <div style="font-size:11px;color:#333;">방화문·방화셔터 작동, 발신기 버튼 상태, 스프링클러 헤드 이상</div>
+          </div>
+          <div style="background:#EAF0F8;border-radius:6px;padding:8px 10px;">
+            <div style="font-size:10px;font-weight:700;color:#1B4F8A;margin-bottom:3px;">🗓 월간</div>
+            <div style="font-size:11px;color:#333;">감지기 작동 테스트, 비상방송 확인, 소화설비 밸브 점검</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E4E0DB;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08);">
+      <div style="background:#1A7A4A;padding:12px 16px;">
+        <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.7);margin-bottom:2px;">방안 03</div>
+        <div style="font-size:13px;font-weight:700;color:#fff;">건물별 담당자 지정 관리</div>
+      </div>
+      <div style="padding:14px 16px;">
+        <div style="font-size:12px;color:#333;line-height:1.8;margin-bottom:10px;"><strong>건물별 전담 담당자를 지정</strong>하여 책임감 있는 유지관리 체계 구축</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="background:#E8F6EE;border-radius:6px;padding:6px 10px;font-size:11px;color:#1A5C37;">✔ 공장동 담당자 (G동·F동·R동·M동·U동)</div>
+          <div style="background:#E8F6EE;border-radius:6px;padding:6px 10px;font-size:11px;color:#1A5C37;">✔ 기숙사 담당자 (난초동·백합동·복지관)</div>
+          <div style="background:#E8F6EE;border-radius:6px;padding:6px 10px;font-size:11px;color:#1A5C37;">✔ 러닝센터 담당자 (채움관·나눔관·L-Stay)</div>
+          <div style="background:#E8F6EE;border-radius:6px;padding:6px 10px;font-size:11px;color:#1A5C37;">✔ 생기원·기타 담당자 지정</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ★개선4: 향후 계획 액션 테이블 (담당자·완료예정일·진행여부) -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+    <span style="display:block;width:4px;height:18px;background:#A50034;border-radius:2px;"></span>
+    <span style="font-size:14px;font-weight:700;">향후 액션 플랜</span>
+  </div>
+  <div class="card-title">개선 조치 액션 항목</div>
+  <div class="card mb">
+    <div class="tbl-wrap">
+      <table class="action-tbl">
+        <thead>
+          <tr>
+            <th style="background:#2C3E50;text-align:left;min-width:180px">액션 항목</th>
+            <th style="background:#455A64;min-width:70px">구분</th>
+            <th style="background:#1B4F8A;min-width:80px">담당</th>
+            <th style="background:#1A7A4A;min-width:90px">완료 예정일</th>
+            <th style="background:#7D3C98;min-width:80px">진행 상태</th>
+            <th style="background:#555;min-width:180px">비고</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600">일일점검 체크리스트 작성</td>
+            <td class="tc">방안01</td>
+            <td class="tc">안전방재반(방재조)</td>
+            <td class="tc">2026. 06. 30</td>
+            <td class="tc"><span class="status-plan">진행 예정(6월중)</span></td>
+            <td>감지기·방화문·소화기 등 항목별 서식 개발</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600">건물별 담당자 지정 확정</td>
+            <td class="tc">방안03</td>
+            <td class="tc">안전방재반(방재조)</td>
+            <td class="tc">2026. 06. 20</td>
+            <td class="tc"><span class="status-plan">진행 예정(6월중)</span></td>
+            <td>공장동·기숙사·러닝센터·생기원 전담자 지정</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600">일·주·월 점검 체계 정식 운영</td>
+            <td class="tc">방안02</td>
+            <td class="tc">안전방재반(방재조)</td>
+            <td class="tc">2026. 08. 01</td>
+            <td class="tc"><span class="status-plan">진행 예정(6월중)</span></td>
+            <td>7월 시범운영 후 8월 정식 전환</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600">분기별 효과 분석 보고</td>
+            <td class="tc">정기보고</td>
+            <td class="tc">안전방재반(방재조)</td>
+            <td class="tc">2026. 09. 30</td>
+            <td class="tc"><span class="status-plan">진행 예정(6월중)</span></td>
+            <td>지적건수 감소율·미완료 해소율 분석</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 기대 효과 -->
+  <div style="background:#fff;border:1px solid #E4E0DB;border-radius:12px;padding:18px 20px;box-shadow:0 2px 10px rgba(0,0,0,.08);margin-bottom:18px;">
+    <div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:14px;display:flex;align-items:center;gap:6px;">
+      <span style="display:block;width:3px;height:15px;background:#A50034;border-radius:2px;"></span>기대 효과
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">
+      <div style="text-align:center;background:#FDF0F3;border-radius:10px;padding:14px 10px;">
+        <div style="font-size:22px;margin-bottom:6px;">🔍</div>
+        <div style="font-size:12px;font-weight:700;color:#A50034;margin-bottom:4px;">조기 발견</div>
+        <div style="font-size:11px;color:#666;line-height:1.5;">일일점검으로<br>이상 징후 조기 포착</div>
+      </div>
+      <div style="text-align:center;background:#EAF0F8;border-radius:10px;padding:14px 10px;">
+        <div style="font-size:22px;margin-bottom:6px;">⚡</div>
+        <div style="font-size:12px;font-weight:700;color:#1B4F8A;margin-bottom:4px;">신속 조치</div>
+        <div style="font-size:11px;color:#666;line-height:1.5;">담당자 지정으로<br>즉각 대응 체계 확보</div>
+      </div>
+      <div style="text-align:center;background:#E8F6EE;border-radius:10px;padding:14px 10px;">
+        <div style="font-size:22px;margin-bottom:6px;">📉</div>
+        <div style="font-size:12px;font-weight:700;color:#1A7A4A;margin-bottom:4px;">지적 건수 감소</div>
+        <div style="font-size:11px;color:#666;line-height:1.5;">정기 관리로<br>다음 점검 지적 최소화</div>
+      </div>
+      <div style="text-align:center;background:#FEF3E8;border-radius:10px;padding:14px 10px;">
+        <div style="font-size:22px;margin-bottom:6px;">📋</div>
+        <div style="font-size:12px;font-weight:700;color:#B35900;margin-bottom:4px;">이력 관리</div>
+        <div style="font-size:11px;color:#666;line-height:1.5;">월단위 기록으로<br>체계적 이력 축적</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 추진 일정 -->
+  <div style="background:#fff;border:1px solid #E4E0DB;border-radius:12px;padding:18px 20px;box-shadow:0 2px 10px rgba(0,0,0,.08);">
+    <div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:14px;display:flex;align-items:center;gap:6px;">
+      <span style="display:block;width:3px;height:15px;background:#A50034;border-radius:2px;"></span>추진 일정
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:grid;grid-template-columns:90px 1fr;align-items:center;gap:12px;">
+        <div style="background:#A50034;color:#fff;font-size:11px;font-weight:700;text-align:center;padding:5px 8px;border-radius:6px;">2026. 06월</div>
+        <div style="font-size:12px;color:#333;">법적점검 완료 · 지적사항 전수 파악 · 담당자 지정 확정 · 체크리스트 초안 작성</div>
+      </div>
+      <div style="display:grid;grid-template-columns:90px 1fr;align-items:center;gap:12px;">
+        <div style="background:#1B4F8A;color:#fff;font-size:11px;font-weight:700;text-align:center;padding:5px 8px;border-radius:6px;">2026. 07월</div>
+        <div style="font-size:12px;color:#333;">일일·주간·월간 점검 체크리스트 배포 및 시범 운영 · 소방공사 완료 추진</div>
+      </div>
+      <div style="display:grid;grid-template-columns:90px 1fr;align-items:center;gap:12px;">
+        <div style="background:#1A7A4A;color:#fff;font-size:11px;font-weight:700;text-align:center;padding:5px 8px;border-radius:6px;">2026. 08월~</div>
+        <div style="font-size:12px;color:#333;">정식 운영 전환 · 시설공사 완료 · 월간 이행 현황 보고 · 분기별 효과 분석</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB 6 : 수동 입력 ══ -->
+<div class="panel" id="t6" data-title="⑦ 수동 입력">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+    <span style="display:block;width:4px;height:18px;background:#A50034;border-radius:2px;flex-shrink:0;"></span>
+    <span style="font-size:14px;font-weight:700;">신규 지적사항 입력 (붙여넣기)</span>
+  </div>
+
+  <!-- 누적 현황 -->
+  <div id="round_status_box" style="background:#F4F6F9;border:1px solid #D0D8E4;border-radius:10px;padding:14px 18px;margin-bottom:16px;">
+    <div style="font-size:12px;font-weight:700;color:#2C3E50;margin-bottom:10px;">📊 누적 입력 현황</div>
+    <div id="round_status_rows" style="display:flex;gap:10px;flex-wrap:wrap;"></div>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:11px;color:#888;">이번 입력 차수:</span>
+      <select id="next_round_sel" style="border:1px solid #A50034;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;color:#A50034;font-family:inherit;outline:none;background:#fff;" onchange="onRoundSelChange()">
+        <option value="3">3차</option>
+        <option value="4">4차</option>
+        <option value="5">5차</option>
+        <option value="6">6차</option>
+        <option value="7">7차</option>
+        <option value="8">8차</option>
+        <option value="9">9차</option>
+        <option value="10">10차</option>
+      </select>
+      <span style="font-size:11px;color:#aaa;">※ 직접 선택 후 반영</span>
+    </div>
+  </div>
+
+  <!-- 붙여넣기 입력 -->
+  <div class="card mb" style="padding:22px 24px;">
+    <div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:6px;display:flex;align-items:center;gap:6px;">
+      <span style="display:block;width:3px;height:15px;background:#1B4F8A;border-radius:2px;"></span>
+      엑셀 내용 붙여넣기
+      <span style="font-size:11px;font-weight:400;color:#888;margin-left:4px;">엑셀에서 범위 복사(Ctrl+C) → 아래에 붙여넣기(Ctrl+V)</span>
+    </div>
+    <div style="font-size:11px;color:#888;margin-bottom:10px;background:#F4F6F9;border-radius:6px;padding:8px 12px;line-height:1.8;">
+      컬럼 순서: <strong>NO / 구분 / 동층 / 점검결과 / 설비분류 / 보수구분 / 결 과</strong><br>
+      헤더 행 포함해도 자동으로 건너뜁니다 · 보수 예정 → 소방자체보수 진행중 자동 변환
+    </div>
+    <textarea id="paste_area" rows="6" placeholder="엑셀에서 복사한 내용을 여기에 붙여넣으세요 (Ctrl+V)..." style="width:100%;border:2px dashed #C8C2BC;border-radius:8px;padding:10px 12px;font-size:12px;font-family:inherit;outline:none;resize:vertical;line-height:1.6;background:#FAFAFA;" onfocus="this.style.borderColor='#1B4F8A'" onblur="this.style.borderColor='#C8C2BC'" oninput="parsePaste()"></textarea>
+    <div style="display:flex;gap:10px;align-items:center;margin-top:10px;">
+      <button onclick="parsePaste()" style="background:#1B4F8A;color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:12px;font-weight:700;cursor:pointer;">🔍 파싱</button>
+      <button onclick="document.getElementById('paste_area').value='';clearPastePreview()" style="background:#F4F2EF;color:#666;border:1px solid #D8D4CF;border-radius:8px;padding:9px 14px;font-size:12px;cursor:pointer;">초기화</button>
+      <span id="paste_msg" style="font-size:12px;font-weight:600;"></span>
+    </div>
+    <!-- 붙여넣기 미리보기 -->
+    <div id="paste_preview" style="display:none;margin-top:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-size:12px;font-weight:700;">📋 파싱 결과 <span id="paste_cnt" style="background:#1B4F8A;color:#fff;font-size:11px;padding:2px 8px;border-radius:10px;margin-left:6px;"></span></div>
+        <button onclick="applyPasteData()" style="background:#1A7A4A;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;">✅ 대기 목록에 추가</button>
+      </div>
+      <div class="tbl-wrap" style="max-height:240px;overflow-y:auto;">
+        <table class="list-tbl">
+          <thead><tr>
+            <th style="width:32px;background:#455A64">NO</th>
+            <th style="width:64px;background:#2C3E50">구분</th>
+            <th style="width:100px;background:#1B4F8A">동/층</th>
+            <th style="width:72px;background:#7D3C98">설비</th>
+            <th style="width:68px;background:#C0612B">보수</th>
+            <th style="background:#196F3D">내용</th>
+            <th style="width:110px;background:#1A7A4A">결과</th>
+          </tr></thead>
+          <tbody id="paste_tb"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 입력 대기 목록 -->
+  <div id="pending_wrap" style="display:none;margin-bottom:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <div style="font-size:13px;font-weight:700;">
+        📋 입력 대기 목록
+        <span id="pending_cnt" style="background:#A50034;color:#fff;font-size:11px;padding:2px 8px;border-radius:10px;margin-left:6px;">0건</span>
+      </div>
+      <button onclick="applyPending()" style="background:#1A7A4A;color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(26,122,74,.25);">✅ 대시보드에 반영</button>
+    </div>
+    <div class="card" style="padding:0;">
+      <div class="tbl-wrap">
+        <table class="list-tbl">
+          <thead><tr>
+            <th style="width:32px;background:#455A64">NO</th>
+            <th style="width:64px;background:#2C3E50">구분</th>
+            <th style="width:110px;background:#1B4F8A">동/층</th>
+            <th style="width:76px;background:#7D3C98">설비분류</th>
+            <th style="width:72px;background:#C0612B">보수구분</th>
+            <th style="background:#196F3D">내용</th>
+            <th style="width:120px;background:#1A7A4A">결과</th>
+            <th style="width:36px;background:#922B21">삭제</th>
+          </tr></thead>
+          <tbody id="pending_tb"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 반영 완료 -->
+  <div id="form_done" style="display:none;text-align:center;padding:30px;background:#E8F6EE;border-radius:14px;border:1px solid #A8D8BC;"></div>
+</div>
+
+<div class="footer">평택안전방재반 · 26년 상반기 소방설비 법적점검 지적사항 개선 현황 · v2</div>
+
+<script>
+/* ══════════════════════════════════════════
+   RECORDS (원본 데이터 230건)
+   ★개선1: 모든 KPI·집계는 이 배열에서 자동계산
+══════════════════════════════════════════ */
+const RECORDS=[
+  {no:1,dong:'공장동',loc:'G2동',equip:'피난설비',repair:'소방공사',result:'완료',content:'폐쇄측 비상구 상부 피난구유도등 미점등 → 철거',round:2},
+  {no:2,dong:'공장동',loc:'G3/1층',equip:'경보설비',repair:'소방공사',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:3,dong:'공장동',loc:'G3/1층',equip:'경보설비',repair:'소방공사',result:'완료',content:'차동식감지기 작동 불량 → 교체',round:2},
+  {no:4,dong:'공장동',loc:'G3/1층',equip:'피난설비',repair:'소방공사',result:'완료',content:'피난구유도등 점등 불량 (등기구노후) → 교체',round:2},
+  {no:5,dong:'공장동',loc:'G3/1층',equip:'경보설비',repair:'소방공사',result:'완료',content:'감지기 미설치 (미닫이 문 구획) → 설치',round:2},
+  {no:6,dong:'공장동',loc:'G3/1층',equip:'경보설비',repair:'소방공사',result:'완료',content:'감지기 미설치 (미닫이 문 구획) → 설치',round:2},
+  {no:7,dong:'공장동',loc:'G3/1층',equip:'경보설비',repair:'소방공사',result:'완료',content:'감지기 미설치 → 설치',round:2},
+  {no:8,dong:'공장동',loc:'G3/3층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'자동방화문 밀폐 불량 (문틀걸림) → 정비',round:2},
+  {no:9,dong:'공장동',loc:'R2동/2층',equip:'경보설비',repair:'소방공사',result:'공사 진행 중',content:'감지기 미설치 (아날로그 감지기 설치됨) → 설치',round:2},
+  {no:10,dong:'공장동',loc:'R2동/2층',equip:'경보설비',repair:'소방공사',result:'완료',content:'감지기 미설치 (아날로그 감지기 설치됨) → 완료',round:2},
+  {no:11,dong:'공장동',loc:'R2동/1층',equip:'경보설비',repair:'소방공사',result:'완료',content:'감지기 미설치 (아날로그 감지기 설치됨) → 완료',round:2},
+  {no:12,dong:'공장동',loc:'R2동/1층',equip:'경보설비',repair:'소방공사',result:'완료',content:'감지기 미설치 (아날로그 감지기 설치됨) → 완료',round:2},
+  {no:13,dong:'공장동',loc:'R2동/지하1층',equip:'경보설비',repair:'소방공사',result:'완료',content:'할로겐 소화설비 감지기 고정 불량 (층고 8m) → 천장면 고정',round:2},
+  {no:14,dong:'공장동',loc:'R2동/지하1층',equip:'경보설비',repair:'소방공사',result:'공사 진행 중',content:'할로겐 소화설비 제어반 예비전원 불량 → 기판/제어반 보수',round:2},
+  {no:15,dong:'공장동',loc:'R2동/지하1층',equip:'경보설비',repair:'소방공사',result:'공사 진행 중',content:'감지기 미설치 (아날로그 감지기 설치됨) → 설치',round:2},
+  {no:16,dong:'공장동',loc:'F1동/1층',equip:'소화설비',repair:'소방자체',result:'소방자체보수 진행중',content:'드라이밸브 세팅불량 (클래퍼 복구불량) → 자체 보수',round:2},
+  {no:17,dong:'공장동',loc:'F2동/1층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'출입문 도어클로져 미설치 → 설치',round:2},
+  {no:18,dong:'공장동',loc:'F2동/1층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'출입문 도어클로져 미설치 → 설치',round:2},
+  {no:19,dong:'공장동',loc:'F3동/154',equip:'소화설비',repair:'소방공사',result:'공사 진행 중',content:'출입구 방출표시등 미설치 → 설치',round:2},
+  {no:20,dong:'공장동',loc:'F3동/154',equip:'소화설비',repair:'소방공사',result:'공사 진행 중',content:'변전실 수동조작함 작동불량 → 선로정비',round:2},
+  {no:21,dong:'공장동',loc:'F3동/1층',equip:'피난설비',repair:'소방공사',result:'공사 진행 중',content:'방화셔터 비상구 앞 피난구유도등 미설치 → 설치',round:2},
+  {no:22,dong:'공장동',loc:'F3동/지하1층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'출입문 자동폐쇄장치 미설치 (가스소화구역) → 도어클로져 설치',round:2},
+  {no:23,dong:'공장동',loc:'F3동/1층',equip:'방화문',repair:'소방청질의',result:'소방청 질의 회신',content:'방화셔터 비상구 이중덧문 피난장애 → 소방청 질의',round:2},
+  {no:24,dong:'공장동',loc:'F3동/1층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화셔터 레일측 마감불량 → 방화실링재 마감',round:2},
+  {no:25,dong:'공장동',loc:'F3동/1층',equip:'방화문',repair:'소방청질의',result:'소방청 질의 회신',content:'방화셔터 상단부 창문 방화구획 미비 → 소방청 질의',round:2},
+  {no:26,dong:'공장동',loc:'F3동/1층',equip:'방화문',repair:'소방청질의',result:'소방청 질의 회신',content:'방화셔터 비상구 이중덧문 피난장애 → 소방청 질의',round:2},
+  {no:27,dong:'공장동',loc:'F3동/1층',equip:'방화문',repair:'소방청질의',result:'소방청 질의 회신',content:'방화셔터 비상구 이중덧문 피난장애 → 소방청 질의',round:2},
+  {no:28,dong:'공장동',loc:'F3동/2층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화문 장력부족 완전마감 불량 → 2차측 장력조절',round:2},
+  {no:29,dong:'공장동',loc:'M동/1층',equip:'소화설비',repair:'소방공사',result:'공사 진행 중',content:'안쪽 휴게공간 스프링클러헤드 미설치 → 설치',round:2},
+  {no:30,dong:'공장동',loc:'M동/2층',equip:'소화설비',repair:'소방자체',result:'소방자체보수 진행중',content:'감지기 연동 수신기 확인불량 → 선로/통신 점검',round:2},
+  {no:31,dong:'공장동',loc:'M동/2층',equip:'방화문',repair:'소방청질의',result:'소방청 질의 회신',content:'방화문 이중덧문 → 소방청 질의',round:2},
+  {no:32,dong:'공장동',loc:'M동/2층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화셔터 1단 연동시 레일측 걸림 하강불량 → 정비',round:2},
+  {no:33,dong:'공장동',loc:'M동/2층',equip:'피난설비',repair:'소방공사',result:'공사 진행 중',content:'방화셔터 비상구 중첩 피난장애 → 유도등 철거',round:2},
+  {no:34,dong:'공장동',loc:'U동/1층',equip:'경보설비',repair:'소방공사',result:'완료',content:'BOILER PNL 상부 감지기 탈락 (층고 6m) → 설치',round:2},
+  {no:35,dong:'공장동',loc:'Y동/2층',equip:'소화설비',repair:'소방공사',result:'완료',content:'알람밸브 시험밸브함 개방형헤드 미설치 → 설치',round:2},
+  {no:36,dong:'공장동',loc:'Y동/2층',equip:'소화설비',repair:'소방공사',result:'완료',content:'알람밸브 시험밸브함 개방형헤드 미설치 → 설치',round:2},
+  {no:37,dong:'생기원',loc:'P1/4층',equip:'경보설비',repair:'소방자체',result:'소방자체보수 진행중',content:'열감지기 적응성 불량 (연기감지기 교체) 단선 → 선로 점검',round:2},
+  {no:38,dong:'생기원',loc:'P1/4층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화문 2차측 장력부족 완전폐쇄불량 → 장력조절',round:2},
+  {no:39,dong:'생기원',loc:'P1/4층',equip:'방화문',repair:'소방청질의',result:'소방청 질의 회신',content:'방화문 이중덧문 (4개소) → 소방청 질의',round:2},
+  {no:40,dong:'생기원',loc:'P1/3층',equip:'방화문',repair:'소방청질의',result:'소방청 질의 회신',content:'방화문 이중덧문 (4개소) → 소방청 질의',round:2},
+  {no:41,dong:'생기원',loc:'P1/2층',equip:'방화문',repair:'소방청질의',result:'소방청 질의 회신',content:'방화문 이중덧문 (4개소) → 소방청 질의',round:2},
+  {no:42,dong:'생기원',loc:'P1/1층',equip:'방화문',repair:'소방청질의',result:'소방청 질의 회신',content:'방화문 이중덧문 (2개소) → 소방청 질의',round:2},
+  {no:43,dong:'생기원',loc:'P1동/2층',equip:'소화설비',repair:'소방공사',result:'공사 진행 중',content:'제수변 파손 누수 → 소화전 교체',round:2},
+  {no:44,dong:'생기원',loc:'P3동/2층',equip:'경보설비',repair:'소방공사',result:'완료',content:'연기감지기 기구불량 → 교체',round:2},
+  {no:45,dong:'생기원',loc:'P3동/3층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화셔터 방향 출입문 개방 3개소 → 개방 불가 조치',round:2},
+  {no:46,dong:'생기원',loc:'P3동/3층',equip:'방화문',repair:'소방청질의',result:'소방청 질의 회신',content:'방화셔터 비상구 이중덧문 3개소 → 소방청 질의',round:2},
+  {no:47,dong:'생기원',loc:'P4/2층',equip:'경보설비',repair:'소방공사',result:'공사 진행 중',content:'감지기 미설치 → 설치',round:2},
+  {no:48,dong:'생기원',loc:'P4/2층',equip:'경보설비',repair:'소방공사',result:'공사 진행 중',content:'감지기 미설치 → 설치',round:2},
+  {no:49,dong:'생기원',loc:'P4/1층',equip:'피난설비',repair:'소방공사',result:'공사 진행 중',content:'피난계단 앞 피난구유도등 미설치 → 이설/증설',round:2},
+  {no:50,dong:'생기원',loc:'P4/1층',equip:'피난설비',repair:'소방공사',result:'공사 진행 중',content:'피난구 폐쇄상태 (판넬로 막음) → 유도등 제거',round:2},
+  {no:51,dong:'생기원',loc:'P4/1층',equip:'소화설비',repair:'소방공사',result:'공사 진행 중',content:'헤드 보양상태 (층고 8m이상) → 보양 제거',round:2},
+  {no:52,dong:'러닝센터',loc:'HOUSE1958/지하1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'유수검지장치실 표지 미부착 → 부착 완료',round:2},
+  {no:53,dong:'러닝센터',loc:'HOUSE1958/지하1층',equip:'경보설비',repair:'소방공사',result:'완료',content:'감지기 미설치 (1개) → 완료',round:2},
+  {no:54,dong:'러닝센터',loc:'HOUSE1958/지하1층',equip:'경보설비',repair:'시설공사',result:'공사 진행 중',content:'비상방송 송출 안됨 → 스피커 교체/선로 정비',round:2},
+  {no:55,dong:'러닝센터',loc:'이음관/3층',equip:'피난설비',repair:'소방공사',result:'공사 진행 중',content:'일체형방화셔터 출입구 상부 피난구유도등 미설치 → 설치',round:2},
+  {no:56,dong:'러닝센터',loc:'이음관/3층',equip:'방화셔터',repair:'시설공사',result:'공사 진행 중',content:'일체형방화셔터 출입구 밀폐 불량 → 보수',round:2},
+  {no:57,dong:'러닝센터',loc:'이음관/2층',equip:'방화셔터',repair:'시설공사',result:'공사 진행 중',content:'일체형방화셔터 출입구 밀폐 불량 → 보수',round:2},
+  {no:58,dong:'러닝센터',loc:'나눔관/옥상',equip:'소화설비',repair:'소방자체',result:'완료',content:'분말소화기 받침대 파손 → 조치',round:2},
+  {no:59,dong:'러닝센터',loc:'나눔관/3층',equip:'피난설비',repair:'소방자체',result:'완료',content:'피난구유도등 점등 불량 (등기구노후) → 교체',round:2},
+  {no:60,dong:'러닝센터',loc:'나눔관/3층',equip:'경보설비',repair:'소방자체',result:'완료',content:'발신기 누름 버튼 파손 → 교체',round:2},
+  {no:61,dong:'러닝센터',loc:'나눔관/2층',equip:'피난설비',repair:'소방자체',result:'완료',content:'복도 통로유도등 점등 불량 (양방향) → 교체',round:2},
+  {no:62,dong:'러닝센터',loc:'나눔관/2층',equip:'피난설비',repair:'소방자체',result:'완료',content:'복도 통로유도등 파손 (우방향) → 교체',round:2},
+  {no:63,dong:'러닝센터',loc:'나눔관/2층',equip:'경보설비',repair:'소방자체',result:'완료',content:'차동식감지기 작동 불량 (1개) → 교체',round:2},
+  {no:64,dong:'러닝센터',loc:'나눔관/2층',equip:'소화설비',repair:'소방자체',result:'완료',content:'스프링클러헤드 살수 반경 미달 (3.25m 초과) → 추가 설치',round:2},
+  {no:65,dong:'러닝센터',loc:'나눔관/2층',equip:'피난설비',repair:'소방자체',result:'완료',content:'계단 통로유도등 점등 불량 (등기구노후) → 교체',round:2},
+  {no:66,dong:'러닝센터',loc:'나눔관/1층',equip:'소화활동설비',repair:'소방자체',result:'완료',content:'송수구 조경수에 의한 사용 장애 → 장애물 제거',round:2},
+  {no:67,dong:'러닝센터',loc:'나눔관/1층',equip:'경보설비',repair:'소방공사',result:'완료',content:'감지기 미설치 (1개) → 설치',round:2},
+  {no:68,dong:'러닝센터',loc:'나눔관/1층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 (1개) → 교체',round:2},
+  {no:69,dong:'러닝센터',loc:'나눔관/지하1층',equip:'경보설비',repair:'소방공사',result:'완료',content:'감지기 미설치 → 정온식 감지선형감지기 설치',round:2},
+  {no:70,dong:'러닝센터',loc:'나눔관/지하1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'스프링클러헤드 차폐판 미설치 (1개) → 교체',round:2},
+  {no:71,dong:'러닝센터',loc:'나눔관/지하1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'스프링클러헤드 차폐판 미설치 (2개) → 교체',round:2},
+  {no:72,dong:'러닝센터',loc:'나눔관/지하1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'스프링클러헤드 차폐판 미설치 (1개) → 교체',round:2},
+  {no:73,dong:'러닝센터',loc:'나눔관/지하1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'스프링클러헤드 차폐판 미설치 (1개) → 교체',round:2},
+  {no:74,dong:'러닝센터',loc:'나눔관/지하1층',equip:'피난설비',repair:'소방자체',result:'완료',content:'비상조명등 예비전원 불량 → 자체 보수',round:2},
+  {no:75,dong:'러닝센터',loc:'나눔관/지하1층',equip:'소화설비',repair:'소방공사',result:'완료',content:'알람밸브 시험밸브함 개방형헤드 미설치 → 완료',round:2},
+  {no:76,dong:'러닝센터',loc:'나눔관/지하1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'유수검지장치실 표지 미부착 → 부착',round:2},
+  {no:77,dong:'러닝센터',loc:'나눔관/지하1층',equip:'소화설비',repair:'소방자체',result:'소방자체보수 진행중',content:'수신기 예비전원 불량 (DC24V*7Ah*2개) → 소방자체보수 진행중',round:2},
+  {no:78,dong:'러닝센터',loc:'나눔관/3층',equip:'방화문',repair:'소방공사',result:'공사 진행 중',content:'안전보호구함 측 자동폐쇄장치 연동 안됨 → 기구 교체',round:2},
+  {no:79,dong:'러닝센터',loc:'나눔관/3층',equip:'방화문',repair:'소방자체',result:'완료',content:'자동폐쇄장치 방화문 닫히는 순서 불량 → 장력조절 완료',round:2},
+  {no:80,dong:'러닝센터',loc:'나눔관/1층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화문 밀폐 불량 → 교체',round:2},
+  {no:81,dong:'러닝센터',loc:'나눔관/지하1층',equip:'방화문',repair:'소방공사',result:'공사 진행 중',content:'자동폐쇄장치 불량으로 방화문 닫히지 않음 → 교체',round:2},
+  {no:82,dong:'러닝센터',loc:'나눔관/지하1층',equip:'경보설비',repair:'시설공사',result:'공사 진행 중',content:'비상방송 송출 안됨 → 스피커 교체/선로 정비',round:2},
+  {no:83,dong:'러닝센터',loc:'나눔관/3층',equip:'경보설비',repair:'소방자체',result:'완료',content:'지구경종 기구 불량 → 교체',round:2},
+  {no:84,dong:'러닝센터',loc:'나눔관/2층',equip:'경보설비',repair:'시설공사',result:'공사 진행 중',content:'비상방송 송출 안됨 → 스피커 교체/선로 정비',round:2},
+  {no:85,dong:'러닝센터',loc:'나눔관/1층',equip:'경보설비',repair:'시설공사',result:'공사 진행 중',content:'비상방송 송출 안됨 → 스피커 교체/선로 정비',round:2},
+  {no:86,dong:'러닝센터',loc:'나눔관/1층',equip:'경보설비',repair:'시설공사',result:'공사 진행 중',content:'비상방송 스피커 미설치 → 설치',round:2},
+  {no:87,dong:'러닝센터',loc:'나움관/1층',equip:'소화설비',repair:'소방공사',result:'공사 진행 중',content:'상수도소화전 제수변 고착으로 개방 불량 → 정비',round:2},
+  {no:88,dong:'러닝센터',loc:'시공사관학교/3층',equip:'피난설비',repair:'소방자체',result:'완료',content:'계단 통로유도등 점등 불량 (등기구노후) → 교체',round:2},
+  {no:89,dong:'러닝센터',loc:'시공사관학교/3층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화문 장력 부족으로 폐쇄 안됨 → 도어클로져 교체',round:2},
+  {no:90,dong:'러닝센터',loc:'시공사관학교/2층',equip:'피난설비',repair:'소방자체',result:'완료',content:'휴대용비상조명등 점등 불량 → 배터리 교체',round:2},
+  {no:91,dong:'러닝센터',loc:'시공사관학교/2층',equip:'경보설비',repair:'소방자체',result:'완료',content:'아날로그감지기 고정 불량 (1개) → 베이스 고정',round:2},
+  {no:92,dong:'러닝센터',loc:'시공사관학교/1층',equip:'경보설비',repair:'소방자체',result:'소방자체보수 진행중',content:'열감지기 적응성 불량 (연기감지기 교체) → 예정',round:2},
+  {no:93,dong:'러닝센터',loc:'시공사관학교/1층',equip:'피난설비',repair:'소방자체',result:'완료',content:'휴대용비상조명등 점등 불량 → 배터리 교체',round:2},
+  {no:94,dong:'러닝센터',loc:'시공사관학교/3층',equip:'방화문',repair:'소방자체',result:'소방자체보수 진행중',content:'전층 방화문 연동시 107번 같이 연동 → 수신기 데이터 수정',round:2},
+  {no:95,dong:'러닝센터',loc:'시공사관학교/3층',equip:'방화문',repair:'소방자체',result:'완료',content:'방화문(107번) 닫히는 순서 불량 → 장력조절 완료',round:2},
+  {no:96,dong:'러닝센터',loc:'L-Stay(북)/8~2층',equip:'경보설비',repair:'소방자체',result:'완료',content:'차동식→연기감지기 교체 권장 → 교체 완료',round:2},
+  {no:97,dong:'러닝센터',loc:'L-Stay(북)/8층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:98,dong:'러닝센터',loc:'L-Stay(북)/옥탑',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 베이스 파손 → 교체',round:2},
+  {no:99,dong:'러닝센터',loc:'L-Stay(북)/8층',equip:'피난설비',repair:'소방자체',result:'완료',content:'8→7층 계단 통로유도등 점등불량 → 교체',round:2},
+  {no:100,dong:'러닝센터',loc:'L-Stay(북)/7층',equip:'피난설비',repair:'소방자체',result:'완료',content:'7→6층 계단 통로유도등 점등불량 → 교체',round:2},
+  {no:101,dong:'러닝센터',loc:'L-Stay(북)/7층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:102,dong:'러닝센터',loc:'L-Stay(북)/7층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:103,dong:'러닝센터',loc:'L-Stay(북)/6층',equip:'소화설비',repair:'소방자체',result:'완료',content:'분말소화기 호스 혼 파손 → 교체',round:2},
+  {no:104,dong:'러닝센터',loc:'L-Stay(북)/5층',equip:'경보설비',repair:'소방자체',result:'완료',content:'차동식감지기 작동불량 → 교체',round:2},
+  {no:105,dong:'러닝센터',loc:'L-Stay(북)/5층',equip:'소화설비',repair:'소방자체',result:'완료',content:'분말소화기 호스 혼 파손 → 교체',round:2},
+  {no:106,dong:'러닝센터',loc:'L-Stay(북)/4층',equip:'소화설비',repair:'소방자체',result:'완료',content:'분말소화기 호스 혼 파손 → 교체',round:2},
+  {no:107,dong:'러닝센터',loc:'L-Stay(북)/3층',equip:'소화설비',repair:'소방자체',result:'완료',content:'유수검지장치실 표지 미부착 → 부착',round:2},
+  {no:108,dong:'러닝센터',loc:'L-Stay(북)/2층',equip:'소화설비',repair:'소방자체',result:'완료',content:'유수검지장치실 표지 미부착 → 부착',round:2},
+  {no:109,dong:'러닝센터',loc:'L-Stay(북)/1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'유수검지장치실 표지 미부착 → 부착',round:2},
+  {no:110,dong:'러닝센터',loc:'L-Stay(북)/1층',equip:'경보설비',repair:'소방자체',result:'완료',content:'차동식감지기 적응성 불량 → 교체',round:2},
+  {no:111,dong:'러닝센터',loc:'L-Stay(남)/1층',equip:'경보설비',repair:'소방자체',result:'완료',content:'차동식감지기 적응성 불량 → 교체',round:2},
+  {no:112,dong:'러닝센터',loc:'L-Stay(남)/1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'분말소화기 호스 파손 → 교체',round:2},
+  {no:113,dong:'러닝센터',loc:'L-Stay(남)/1층',equip:'경보설비',repair:'소방자체',result:'완료',content:'차동식감지기 적응성 불량 → 교체',round:2},
+  {no:114,dong:'러닝센터',loc:'L-Stay(남)/옥탑',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:115,dong:'러닝센터',loc:'L-Stay(남)/4층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:116,dong:'러닝센터',loc:'L-Stay(남)/4층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:117,dong:'러닝센터',loc:'L-Stay(남)/4층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:118,dong:'러닝센터',loc:'L-Stay(남)/4층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:119,dong:'러닝센터',loc:'L-Stay(남)/4층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:120,dong:'러닝센터',loc:'L-Stay(남)/4층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:121,dong:'러닝센터',loc:'L-Stay(남)/4층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:122,dong:'러닝센터',loc:'L-Stay(남)/4층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:123,dong:'러닝센터',loc:'L-Stay(남)/4층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:124,dong:'러닝센터',loc:'L-Stay(남)/3층',equip:'소화설비',repair:'소방자체',result:'완료',content:'유수검지장치실 표지 미부착 → 부착',round:2},
+  {no:125,dong:'러닝센터',loc:'L-Stay(남)/2층',equip:'소화설비',repair:'소방자체',result:'완료',content:'유수검지장치실 표지 미부착 → 부착',round:2},
+  {no:126,dong:'러닝센터',loc:'L-Stay/지하1층',equip:'피난설비',repair:'소방공사',result:'완료',content:'피난구유도등 미설치 (중형) → 완료',round:2},
+  {no:127,dong:'러닝센터',loc:'L-Stay/지하1층',equip:'피난설비',repair:'소방공사',result:'완료',content:'피난구유도등 미설치 (중형) → 완료',round:2},
+  {no:128,dong:'러닝센터',loc:'L-Stay/지하1층',equip:'경보설비',repair:'소방공사',result:'완료',content:'감지기 미설치 (1개) → 완료',round:2},
+  {no:129,dong:'러닝센터',loc:'L-Stay/지하1층',equip:'소화설비',repair:'소방공사',result:'완료',content:'알람밸브 시험밸브함 개방형헤드 미설치 → 완료',round:2},
+  {no:130,dong:'러닝센터',loc:'L-Stay/지하1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'유수검지장치실 표지 미부착 → 부착',round:2},
+  {no:131,dong:'러닝센터',loc:'L-Stay/지하1층',equip:'소화설비',repair:'소방자체',result:'소방자체보수 진행중',content:'알람밸브 압력스위치 작동시 방화문 연동 안됨 → 데이터 수정',round:2},
+  {no:132,dong:'러닝센터',loc:'L-Stay(남)/1층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화문 틀어짐 및 문틀 걸림으로 폐쇄 안됨',round:2},
+  {no:133,dong:'러닝센터',loc:'L-Stay(남)/2층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화문 하부 문틀 걸림으로 폐쇄 안됨',round:2},
+  {no:134,dong:'러닝센터',loc:'L-Stay(북)/8층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화문(114번) 연동시 문틀 걸림으로 폐쇄 안됨',round:2},
+  {no:135,dong:'러닝센터',loc:'L-Stay(남)/7층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화문(53번) 연동시 상부 문틀 걸림으로 폐쇄 안됨',round:2},
+  {no:136,dong:'러닝센터',loc:'L-Stay(남)/6층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화문(38번) 연동시 닫히지 않음 → 다른 제조사 도어릴리즈 교체',round:2},
+  {no:137,dong:'러닝센터',loc:'L-Stay/지하1층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'북쪽동 화재시 방화문(151번) 연동 안됨 → 데이터 수정',round:2},
+  {no:138,dong:'러닝센터',loc:'L-Stay/지하1층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'남쪽동 화재시 방화문(152번) 연동 안됨 → 데이터 수정',round:2},
+  {no:139,dong:'러닝센터',loc:'채움관/전층',equip:'소화활동설비',repair:'소방공사',result:'공사 진행 중',content:'급기댐퍼 수신기 연동시 전층 연동 안됨 → 연동로직 변경',round:2},
+  {no:140,dong:'러닝센터',loc:'채움관/전층',equip:'소화활동설비',repair:'소방공사',result:'공사 진행 중',content:'배기댐퍼 수신기 연동시 댐퍼 연동 안됨 → 연동로직 변경',round:2},
+  {no:141,dong:'러닝센터',loc:'채움관/12층',equip:'소화활동설비',repair:'소방자체',result:'소방자체보수 진행중',content:'급기댐퍼 조작부와 모터잭 분리 상태 → 댐퍼/모터 교체',round:2},
+  {no:142,dong:'러닝센터',loc:'채움관/12층',equip:'소화활동설비',repair:'소방공사',result:'완료',content:'휀 연동시 급기댐퍼 고정 안됨 → 재고정 완료',round:2},
+  {no:143,dong:'러닝센터',loc:'채움관/11층',equip:'피난설비',repair:'소방자체',result:'완료',content:'소형 피난구유도등 적응성 불량 (2개) → 중형 교체',round:2},
+  {no:144,dong:'러닝센터',loc:'채움관/11층',equip:'피난설비',repair:'소방자체',result:'완료',content:'소형 피난구유도등 적응성 불량 (1개) → 중형 교체',round:2},
+  {no:145,dong:'러닝센터',loc:'채움관/11층',equip:'피난설비',repair:'소방자체',result:'완료',content:'소형 피난구유도등 적응성 불량 (1개) → 중형 교체',round:2},
+  {no:146,dong:'러닝센터',loc:'채움관/11층',equip:'피난설비',repair:'소방자체',result:'완료',content:'소형 피난구유도등 적응성 불량 (2개) → 중형 교체',round:2},
+  {no:147,dong:'러닝센터',loc:'채움관/10층',equip:'소화활동설비',repair:'소방자체',result:'완료',content:'비상콘센트 표지 미부착 → 부착',round:2},
+  {no:148,dong:'러닝센터',loc:'채움관/5층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:149,dong:'러닝센터',loc:'채움관/5층',equip:'소화설비',repair:'소방공사',result:'완료',content:'스프링클러헤드 보양 상태 (1개) → 제거',round:2},
+  {no:150,dong:'러닝센터',loc:'채움관/5층',equip:'소화설비',repair:'소방공사',result:'완료',content:'스프링클러헤드 보양 상태 (1개) → 제거',round:2},
+  {no:151,dong:'러닝센터',loc:'채움관/5층',equip:'소화설비',repair:'소방공사',result:'완료',content:'상향식 스프링클러헤드 페인트 도색 (2개) → 교체',round:2},
+  {no:152,dong:'러닝센터',loc:'채움관/4층',equip:'경보설비',repair:'소방자체',result:'완료',content:'연기감지기 작동 불량 → 교체',round:2},
+  {no:153,dong:'러닝센터',loc:'채움관/4층',equip:'소화설비',repair:'소방공사',result:'공사 진행 중',content:'스프링클러헤드 살수 반경 미달 (3.25m 초과)',round:2},
+  {no:154,dong:'러닝센터',loc:'채움관/4층',equip:'경보설비',repair:'소방자체',result:'완료',content:'차동식감지기 작동 불량 → 교체',round:2},
+  {no:155,dong:'러닝센터',loc:'채움관/4층',equip:'경보설비',repair:'소방자체',result:'완료',content:'차동식감지기 작동 불량 → 교체',round:2},
+  {no:156,dong:'러닝센터',loc:'채움관/4층',equip:'경보설비',repair:'소방자체',result:'소방자체보수 진행중',content:'연기감지기 작동 불량 → 교체 예정',round:2},
+  {no:157,dong:'러닝센터',loc:'채움관/4층',equip:'경보설비',repair:'소방자체',result:'소방자체보수 진행중',content:'연기감지기 작동 불량 → 교체 예정',round:2},
+  {no:158,dong:'러닝센터',loc:'채움관/4층',equip:'소화설비',repair:'소방자체',result:'완료',content:'창고 내 소화전 식별 불가 → 표지 설치',round:2},
+  {no:159,dong:'러닝센터',loc:'채움관/4층',equip:'소화활동설비',repair:'소방공사',result:'공사 진행 중',content:'급기댐퍼 모터 작동 불량 → 모터 교체',round:2},
+  {no:160,dong:'러닝센터',loc:'채움관/3층',equip:'소화설비',repair:'소방공사',result:'공사 진행 중',content:'스프링클러헤드 살수 반경 미달 → 진행 중',round:2},
+  {no:161,dong:'러닝센터',loc:'채움관/3층',equip:'소화설비',repair:'소방자체',result:'완료',content:'스프링클러헤드 페인트 도색 (2개) → 제거 완료',round:2},
+  {no:162,dong:'러닝센터',loc:'채움관/3층',equip:'소화설비',repair:'소방공사',result:'공사 진행 중',content:'스프링클러헤드 살수 반경 미달 → 진행 중',round:2},
+  {no:163,dong:'러닝센터',loc:'채움관/2층',equip:'경보설비',repair:'소방공사',result:'완료',content:'감지기 미설치 (1개) → 완료',round:2},
+  {no:164,dong:'러닝센터',loc:'채움관/2층',equip:'소화설비',repair:'소방공사',result:'공사 진행 중',content:'스프링클러헤드 살수 반경 미달 → 진행 중',round:2},
+  {no:165,dong:'러닝센터',loc:'채움관/1층',equip:'소화활동설비',repair:'소방공사',result:'공사 진행 중',content:'급기댐퍼 수동기동시 수신반 신호 확인 안됨 → 댐퍼 조작부 교체',round:2},
+  {no:166,dong:'러닝센터',loc:'채움관/1층',equip:'소화활동설비',repair:'소방공사',result:'공사 진행 중',content:'급기댐퍼 거실 차압공 위치 확인 안됨 → 천정면 설치',round:2},
+  {no:167,dong:'러닝센터',loc:'채움관/1층',equip:'소화활동설비',repair:'소방공사',result:'공사 진행 중',content:'급기댐퍼 거실 차압공 위치 확인 안됨 → 천정면 설치',round:2},
+  {no:168,dong:'러닝센터',loc:'채움관/1층',equip:'경보설비',repair:'소방자체',result:'소방자체보수 진행중',content:'감지기 작동시 식당 감지기 회로로 확인됨 → 일반감지기 회로로 수정',round:2},
+  {no:169,dong:'러닝센터',loc:'채움관/1층',equip:'경보설비',repair:'소방자체',result:'소방자체보수 진행중',content:'감지기 작동시 식당 감지기 회로로 확인됨 → 일반감지기 회로로 수정',round:2},
+  {no:170,dong:'러닝센터',loc:'채움관/지하1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'유수검지장치실 표지 미부착 → 부착',round:2},
+  {no:171,dong:'러닝센터',loc:'채움관/지하1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'피난구유도등 점등 불량 (중형) → 교체',round:2},
+  {no:172,dong:'러닝센터',loc:'채움관/지하1층',equip:'소화활동설비',repair:'소방자체',result:'소방자체보수 진행중',content:'비상용승강장 급기휀 동력제어반 OFF 스위치 점등 불량 → 교체',round:2},
+  {no:173,dong:'러닝센터',loc:'채움관/지하1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'측벽형 스프링클러헤드 차폐판 미설치 (12개) → 설치',round:2},
+  {no:174,dong:'러닝센터',loc:'채움관/지하1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'측벽형 스프링클러헤드 차폐판 미설치 (4개) → 설치',round:2},
+  {no:175,dong:'러닝센터',loc:'채움관/12층',equip:'방화문',repair:'소방자체',result:'소방자체보수 진행중',content:'방화문(57번) 도어릴리즈 불량으로 닫히지 않음 → 교체',round:2},
+  {no:176,dong:'러닝센터',loc:'채움관/12층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화문(70번) 연동시 바닥 카페트에 걸려 닫히지 않음 → 바닥 보수',round:2},
+  {no:177,dong:'러닝센터',loc:'채움관/9층',equip:'방화문',repair:'소방자체',result:'소방자체보수 진행중',content:'방화문(42번) 도어릴리즈 불량으로 닫히지 않음 → 교체',round:2},
+  {no:178,dong:'러닝센터',loc:'채움관/8층',equip:'방화문',repair:'소방자체',result:'소방자체보수 진행중',content:'방화문(37번) 연동시 닫히지 않음 → 도어릴리즈 위치 조정',round:2},
+  {no:179,dong:'러닝센터',loc:'채움관/6층',equip:'방화문',repair:'소방자체',result:'소방자체보수 진행중',content:'방화문(40번) 도어릴리즈 불량 → 교체',round:2},
+  {no:180,dong:'러닝센터',loc:'채움관/5층',equip:'방화문',repair:'소방자체',result:'소방자체보수 진행중',content:'방화문(34번) 연동시 닫히지 않음 → 도어릴리즈 위치 조정/교체',round:2},
+  {no:181,dong:'러닝센터',loc:'채움관/4층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화문(17번) 연동시 닫히지 않음 → 장력 조정',round:2},
+  {no:182,dong:'기숙사',loc:'난초동/A동 3~10층',equip:'피난설비',repair:'소방자체',result:'완료',content:'완강기 표지 변색 → 교체',round:2},
+  {no:183,dong:'기숙사',loc:'난초동/A동 3~10층',equip:'피난설비',repair:'소방자체',result:'완료',content:'완강기 표지 변색 → 교체',round:2},
+  {no:184,dong:'기숙사',loc:'난초동/B동 3~10층',equip:'피난설비',repair:'소방자체',result:'완료',content:'완강기 표지 변색 → 교체',round:2},
+  {no:185,dong:'기숙사',loc:'난초동/B동 3~10층',equip:'피난설비',repair:'소방자체',result:'완료',content:'완강기 표지 변색 → 교체',round:2},
+  {no:186,dong:'기숙사',loc:'난초동/A동 1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'알람밸브 탬퍼스위치 작동 불량 → 교체',round:2},
+  {no:187,dong:'기숙사',loc:'난초동/A동 1층',equip:'피난설비',repair:'소방자체',result:'완료',content:'출입구 피난구유도등 점등 불량 (등기구노후) → 교체',round:2},
+  {no:188,dong:'기숙사',loc:'난초동/B동 3층',equip:'소방설비',repair:'소방자체',result:'소방자체보수 진행중',content:'탬퍼스위치 작동 불량 → 교체',round:2},
+  {no:189,dong:'기숙사',loc:'난초동/B동 1층',equip:'경보설비',repair:'소방자체',result:'완료',content:'알람밸브 압력스위치 작동시 사이렌 송출 불량 → 교체',round:2},
+  {no:190,dong:'기숙사',loc:'난초동/B동 1층',equip:'소화설비',repair:'소방자체',result:'소방자체보수 진행중',content:'알람밸브 압력스위치 작동 불량 → 정비',round:2},
+  {no:191,dong:'기숙사',loc:'난초동/B동 B1층',equip:'경보설비',repair:'소방자체',result:'완료',content:'알람밸브 압력스위치 작동시 사이렌 송출 불량 → 교체',round:2},
+  {no:192,dong:'기숙사',loc:'난초동/B1층',equip:'소화설비',repair:'소방자체',result:'소방자체보수 진행중',content:'시수저수조 탬퍼스위치 작동 불량 → 교체',round:2},
+  {no:193,dong:'기숙사',loc:'난초동/B1층',equip:'소화설비',repair:'소방공사',result:'공사 진행 중',content:'예비펌프 성능시험시 유량계 추 미상승 → 유량계 교체',round:2},
+  {no:194,dong:'기숙사',loc:'난초동/B동 11층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'계단 출입구 방화문 밀폐 불량 (문틀걸림) → 보수',round:2},
+  {no:195,dong:'기숙사',loc:'난초동/A,B동 PH2층',equip:'경보설비',repair:'시설공사',result:'공사 진행 중',content:'비상방송 송출 불량 (앰프 연동 안됨) → 선로 정비',round:2},
+  {no:196,dong:'기숙사',loc:'난초동/A,B동 PH1층',equip:'경보설비',repair:'시설공사',result:'공사 진행 중',content:'비상방송 송출 불량 (앰프 연동 안됨) → 선로 정비',round:2},
+  {no:197,dong:'기숙사',loc:'난초동/A동 12층',equip:'경보설비',repair:'시설공사',result:'공사 진행 중',content:'비상방송 음량 미달 → 선로 정비',round:2},
+  {no:198,dong:'기숙사',loc:'난초동/B동 2층',equip:'경보설비',repair:'시설공사',result:'공사 진행 중',content:'비상방송 음량 미달 → 선로 정비',round:2},
+  {no:199,dong:'기숙사',loc:'난초동/B동 1층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'로비 복도 동장실 측 자동방화문 밀폐 불량 → 장력 조절',round:2},
+  {no:200,dong:'기숙사',loc:'백합동/5층',equip:'소화설비',repair:'소방자체',result:'소방자체보수 진행중',content:'알람밸브 압력스위치 작동 불량 → 교체',round:2},
+  {no:201,dong:'기숙사',loc:'백합동/4층',equip:'경보설비',repair:'소방자체',result:'소방자체보수 진행중',content:'알람밸브 압력스위치 작동시 사이렌 송출 불량 → 선로 정비',round:2},
+  {no:202,dong:'기숙사',loc:'백합동/1~7층',equip:'경보설비',repair:'소방공사',result:'공사 진행 중',content:'감지기 미설치 (면적 20㎡ 안됨) → 설치',round:2},
+  {no:203,dong:'기숙사',loc:'백합동/5층',equip:'피난설비',repair:'소방자체',result:'완료',content:'완강기 표지 탈락 → 부착',round:2},
+  {no:204,dong:'기숙사',loc:'백합동/3층',equip:'피난설비',repair:'소방자체',result:'완료',content:'완강기 표지 탈락 → 부착',round:2},
+  {no:205,dong:'기숙사',loc:'백합동/2층',equip:'피난설비',repair:'소방자체',result:'완료',content:'방화문 도면과 수신기 번호 다름 → 확인 완료',round:2},
+  {no:206,dong:'기숙사',loc:'백합동/2층',equip:'소화설비',repair:'소방자체',result:'완료',content:'스프링클러헤드 보양 상태 (1개) → 제거',round:2},
+  {no:207,dong:'기숙사',loc:'백합동/지하1층',equip:'피난설비',repair:'소방자체',result:'완료',content:'아날로그 감지기 도면 미표기 → 도면 수정',round:2},
+  {no:208,dong:'기숙사',loc:'백합동/어린이집',equip:'소화설비',repair:'소방공사',result:'공사 진행 중',content:'부저불량 → 수리',round:2},
+  {no:209,dong:'기숙사',loc:'백합동/1층',equip:'경보설비',repair:'시설공사',result:'공사 진행 중',content:'비상방송 음량 미달 → 선로 정비',round:2},
+  {no:210,dong:'기숙사',loc:'백합동/1~7층',equip:'방화구획',repair:'시설공사',result:'공사 진행 중',content:'배관 및 전선 관통부 층간 방화구획 미비 → 마감',round:2},
+  {no:211,dong:'기숙사',loc:'백합동/2층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'방화문 밀폐 불량 (팅겨나감) → 손잡이래치 교체',round:2},
+  {no:212,dong:'기숙사',loc:'백합동/지하1층',equip:'방화문',repair:'시설공사',result:'공사 진행 중',content:'출입구 방화문 밀폐 불량 (문틀걸림) → 정비',round:2},
+  {no:213,dong:'기숙사',loc:'복지관/1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'분말소화기 노즐불량 → 교체',round:2},
+  {no:214,dong:'기숙사',loc:'복지관/지하1층',equip:'소화설비',repair:'소방자체',result:'완료',content:'도면과 현장의 소화기번호 다름 → 통일',round:2},
+  {no:215,dong:'기숙사',loc:'복지관/지하2층',equip:'소화설비',repair:'소방자체',result:'완료',content:'할론소화기 충압 불량 → 교체',round:2},
+  {no:216,dong:'기숙사',loc:'복지관/2층',equip:'경보설비',repair:'소방공사',result:'공사 진행 중',content:'감지기 미설치 → 설치',round:2},
+  {no:217,dong:'기숙사',loc:'복지관/2층',equip:'피난설비',repair:'소방자체',result:'완료',content:'피난구유도등 점등 불량 (등기구노후) → 교체',round:2},
+  {no:218,dong:'기숙사',loc:'복지관/2층',equip:'피난설비',repair:'소방자체',result:'완료',content:'피난구유도등 점등 불량 (등기구노후) → 교체',round:2},
+  {no:219,dong:'기숙사',loc:'복지관/전층',equip:'경보설비',repair:'소방공사',result:'공사 진행 중',content:'발신기 작동시 수신기 응답 미확인 → 선로 정비',round:2},
+  {no:220,dong:'기숙사',loc:'복지관/지하1층',equip:'경보설비',repair:'소방공사',result:'공사 진행 중',content:'감지기 작동시 경계구역 불량 → 경계구역 통일',round:2},
+  {no:221,dong:'기숙사',loc:'복지관/지하1층',equip:'경보설비',repair:'소방공사',result:'공사 진행 중',content:'감지기 작동시 현장 수신기 확인 안됨 → 선로 정비',round:2},
+  {no:222,dong:'기숙사',loc:'복지관/지하2층',equip:'경보설비',repair:'소방자체',result:'완료',content:'차동식감지기 작동 불량 → 교체',round:2},
+  {no:223,dong:'기숙사',loc:'복지관/지하2층',equip:'경보설비',repair:'소방자체',result:'소방자체보수 진행중',content:'소화전 발신기 번호 도면과 다름 → 통일',round:2},
+  {no:224,dong:'기숙사',loc:'복지관',equip:'경보설비',repair:'시설공사',result:'공사 진행 중',content:'비상방송 송출 불량 (앰프 미연동) → 설비 정비',round:2},
+  {no:225,dong:'공장동',loc:'주차동/지하3층',equip:'경보설비',repair:'소방자체',result:'소방자체보수 진행중',content:'발신기 누름 버튼 접촉 불량 → 기구 교체',round:2},
+  {no:226,dong:'공장동',loc:'주차동/지하3층',equip:'소화설비',repair:'소방공사',result:'공사 진행 중',content:'주차장 천정 누수 철판으로 스프링클러헤드 살수 장애 → 헤드 추가 설치',round:2},
+  {no:227,dong:'공장동',loc:'주차동/지하2층',equip:'경보설비',repair:'소방자체',result:'소방자체보수 진행중',content:'주차램프 측 정온식감지기 작동불량 → 교체',round:2},
+  {no:228,dong:'공장동',loc:'주차동/지하3층',equip:'방화셔터',repair:'소방자체',result:'소방자체보수 진행중',content:'1차 연기감지기 작동후 방화셔터 연동시 162번 같이 확인됨 → 선로 점검',round:2},
+  {no:229,dong:'공장동',loc:'주차동/지하2층',equip:'방화셔터',repair:'시설공사',result:'공사 진행 중',content:'일체형방화셔터 출입구 철판 탈락으로 밀폐 안됨 → 보수',round:2},
+  {no:230,dong:'공장동',loc:'주차동/지하3층',equip:'방화셔터',repair:'시설공사',result:'공사 진행 중',content:'일체형방화셔터 2차 리미트 불량으로 밀폐 안됨 → 조정',round:2},
+];
+
+/* ══════════════════════════════════════════
+   ★개선1: RECORDS 기반 전체 집계 자동계산
+══════════════════════════════════════════ */
+function calcStats(recs){
+  const total  = recs.length;
+  const done   = recs.filter(r=>r.result==='완료').length;
+  const soco   = recs.filter(r=>r.result==='공사 진행 중'&&r.repair==='소방공사').length;
+  const siso   = recs.filter(r=>r.result==='공사 진행 중'&&r.repair==='시설공사').length;
+  const ing    = soco+siso;
+  const plan   = recs.filter(r=>r.result==='소방자체보수 진행중').length;
+  const query  = recs.filter(r=>r.result==='소방청 질의 회신').length;
+  const remain = total-done;
+  const pct    = v=>total?Math.round(v/total*100):0;
+  // 보수구분별
+  const bySoco_total  = recs.filter(r=>r.repair==='소방공사').length;
+  const bySoco_done   = recs.filter(r=>r.repair==='소방공사'&&r.result==='완료').length;
+  const bySoco_ing    = recs.filter(r=>r.repair==='소방공사'&&r.result==='공사 진행 중').length;
+  const bySiso_total  = recs.filter(r=>r.repair==='시설공사').length;
+  const bySiso_done   = recs.filter(r=>r.repair==='시설공사'&&r.result==='완료').length;
+  const bySiso_ing    = recs.filter(r=>r.repair==='시설공사'&&r.result==='공사 진행 중').length;
+  const bySiso_query  = 0; // 소방청질의는 독립 repair로 분리
+  const byQuery_total = recs.filter(r=>r.repair==='소방청질의').length;
+  const byQuery_done  = recs.filter(r=>r.repair==='소방청질의'&&r.result==='완료').length;
+  const byQuery_ing   = recs.filter(r=>r.repair==='소방청질의'&&r.result==='소방청 질의 회신').length;
+  const bySelf_total  = recs.filter(r=>r.repair==='소방자체').length;
+  const bySelf_done   = recs.filter(r=>r.repair==='소방자체'&&r.result==='완료').length;
+  const bySelf_plan   = recs.filter(r=>r.repair==='소방자체'&&r.result==='소방자체보수 진행중').length;
+  // 동별
+  const dongs = ['공장동','기숙사','러닝센터','생기원'];
+  const dongStats = dongs.map(dn=>{
+    const sub = recs.filter(r=>r.dong===dn);
+    return {
+      name:dn,total:sub.length,
+      done:sub.filter(r=>r.result==='완료').length,
+      ing_soco:sub.filter(r=>r.result==='공사 진행 중'&&r.repair==='소방공사').length,
+      ing_siso:sub.filter(r=>r.result==='공사 진행 중'&&r.repair==='시설공사').length,
+      plan:sub.filter(r=>r.result==='소방자체보수 진행중').length,
+      query:sub.filter(r=>r.result==='소방청 질의 회신').length,
+    };
+  });
+  // 설비별
+  const equipMap={};
+  recs.forEach(r=>{if(r.equip)equipMap[r.equip]=(equipMap[r.equip]||0)+1;});
+  const equips = Object.entries(equipMap).sort((a,b)=>b[1]-a[1]).map(([name,cnt])=>({name,cnt}));
+  return {total,done,soco,siso,ing,plan,query,remain,pct,
+    bySoco:{total:bySoco_total,done:bySoco_done,ing:bySoco_ing},
+    bySiso:{total:bySiso_total,done:bySiso_done,ing:bySiso_ing,query:0},
+    bySelf:{total:bySelf_total,done:bySelf_done,plan:bySelf_plan},
+    byQuery:{total:byQuery_total,done:byQuery_done,ing:byQuery_ing},
+    dongStats,equips};
+}
+
+/* ══ 탭 전환 ══ */
+const panels=document.querySelectorAll('.panel');
+const tabEls=document.querySelectorAll('.tab');
+let inited=false;
+function go(i){
+  panels.forEach((p,j)=>p.classList.toggle('active',i===j));
+  tabEls.forEach((t,j)=>t.classList.toggle('active',i===j));
+  if(!inited){initAll();inited=true;}
+}
+
+/* ══════════════════════════════════════════
+   initAll: 모든 탭 데이터를 RECORDS 기반으로 렌더
+══════════════════════════════════════════ */
+function initAll(){
+  const S = calcStats(RECORDS);
+  const C={done:'#1A7A4A',ing:'#E67E22',ing2:'#1B4F8A',plan:'#2980B9',query:'#8E44AD',red:'#A50034'};
+
+  // ★개선1: 헤더 자동갱신
+  const _t=new Date(),_yy=_t.getFullYear(),_mm=String(_t.getMonth()+1).padStart(2,'0'),_dd=String(_t.getDate()).padStart(2,'0');
+  document.getElementById('hdr_info').innerHTML=`기준일 : ${_yy}. ${_mm}. ${_dd} &nbsp;|&nbsp; 총 ${S.total}건`;
+
+  // ── T0 KPI 자동계산 ──
+  document.getElementById('kpi_total').textContent=S.total;
+  document.getElementById('kpi_total_sub').textContent=`1차 241건 → 2차 ${S.total}건`;
+  document.getElementById('kpi_total_badge').textContent=`총 ${S.total}건`;
+  document.getElementById('kpi_done').textContent=S.done;
+  document.getElementById('kpi_done_pct').textContent=S.pct(S.done)+'%';
+  document.getElementById('kpi_ing').textContent=S.ing;
+  document.getElementById('kpi_ing_detail').innerHTML=`
+    <div style="text-align:center;background:var(--ing-lt);border-radius:8px;padding:5px 12px;">
+      <div style="font-size:20px;font-weight:900;color:var(--ing);line-height:1;">${S.soco}</div>
+      <div style="font-size:10px;color:var(--ing);font-weight:600;margin-top:2px;">소방공사</div>
+    </div>
+    <div style="text-align:center;background:var(--ing2-lt);border-radius:8px;padding:5px 12px;">
+      <div style="font-size:20px;font-weight:900;color:var(--ing2);line-height:1;">${S.siso}</div>
+      <div style="font-size:10px;color:var(--ing2);font-weight:600;margin-top:2px;">시설공사</div>
+    </div>`;
+  document.getElementById('kpi_ing_pct').textContent=S.pct(S.ing)+'%';
+  document.getElementById('kpi_plan').textContent=S.plan;
+  document.getElementById('kpi_plan_pct').textContent=S.pct(S.plan)+'%';
+  document.getElementById('kpi_remain').textContent=S.remain;
+  document.getElementById('kpi_remain_pct').textContent=S.pct(S.remain)+'%';
+  document.getElementById('kpi_remain_detail').innerHTML=
+    `<strong style="color:var(--red)">미완료 ${S.remain}건 현황</strong><br>
+    공사진행중 <span style="color:var(--ing);font-weight:700">소방공사 ${S.soco}건</span> · <span style="color:var(--ing2);font-weight:700">시설공사 ${S.siso}건</span><br>
+    소방자체보수 진행중 <span style="color:var(--plan);font-weight:700">${S.plan}건</span> &nbsp;·&nbsp;
+    소방청 질의 <span style="color:var(--query);font-weight:700">${S.query}건</span>`;
+  document.getElementById('kpi_query').textContent=S.query;
+  document.getElementById('kpi_query_pct').textContent=S.pct(S.query)+'%';
+
+  // ── T0 동별 진행률 & 테이블 ──
+  const t0p=document.getElementById('t0_prog');
+  const t0tbl=document.getElementById('t0_tbl');
+  t0p.innerHTML=''; t0tbl.innerHTML='';
+  S.dongStats.forEach(d=>{
+    const pct=d.total?Math.round(d.done/d.total*100):0;
+    const clr=pct>=60?C.done:pct>=40?C.plan:C.red;
+    t0p.innerHTML+=`<div class="prog-row"><span class="prog-lbl">${d.name}</span><div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${clr}"></div></div><span class="prog-val" style="color:${clr}">${pct}%</span><span style="font-size:11px;color:var(--text2);margin-left:6px">${d.done}/${d.total}건</span></div>`;
+    t0tbl.innerHTML+=`<tr>
+      <td style="font-weight:600">${d.name}</td>
+      <td class="tc">${d.total}</td>
+      <td class="tc" style="color:var(--done);font-weight:700">${d.done}</td>
+      <td class="tc" style="color:var(--ing);font-weight:700">${d.ing_soco}</td>
+      <td class="tc" style="color:var(--ing2);font-weight:700">${d.ing_siso}</td>
+      <td class="tc" style="color:var(--plan);font-weight:700">${d.plan}</td>
+      <td class="tc" style="color:var(--query);font-weight:700">${d.query}</td>
+      <td class="tc"><div style="display:flex;align-items:center;gap:5px"><div style="flex:1;height:7px;background:var(--gray2);border-radius:4px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${clr};border-radius:4px"></div></div><span style="font-size:11px;font-weight:700;min-width:30px">${pct}%</span></div></td>
+      <td class="tc" style="color:var(--red)">${d.total-d.done}</td></tr>`;
+  });
+  const tot=S.dongStats.reduce((a,d)=>({total:a.total+d.total,done:a.done+d.done,ing_soco:a.ing_soco+d.ing_soco,ing_siso:a.ing_siso+d.ing_siso,plan:a.plan+d.plan,query:a.query+d.query}),{total:0,done:0,ing_soco:0,ing_siso:0,plan:0,query:0});
+  const totPct=tot.total?Math.round(tot.done/tot.total*100):0;
+  t0tbl.innerHTML+=`<tr><td>합  계</td><td class="tc">${tot.total}</td><td class="tc" style="color:var(--done)">${tot.done}</td><td class="tc" style="color:var(--ing)">${tot.ing_soco}</td><td class="tc" style="color:var(--ing2)">${tot.ing_siso}</td><td class="tc" style="color:var(--plan)">${tot.plan}</td><td class="tc" style="color:var(--query)">${tot.query}</td><td class="tc" style="color:var(--done);font-weight:700">${totPct}%</td><td class="tc" style="color:var(--red)">${tot.total-tot.done}</td></tr>`;
+
+  // ── T1 1차·2차 비교 (★개선3: 2차 수치 자동계산) ──
+  const soco1=75,socoD1=5,siso1=50,sisoD1=0,self1=116,selfD1=87,total1=241,done1=92;
+  const soco2=S.bySoco.total, socoD2=S.bySoco.done, socoIng2=S.bySoco.ing;
+  const siso2=S.bySiso.total, sisoD2=S.bySiso.done, sisoIng2=S.bySiso.ing, sisoQ2=S.bySiso.query;
+  const self2=S.bySelf.total, selfD2=S.bySelf.done, selfP2=S.bySelf.plan;
+  const pct1=Math.round(done1/total1*100);
+  const pct2=S.pct(S.done);
+  const pctDiff=pct2-pct1;
+  const socoPct2=soco2?Math.round(socoD2/soco2*100):0;
+  const selfPct2=self2?Math.round(selfD2/self2*100):0;
+  document.getElementById('cmp_total').textContent=S.total;
+  document.getElementById('cmp_rows').innerHTML=`
+    <div style="display:flex;gap:8px;align-items:stretch;grid-column:1/-1;">
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;flex:1;">
+        <div style="background:#fff;border-radius:8px;padding:8px 6px;text-align:center;border:2px solid var(--done);"><div style="font-size:15px;font-weight:900;color:var(--done);">${S.done}</div><div style="font-size:9px;color:var(--text2);margin-top:2px;">완료</div><div style="font-size:9px;font-weight:700;color:var(--done);">${pct2}% ▲+${S.done-done1}</div></div>
+        <div style="background:#fff;border-radius:8px;padding:8px 6px;text-align:center;border:1px solid var(--border);"><div style="font-size:15px;font-weight:900;color:var(--done);">${socoD2}</div><div style="font-size:9px;color:var(--text2);margin-top:2px;">소방공사<br>완료</div><div style="font-size:9px;font-weight:600;color:var(--done);">${socoPct2}% ▲+${socoD2-socoD1}</div></div>
+        <div style="background:#fff;border-radius:8px;padding:8px 6px;text-align:center;border:1px solid var(--border);"><div style="font-size:15px;font-weight:900;color:var(--done);">${selfD2}</div><div style="font-size:9px;color:var(--text2);margin-top:2px;">소방자체<br>완료</div><div style="font-size:9px;font-weight:600;color:var(--done);">${selfPct2}% ▲+${selfD2-selfD1}</div></div>
+        <div style="background:#fff;border-radius:8px;padding:8px 6px;text-align:center;border:1px solid var(--border);"><div style="font-size:15px;font-weight:900;color:var(--ing);">${socoIng2}</div><div style="font-size:9px;color:var(--text2);margin-top:2px;">소방공사<br>진행중</div><div style="font-size:9px;font-weight:600;color:var(--done);">▼-${soco1-socoD1-socoIng2>=0?soco1-socoD1-socoIng2:0}</div></div>
+        <div style="background:#fff;border-radius:8px;padding:8px 6px;text-align:center;border:1px solid var(--border);"><div style="font-size:15px;font-weight:900;color:var(--ing2);">${sisoIng2}</div><div style="font-size:9px;color:var(--text2);margin-top:2px;">시설공사<br>진행중</div><div style="font-size:9px;color:var(--text3);">유지</div></div>
+      </div>
+      <div style="background:#FDF0F3;border:2px solid #A50034;border-radius:10px;padding:10px 14px;text-align:center;min-width:72px;display:flex;flex-direction:column;justify-content:center;">
+        <div style="font-size:22px;font-weight:900;color:#A50034;line-height:1;">${S.remain}</div>
+        <div style="font-size:9px;color:#A50034;font-weight:700;margin-top:3px;">미완료</div>
+        <div style="font-size:9px;color:var(--done);font-weight:700;margin-top:2px;">▼-${total1-done1-S.remain}</div>
+      </div>
+    </div>`;
+
+  // 완료율 도넛 차트 렌더 함수
+  function drawDonut(canvasId, pct, color, prevPct){
+    const el=document.getElementById(canvasId);
+    if(!el)return;
+    if(el._chartInst){el._chartInst.destroy();}
+    el._chartInst=new Chart(el,{
+      type:'doughnut',
+      data:{datasets:[{data:[pct,100-pct],backgroundColor:[color,'#E8E4DF'],borderWidth:0,borderRadius:4}]},
+      options:{responsive:false,cutout:'62%',plugins:{legend:{display:false},tooltip:{enabled:false}},animation:{duration:700}}
+    });
+  }
+  // 도넛 라벨 오버레이 함수
+  function donutLabel(wrapperId, pct, delta, color){
+    const w=document.getElementById(wrapperId);
+    if(!w)return;
+    w.style.position='relative';
+    let lbl=w.querySelector('.donut-lbl');
+    if(!lbl){lbl=document.createElement('div');lbl.className='donut-lbl';lbl.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;width:80px;';w.appendChild(lbl);}
+    const dColor=delta>=0?'#1A7A4A':'#A50034';
+    lbl.innerHTML=`<div style="font-size:22px;font-weight:900;color:${color};line-height:1;">${pct}%</div><div style="font-size:10px;font-weight:700;color:${dColor};margin-top:3px;">${delta>=0?'+':''}${delta.toFixed(1)}%p</div>`;
+  }
+
+  document.getElementById('delta_strip').innerHTML=`
+    <div style="text-align:center;padding:10px 6px;">
+      <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px;">전체 완료율</div>
+      <div id="donut_wrap_all" style="width:130px;height:130px;margin:0 auto;"><canvas id="donut_all" width="130" height="130"></canvas></div>
+      <div style="margin-top:6px;font-size:11px;color:var(--text2);">1차 ${pct1}% → 2차</div>
+    </div>
+    <div style="text-align:center;padding:10px 6px;">
+      <div style="font-size:10px;font-weight:700;color:var(--text2);margin-bottom:6px;">소방공사 완료율</div>
+      <div id="donut_wrap_soco" style="width:90px;height:90px;margin:0 auto;"><canvas id="donut_soco" width="90" height="90"></canvas></div>
+      <div style="margin-top:4px;font-size:10px;color:var(--text2);">1차 6.7% → 2차</div>
+    </div>
+    <div style="text-align:center;padding:10px 6px;">
+      <div style="font-size:10px;font-weight:700;color:var(--text2);margin-bottom:6px;">소방자체 완료율</div>
+      <div id="donut_wrap_self" style="width:90px;height:90px;margin:0 auto;"><canvas id="donut_self" width="90" height="90"></canvas></div>
+      <div style="margin-top:4px;font-size:10px;color:var(--text2);">1차 75% → 2차</div>
+    </div>
+    <div style="text-align:center;padding:10px 6px;">
+      <div style="font-size:10px;font-weight:700;color:var(--text2);margin-bottom:6px;">시설공사 완료율</div>
+      <div id="donut_wrap_siso" style="width:90px;height:90px;margin:0 auto;"><canvas id="donut_siso" width="90" height="90"></canvas></div>
+      <div style="margin-top:4px;font-size:10px;color:var(--warn);font-weight:600;">진행중 ${sisoIng2}건</div>
+    </div>
+    <div style="text-align:center;padding:10px 6px;background:var(--query-lt);border-radius:12px;display:flex;flex-direction:column;justify-content:center;">
+      <div style="font-size:11px;font-weight:700;color:var(--query);margin-bottom:8px;">소방청 질의 대기</div>
+      <div style="font-size:48px;font-weight:900;color:var(--query);line-height:1;">${sisoQ2}</div>
+      <div style="font-size:12px;color:var(--query);margin-top:4px;font-weight:600;">건</div>
+      <div style="font-size:11px;font-weight:600;color:var(--query);margin-top:6px;">이중덧문 관련</div>
+    </div>`;
+  setTimeout(()=>{
+    drawDonut('donut_all', pct2, '#A50034', pct1);
+    donutLabel('donut_wrap_all', pct2, pctDiff, '#A50034');
+    drawDonut('donut_soco', socoPct2, '#1A7A4A', 6.7);
+    donutLabel('donut_wrap_soco', socoPct2, socoPct2-6.7, '#1A7A4A');
+    drawDonut('donut_self', selfPct2, '#1A7A4A', 75);
+    donutLabel('donut_wrap_self', selfPct2, selfPct2-75, '#1A7A4A');
+    const _sisoPct=S.bySiso.total?Math.round(S.bySiso.done/S.bySiso.total*100):0;
+    drawDonut('donut_siso', _sisoPct, '#B35900', 0);
+    donutLabel('donut_wrap_siso', _sisoPct, _sisoPct, '#B35900');
+  },100);
+
+  document.getElementById('t1_prog_rows').innerHTML=`
+    <div style="display:grid;grid-template-columns:68px 1fr 120px 60px;gap:10px;align-items:center;margin-bottom:10px;">
+      <span style="font-size:12px;font-weight:700;">소방공사</span>
+      <div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <span style="font-size:10px;color:var(--text3);width:18px;">1차</span>
+          <div style="flex:1;height:8px;background:var(--gray2);border-radius:6px;overflow:hidden;"><div style="width:6.7%;height:100%;background:#9DB0C4;border-radius:6px;"></div></div>
+          <span style="font-size:10px;color:var(--text3);min-width:32px;">6.7%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:10px;color:var(--done);width:18px;font-weight:700;">2차</span>
+          <div style="flex:1;height:8px;background:var(--gray2);border-radius:6px;overflow:hidden;"><div style="width:${socoPct2}%;height:100%;background:var(--done);border-radius:6px;"></div></div>
+          <span style="font-size:10px;color:var(--done);font-weight:700;min-width:32px;">${socoPct2}%</span>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8;">완료 ${socoD1} → ${socoD2}건<br>진행중 ${soco1-socoD1} → ${socoIng2}건</div>
+      <div style="font-size:13px;font-weight:700;color:var(--done);text-align:center;">+${(socoPct2-6.7).toFixed(1)}%p</div>
+    </div>
+    <div style="height:1px;background:var(--border);margin:6px 0;"></div>
+    <div style="display:grid;grid-template-columns:68px 1fr 120px 60px;gap:10px;align-items:center;margin-bottom:10px;">
+      <span style="font-size:12px;font-weight:700;">소방자체</span>
+      <div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <span style="font-size:10px;color:var(--text3);width:18px;">1차</span>
+          <div style="flex:1;height:8px;background:var(--gray2);border-radius:6px;overflow:hidden;"><div style="width:75%;height:100%;background:#9DB0C4;border-radius:6px;"></div></div>
+          <span style="font-size:10px;color:var(--text3);min-width:32px;">75.0%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:10px;color:var(--done);width:18px;font-weight:700;">2차</span>
+          <div style="flex:1;height:8px;background:var(--gray2);border-radius:6px;overflow:hidden;"><div style="width:${selfPct2}%;height:100%;background:var(--done);border-radius:6px;"></div></div>
+          <span style="font-size:10px;color:var(--done);font-weight:700;min-width:32px;">${selfPct2}%</span>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8;">완료 ${selfD1} → ${selfD2}건<br>예정 ${self1-selfD1} → ${selfP2}건</div>
+      <div style="font-size:13px;font-weight:700;color:var(--done);text-align:center;">+${(selfPct2-75).toFixed(1)}%p</div>
+    </div>
+    <div style="height:1px;background:var(--border);margin:6px 0;"></div>
+    <div style="display:grid;grid-template-columns:68px 1fr 120px 60px;gap:10px;align-items:center;margin-bottom:6px;">
+      <span style="font-size:12px;font-weight:700;">시설공사</span>
+      <div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <span style="font-size:10px;color:var(--text3);width:18px;">1차</span>
+          <div style="flex:1;height:8px;background:var(--gray2);border-radius:6px;overflow:hidden;"><div style="width:0%;height:100%;background:#9DB0C4;border-radius:6px;"></div></div>
+          <span style="font-size:10px;color:var(--text3);min-width:32px;">0%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:10px;color:var(--ing2);width:18px;font-weight:700;">2차</span>
+          <div style="flex:1;height:8px;background:var(--gray2);border-radius:6px;overflow:hidden;"><div style="width:0%;height:100%;background:var(--ing2);border-radius:6px;"></div></div>
+          <span style="font-size:10px;color:var(--ing2);font-weight:700;min-width:32px;">0%</span>
+        </div>
+      </div>
+      <div style="font-size:11px;line-height:1.8;">완료 0건 유지<br><span style="color:var(--ing2);font-weight:700;">진행중 ${sisoIng2}건</span></div>
+      <div style="font-size:12px;font-weight:700;color:var(--text3);text-align:center;">변동없음</div>
+    </div>
+    <div style="display:grid;grid-template-columns:68px 1fr 120px 60px;gap:10px;align-items:center;margin-bottom:6px;">
+      <span style="font-size:12px;font-weight:700;color:var(--query);">소방청질의</span>
+      <div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:10px;color:var(--query);width:18px;font-weight:700;">대기</span>
+          <div style="flex:1;height:8px;background:var(--query-lt);border-radius:6px;overflow:hidden;"><div style="width:100%;height:100%;background:var(--query);border-radius:6px;opacity:.4;"></div></div>
+          <span style="font-size:10px;color:var(--query);font-weight:700;min-width:32px;">${sisoQ2}건</span>
+        </div>
+      </div>
+      <div style="font-size:11px;line-height:1.8;color:var(--query);">이중덧문 관련<br>회신 대기</div>
+      <div style="font-size:12px;font-weight:700;color:var(--query);text-align:center;">회신대기</div>
+    </div>
+    <div style="height:2px;background:#2C3E50;margin:8px 0;"></div>
+    <div style="display:grid;grid-template-columns:68px 1fr 120px 60px;gap:10px;align-items:center;">
+      <span style="font-size:13px;font-weight:700;">전  체</span>
+      <div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <span style="font-size:10px;color:var(--text3);width:18px;">1차</span>
+          <div style="flex:1;height:10px;background:var(--gray2);border-radius:6px;overflow:hidden;"><div style="width:${pct1}%;height:100%;background:#9DB0C4;border-radius:6px;opacity:.8;"></div></div>
+          <span style="font-size:11px;color:var(--text3);min-width:32px;">${pct1}%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:10px;color:var(--red);width:18px;font-weight:700;">2차</span>
+          <div style="flex:1;height:10px;background:var(--gray2);border-radius:6px;overflow:hidden;"><div style="width:${pct2}%;height:100%;background:var(--red);border-radius:6px;"></div></div>
+          <span style="font-size:11px;color:var(--red);font-weight:700;min-width:32px;">${pct2}%</span>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8;">완료 ${done1} → ${S.done}건<br><span style="color:var(--done);">미완료 ${total1-done1} → ${S.remain}건</span></div>
+      <div style="font-size:16px;font-weight:700;color:var(--red);text-align:center;">+${pctDiff}%p</div>
+    </div>`;
+
+  // ── T2 동별 ──
+  const t2tbl=document.getElementById('t2_tbl');
+  const t2p=document.getElementById('t2_prog');
+  t2tbl.innerHTML=''; t2p.innerHTML='';
+  S.dongStats.forEach(d=>{
+    const pct=d.total?Math.round(d.done/d.total*100):0;
+    const clr=pct>=60?C.done:pct>=40?C.plan:C.red;
+    t2tbl.innerHTML+=`<tr>
+      <td style="font-weight:600">${d.name}</td>
+      <td class="tc">${d.total}</td>
+      <td class="tc" style="color:var(--done);font-weight:700">${d.done}</td>
+      <td class="tc" style="color:var(--ing);font-weight:700">${d.ing_soco}</td>
+      <td class="tc" style="color:var(--ing2);font-weight:700">${d.ing_siso}</td>
+      <td class="tc" style="color:var(--plan);font-weight:700">${d.plan}</td>
+      <td class="tc" style="color:var(--query);font-weight:700">${d.query}</td>
+      <td class="tc"><div style="display:flex;align-items:center;gap:5px"><div style="flex:1;height:7px;background:var(--gray2);border-radius:4px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${clr};border-radius:4px"></div></div><span style="font-size:11px;font-weight:700;min-width:30px">${pct}%</span></div></td>
+      <td class="tc" style="color:var(--red)">${d.total-d.done}</td></tr>`;
+    t2p.innerHTML+=`<div class="prog-row"><span class="prog-lbl">${d.name}</span><div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${clr}"></div></div><span class="prog-val" style="color:${clr}">${pct}%</span><span style="font-size:11px;color:var(--text2);margin-left:6px">${d.done}/${d.total}건</span></div>`;
+  });
+  t2tbl.innerHTML+=`<tr><td>합  계</td><td class="tc">${tot.total}</td><td class="tc" style="color:var(--done)">${tot.done}</td><td class="tc" style="color:var(--ing)">${tot.ing_soco}</td><td class="tc" style="color:var(--ing2)">${tot.ing_siso}</td><td class="tc" style="color:var(--plan)">${tot.plan}</td><td class="tc" style="color:var(--query)">${tot.query}</td><td class="tc" style="color:var(--done);font-weight:700">${totPct}%</td><td class="tc" style="color:var(--red)">${tot.total-tot.done}</td></tr>`;
+
+  // ── T2 히트맵 ──
+  const EQUIP_NAMES=['경보설비','소화설비','방화문','피난설비','소화활동설비','방화셔터','방화구획','소방설비'];
+  const EQUIP_COLORS=['#C0392B','#E74C3C','#E67E22','#F39C12','#27AE60','#2980B9','#8E44AD','#455A64'];
+  const DONG_NAMES=['공장동','기숙사','러닝센터','생기원'];
+  const DONG_COLORS=['#C0392B','#2980B9','#1A7A4A','#8E44AD'];
+  const MATRIX={};
+  DONG_NAMES.forEach(dn=>{
+    MATRIX[dn]=EQUIP_NAMES.map(en=>RECORDS.filter(r=>r.dong===dn&&r.equip===en).length);
+  });
+  function heatColor(v,max){if(v===0)return'#FFF5F5';if(v<=3)return'#FFCCCC';if(v<=9)return'#FF8888';return'#CC2200';}
+  function heatText(v){return v===0?'<span style="color:#ccc">-</span>':`<span style="color:${v>=10?'#fff':'#222'};font-weight:700">${v}</span>`;}
+  const hmBody=document.getElementById('heatmap_body');
+  if(hmBody){
+    hmBody.innerHTML='';
+    DONG_NAMES.forEach(d=>{
+      const row=MATRIX[d];
+      const total=row.reduce((a,b)=>a+b,0);
+      const max=Math.max(...Object.values(MATRIX).map(r=>Math.max(...r)));
+      let tds=row.map((v,i)=>`<td class="tc" style="background:${heatColor(v,max)};padding:10px 8px;">${heatText(v)}</td>`).join('');
+      hmBody.innerHTML+=`<tr><td style="font-weight:700;padding-left:12px">${d}</td>${tds}<td class="tc" style="font-weight:700;background:#F0EDE8">${total}</td></tr>`;
+    });
+    const totals=EQUIP_NAMES.map((_,i)=>DONG_NAMES.reduce((a,d)=>a+MATRIX[d][i],0));
+    const grandTotal=totals.reduce((a,b)=>a+b,0);
+    let totTds=totals.map(v=>`<td class="tc" style="font-weight:700;background:#E8E4DF">${v}</td>`).join('');
+    hmBody.innerHTML+=`<tr style="background:#E8E4DF"><td style="font-weight:700;padding-left:12px">합 계</td>${totTds}<td class="tc" style="font-weight:700">${grandTotal}</td></tr>`;
+  }
+  // 누적 가로 막대
+  const distEl=document.getElementById('equip_dist_bars');
+  if(distEl){
+    distEl.innerHTML='';
+    DONG_NAMES.forEach((d,di)=>{
+      const row=MATRIX[d];
+      const total=row.reduce((a,b)=>a+b,0);
+      const segments=row.map((v,i)=>v>0?`<div style="flex:${v};background:${EQUIP_COLORS[i]};height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;min-width:${v>3?'28px':'0'};overflow:hidden" title="${EQUIP_NAMES[i]}: ${v}건">${v>2?v:''}</div>`:'').join('');
+      distEl.innerHTML+=`<div style="display:grid;grid-template-columns:80px 1fr 40px;align-items:center;gap:10px;margin-bottom:10px;"><span style="font-size:12px;font-weight:700;color:${DONG_COLORS[di]}">${d}</span><div style="height:28px;border-radius:6px;overflow:hidden;display:flex;background:#eee;">${segments}</div><span style="font-size:12px;font-weight:700;color:var(--text2)">${total}건</span></div>`;
+    });
+    distEl.innerHTML+=`<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">${EQUIP_NAMES.map((n,i)=>`<span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:10px;height:10px;border-radius:2px;background:${EQUIP_COLORS[i]};display:inline-block"></span>${n}</span>`).join('')}</div>`;
+  }
+  // 도넛 차트
+  function makeDongPie(canvasId,legId,dongData){
+    const el=document.getElementById(canvasId);
+    if(!el)return;
+    if(el._chartInst){el._chartInst.destroy();el._chartInst=null;}
+    el._chartInst=new Chart(el,{type:'doughnut',data:{labels:DONG_NAMES,datasets:[{data:dongData,backgroundColor:DONG_COLORS,borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}건`}}}}});
+    const legEl=document.getElementById(legId);
+    if(legEl){legEl.innerHTML=DONG_NAMES.map((d,i)=>dongData[i]>0?`<span style="color:${DONG_COLORS[i]};font-weight:700">${d} ${dongData[i]}건</span>`:'').filter(Boolean).join(' · ');}
+  }
+  makeDongPie('pie_keongbo','pie_keongbo_leg',DONG_NAMES.map(d=>MATRIX[d][0]));
+  makeDongPie('pie_sohwa','pie_sohwa_leg',DONG_NAMES.map(d=>MATRIX[d][1]));
+  makeDongPie('pie_bangmun','pie_bangmun_leg',DONG_NAMES.map(d=>MATRIX[d][2]));
+  makeDongPie('pie_pinan','pie_pinan_leg',DONG_NAMES.map(d=>MATRIX[d][3]));
+
+  // ── T3 보수구분별 자동계산 ──
+  const t3tbl=document.getElementById('t3_repair_tbl');
+  if(t3tbl){
+    const selfPct=S.bySelf.total?Math.round(S.bySelf.done/S.bySelf.total*100):0;
+    const socoPct=S.bySoco.total?Math.round(S.bySoco.done/S.bySoco.total*100):0;
+    const sisoPct=S.bySiso.total?Math.round(S.bySiso.done/S.bySiso.total*100):0;
+    const queryPct=S.byQuery.total?Math.round(S.byQuery.done/S.byQuery.total*100):0;
+    t3tbl.innerHTML=`
+      <tr><td style="font-weight:600">소방자체</td><td class="tc">${S.bySelf.total}</td><td class="tc" style="color:var(--done);font-weight:700">${S.bySelf.done}</td><td class="tc">-</td><td class="tc">-</td><td class="tc" style="color:var(--plan)">${S.bySelf.plan}</td><td class="tc">-</td><td class="tc"><span class="badge b-done">${selfPct}%</span></td></tr>
+      <tr><td style="font-weight:600">소방공사</td><td class="tc">${S.bySoco.total}</td><td class="tc" style="color:var(--done);font-weight:700">${S.bySoco.done}</td><td class="tc" style="color:var(--ing);font-weight:700">${S.bySoco.ing}</td><td class="tc">-</td><td class="tc">-</td><td class="tc">-</td><td class="tc"><span class="badge b-ing">${socoPct}%</span></td></tr>
+      <tr><td style="font-weight:600">시설공사</td><td class="tc">${S.bySiso.total}</td><td class="tc" style="color:var(--done);font-weight:700">${S.bySiso.done}</td><td class="tc">-</td><td class="tc" style="color:var(--ing2);font-weight:700">${S.bySiso.ing}</td><td class="tc">-</td><td class="tc">-</td><td class="tc"><span class="badge b-dn">${sisoPct}%</span></td></tr>
+      <tr><td style="font-weight:600;color:var(--query)">소방청질의</td><td class="tc">${S.byQuery.total}</td><td class="tc" style="color:var(--done);font-weight:700">${S.byQuery.done}</td><td class="tc">-</td><td class="tc">-</td><td class="tc">-</td><td class="tc" style="color:var(--query);font-weight:700">${S.byQuery.ing}</td><td class="tc"><span class="badge b-query">${queryPct}%</span></td></tr>
+      <tr><td>합  계</td><td class="tc">${S.total}</td><td class="tc" style="color:var(--done)">${S.done}</td><td class="tc" style="color:var(--ing)">${S.soco}</td><td class="tc" style="color:var(--ing2)">${S.siso}</td><td class="tc" style="color:var(--plan)">${S.plan}</td><td class="tc" style="color:var(--query)">${S.query}</td><td class="tc"><span class="badge b-up">${totPct}%</span></td></tr>`;
+  }
+  // T3 설비 순위
+  const t3e=document.getElementById('t3_equip');
+  if(t3e){
+    t3e.innerHTML='';
+    const mx=S.equips[0]?S.equips[0].cnt:1;
+    const ec=['#C0392B','#E74C3C','#E67E22','#F39C12','#27AE60','#2980B9','#8E44AD','#1ABC9C'];
+    S.equips.forEach((e,i)=>{
+      t3e.innerHTML+=`<div class="eq-row"><span class="eq-lbl">${e.name}</span><div class="prog-track"><div class="prog-fill" style="width:${Math.round(e.cnt/mx*100)}%;background:${ec[i%ec.length]}"></div></div><span class="eq-cnt">${e.cnt}건</span></div>`;
+    });
+  }
+  // T3 보수구분 진행률 바
+  const t3prog=document.getElementById('t3_prog_bars');
+  if(t3prog){
+    const selfPct=S.bySelf.total?Math.round(S.bySelf.done/S.bySelf.total*100):0;
+    const socoPct=S.bySoco.total?Math.round(S.bySoco.done/S.bySoco.total*100):0;
+    const sisoPct=S.bySiso.total?Math.round(S.bySiso.done/S.bySiso.total*100):0;
+    const queryPct=S.byQuery.total?Math.round(S.byQuery.done/S.byQuery.total*100):0;
+    t3prog.innerHTML=`
+      <div class="prog-row"><span class="prog-lbl">소방자체</span><div class="prog-track"><div class="prog-fill" style="width:${selfPct}%;background:var(--done)"></div></div><span class="prog-val" style="color:var(--done)">${selfPct}%</span><span style="font-size:11px;color:var(--text2);margin-left:6px">${S.bySelf.done}/${S.bySelf.total}건</span></div>
+      <div class="prog-row"><span class="prog-lbl">소방공사</span><div class="prog-track"><div class="prog-fill" style="width:${socoPct}%;background:var(--blue)"></div></div><span class="prog-val" style="color:var(--blue)">${socoPct}%</span><span style="font-size:11px;color:var(--text2);margin-left:6px">${S.bySoco.done}/${S.bySoco.total}건 · 진행중 ${S.bySoco.ing}건</span></div>
+      <div class="prog-row"><span class="prog-lbl">시설공사</span><div class="prog-track"><div class="prog-fill" style="width:${sisoPct}%;background:var(--ing2)"></div></div><span class="prog-val" style="color:var(--ing2)">${sisoPct}%</span><span style="font-size:11px;color:var(--text2);margin-left:6px">${S.bySiso.done}/${S.bySiso.total}건 · 진행중 ${S.bySiso.ing}건</span></div>
+      <div class="prog-row"><span class="prog-lbl">소방청질의</span><div class="prog-track"><div class="prog-fill" style="width:${queryPct}%;background:var(--query)"></div></div><span class="prog-val" style="color:var(--query)">${queryPct}%</span><span style="font-size:11px;color:var(--text2);margin-left:6px">${S.byQuery.done}/${S.byQuery.total}건 · 질의중 ${S.byQuery.ing}건</span></div>
+      <div style="height:1px;background:var(--text);margin:12px 0 8px"></div>
+      <div class="prog-row"><span class="prog-lbl" style="font-weight:700">전  체</span><div class="prog-track" style="height:14px"><div class="prog-fill" style="width:${totPct}%;background:var(--red)"></div></div><span class="prog-val" style="color:var(--red);font-size:15px">${totPct}%</span><span style="font-size:11px;color:var(--text2);margin-left:6px">${S.done}/${S.total}건</span></div>`;
+  }
+
+  // ── T4 목록 초기 ──
+  renderList(RECORDS);
+}
+
+/* ══ 목록 ══ */
+function bHTML(r,repair){
+  if(r==='공사 진행 중'){
+    if(repair==='소방공사')return`<span class="badge b-ing">진행중 (소방공사)</span>`;
+    if(repair==='시설공사')return`<span class="badge b-ing2">진행중 (시설공사)</span>`;
+    return`<span class="badge b-ing">공사 진행 중</span>`;
+  }
+  const m={'완료':'b-done','소방자체보수 진행중':'b-plan','소방청 질의 회신':'b-query'};
+  return`<span class="badge ${m[r]||''}">${r}</span>`;
+}
+function roundBadge(r){
+  const colors={2:'#1B4F8A',3:'#1A7A4A',4:'#8E44AD',5:'#B35900',6:'#C0392B'};
+  const c=colors[r]||'#455A64';
+  return`<span style="background:${c};color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;">${r}차</span>`;
+}
+function renderList(arr){
+  document.getElementById('f_cnt').textContent=arr.length+'건';
+  const tb=document.getElementById('list_tb');
+  if(!arr.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--text3)">검색 결과 없음</td></tr>';return;}
+  tb.innerHTML=arr.map(r=>`<tr>
+    <td class="tc">${r.no}</td>
+    <td class="tc">${roundBadge(r.round||2)}</td>
+    <td class="tc" style="font-weight:600">${r.dong}</td>
+    <td>${r.loc}</td>
+    <td class="tc">${r.equip}</td>
+    <td class="tc">${r.repair}</td>
+    <td class="content-cell">${r.content}</td>
+    <td class="tc">${bHTML(r.result,r.repair)}</td>
+  </tr>`).join('');
+}
+function filt(){
+  const rnd=document.getElementById('f_round').value;
+  const d=document.getElementById('f_dong').value;
+  const rs=document.getElementById('f_result').value;
+  const rp=document.getElementById('f_repair').value;
+  const eq=document.getElementById('f_equip').value;
+  const s=document.getElementById('f_search').value.toLowerCase();
+  renderList(RECORDS.filter(r=>{
+    if(rnd&&String(r.round||2)!==rnd)return false;
+    if(d&&r.dong!==d)return false;
+    if(rp&&r.repair!==rp)return false;
+    if(eq&&!r.equip.includes(eq))return false;
+    if(s&&!r.content.toLowerCase().includes(s)&&!r.loc.toLowerCase().includes(s))return false;
+    if(rs==='ing_soco')return r.result==='공사 진행 중'&&r.repair==='소방공사';
+    if(rs==='ing_siso')return r.result==='공사 진행 중'&&r.repair==='시설공사';
+    if(rs==='완료')return r.result==='완료';
+    if(rs==='소방자체보수 진행중')return r.result==='소방자체보수 진행중';
+    if(rs==='소방청 질의 회신')return r.result==='소방청 질의 회신';
+    return true;
+  }));
+}
+function resetF(){['f_round','f_dong','f_result','f_repair','f_equip'].forEach(id=>document.getElementById(id).value='');document.getElementById('f_search').value='';renderList(RECORDS);}
+
+/* ══ 차수 관리 ══ */
+/* ══ 차수 관리 ══ */
+function getSelectedRound(){
+  const sel=document.getElementById('next_round_sel');
+  return sel ? parseInt(sel.value)||3 : 3;
+}
+function updateRoundUI(){
+  const sel=document.getElementById('next_round_sel');
+  if(!sel) return;
+  // 현재 선택값 유지, 없으면 3차 기본
+  if(!sel.value){
+    // 옵션이 없을 때만 생성
+    if(!sel.options.length){
+      for(let r=3;r<=10;r++){
+        const opt=document.createElement('option');
+        opt.value=r; opt.textContent=r+'차';
+        sel.appendChild(opt);
+      }
+    }
+  }
+  // ⑤ 전체목록 차수 필터 동기화 (반영된 차수까지만)
+  const maxR = RECORDS.reduce((max,r)=>Math.max(max,r.round||2),2);
+  const fRound=document.getElementById('f_round');
+  if(fRound){
+    for(let r=3;r<=maxR;r++){
+      if(!fRound.querySelector(`option[value="${r}"]`)){
+        const opt=document.createElement('option');
+        opt.value=r; opt.textContent=r+'차 (추가분)';
+        fRound.appendChild(opt);
+      }
+    }
+  }
+}
+function onRoundSelChange(){
+  // 수동 선택 시 별도 동작 없음 (선택값 그대로 사용)
+}
+function updateRoundStatusBox(){
+  const box=document.getElementById('round_status_rows');
+  if(!box)return;
+  const byRound={};
+  RECORDS.forEach(r=>{const rn=r.round||2;byRound[rn]=(byRound[rn]||0)+1;});
+  const colors={2:'#1B4F8A',3:'#1A7A4A',4:'#8E44AD',5:'#B35900',6:'#C0392B'};
+  box.innerHTML=Object.entries(byRound).sort((a,b)=>a[0]-b[0]).map(([rn,cnt])=>{
+    const c=colors[rn]||'#455A64';
+    const label=rn==2?'2차 (기본)':rn+'차 (추가분)';
+    const note=rn==2?'내장 데이터':'수동 입력';
+    return`<div style="background:#fff;border:1px solid #D0E4F5;border-left:4px solid ${c};border-radius:8px;padding:10px 16px;font-size:12px;">
+      <span style="font-weight:700;color:${c};">${label}</span>
+      <span style="margin-left:8px;color:#555;">${cnt}건</span>
+      <span style="margin-left:6px;font-size:11px;color:#999;">${note}</span>
+    </div>`;
+  }).join('');
+}
+
+/* ══ 붙여넣기 파싱 ══ */
+const RESULT_CONV = {
+  '공사 진행 중':'공사 진행 중', '보수 예정':'소방자체보수 진행중',
+  '소방청 질의 회신':'소방청 질의 회신', '완료':'완료',
+  '소방자체보수 진행중':'소방자체보수 진행중'
+};
+const EQUIP_CONV = {'피난구조설비':'피난설비'};
+let pasteRecords = [];
+
+function parsePaste(){
+  const raw = document.getElementById('paste_area').value.trim();
+  const msg = document.getElementById('paste_msg');
+  if(!raw){ clearPastePreview(); return; }
+
+  const lines = raw.split('\n').map(l=>l.split('\t').map(c=>c.trim()));
+  pasteRecords = [];
+
+  for(const cols of lines){
+    // 컬럼 수 부족하면 스킵
+    if(cols.length < 5) continue;
+    // 헤더 행 스킵 (NO가 숫자가 아니면)
+    // 앞쪽 빈 컬럼 제거 후 파싱
+    const trimmed = cols.filter((_,i)=> cols.slice(0,i).every(c=>c==='') ? false : true);
+    // 실제 데이터: NO가 있는 컬럼부터
+    let startIdx = cols.findIndex(c=>c.match(/^\d+$/));
+    if(startIdx < 0) continue; // 헤더나 빈 행
+
+    const no   = cols[startIdx];
+    const dong = cols[startIdx+1]||'';
+    const loc  = cols[startIdx+2]||'';
+    const cont = cols[startIdx+3]||'';
+    const equip= EQUIP_CONV[cols[startIdx+4]||''] || (cols[startIdx+4]||'');
+    const rep  = cols[startIdx+5]||'';
+    const res  = RESULT_CONV[cols[startIdx+6]||''] || (cols[startIdx+6]||'');
+
+    if(!dong || !cont) continue;
+
+    // ■내용/■조치 파싱
+    let content = cont.replace(/\n/g,' ').trim();
+    const nm = content.match(/■내용\s*:\s*(.+?)(?=■조치|$)/);
+    const am = content.match(/■조치\s*:\s*(.+?)$/);
+    if(nm && am) content = nm[1].trim() + ' → ' + am[1].trim();
+    else if(nm) content = nm[1].trim();
+    content = content.replace(/\s+/g,' ').trim();
+
+    let repair = res === '소방청 질의 회신' ? '소방청질의' : rep;
+
+    pasteRecords.push({dong, loc, equip, repair, result:res, content});
+  }
+
+  if(!pasteRecords.length){
+    msg.style.color='#A50034'; msg.textContent='⚠ 파싱된 데이터가 없습니다. 컬럼 순서를 확인해 주세요.';
+    clearPastePreview(); return;
+  }
+  msg.style.color='#1A7A4A'; msg.textContent=`✅ ${pasteRecords.length}건 파싱 완료`;
+  renderPastePreview();
+}
+
+function renderPastePreview(){
+  const preview = document.getElementById('paste_preview');
+  preview.style.display = 'block';
+  document.getElementById('paste_cnt').textContent = pasteRecords.length+'건';
+  const tb = document.getElementById('paste_tb');
+  tb.innerHTML = pasteRecords.map((r,i)=>`<tr>
+    <td class="tc">${i+1}</td>
+    <td class="tc" style="font-weight:600">${r.dong}</td>
+    <td>${r.loc}</td>
+    <td class="tc">${r.equip}</td>
+    <td class="tc">${r.repair}</td>
+    <td class="content-cell">${r.content.substring(0,60)}${r.content.length>60?'…':''}</td>
+    <td class="tc">${bHTML(r.result,r.repair)}</td>
+  </tr>`).join('');
+}
+
+function clearPastePreview(){
+  pasteRecords=[];
+  document.getElementById('paste_preview').style.display='none';
+  document.getElementById('paste_msg').textContent='';
+}
+
+function applyPasteData(){
+  if(!pasteRecords.length) return;
+  // 대기 목록에 추가
+  pasteRecords.forEach(r=>pendingRecords.push(r));
+  renderPending();
+  clearPastePreview();
+  document.getElementById('paste_area').value='';
+  const msg=document.getElementById('paste_msg');
+  msg.style.color='#1A7A4A';
+  msg.textContent=`✅ ${pendingRecords.length}건 대기 중 → 아래 「대시보드에 반영」 클릭`;
+  // 대기 목록 위치로 스크롤
+  document.getElementById('pending_wrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+let pendingRecords = [];
+
+function renderPending(){
+  const wrap = document.getElementById('pending_wrap');
+  const tb   = document.getElementById('pending_tb');
+  const cnt  = document.getElementById('pending_cnt');
+  if(!pendingRecords.length){ wrap.style.display='none'; return; }
+  wrap.style.display='block';
+  cnt.textContent = pendingRecords.length+'건';
+  tb.innerHTML = pendingRecords.map((r,i)=>`<tr>
+    <td class="tc">${i+1}</td>
+    <td class="tc" style="font-weight:600">${r.dong}</td>
+    <td>${r.loc}</td>
+    <td class="tc">${r.equip}</td>
+    <td class="tc">${r.repair}</td>
+    <td class="content-cell">${r.content}</td>
+    <td class="tc">${bHTML(r.result,r.repair)}</td>
+    <td class="tc"><button onclick="removePending(${i})" style="background:#FDF0F3;color:#A50034;border:1px solid #F5C0CC;border-radius:5px;padding:2px 8px;font-size:11px;cursor:pointer;font-weight:700;">✕</button></td>
+  </tr>`).join('');
+}
+
+function removePending(i){
+  pendingRecords.splice(i,1);
+  renderPending();
+  const msg=document.getElementById('fi_msg');
+  msg.style.color='#666';
+  msg.textContent=pendingRecords.length?`${pendingRecords.length}건 대기 중`:'';
+}
+
+function applyPending(){
+  if(!pendingRecords.length)return;
+  const newRound = getSelectedRound();
+  const maxNo = RECORDS.length ? Math.max(...RECORDS.map(r=>r.no)) : 0;
+  pendingRecords.forEach((r,i)=>{
+    RECORDS.push({...r, no: maxNo+i+1, round: newRound});
+  });
+  const addedCount = pendingRecords.length;
+  pendingRecords = [];
+  if(Chart.instances){Object.values(Chart.instances).forEach(c=>{try{c.destroy();}catch(e){}});}
+  inited=false;
+  initAll();inited=true;
+  const t=new Date();
+  const dateStr=`${t.getFullYear()}. ${String(t.getMonth()+1).padStart(2,'0')}. ${String(t.getDate()).padStart(2,'0')}`;
+  document.getElementById('hdr_info').innerHTML=`기준일 : ${dateStr} &nbsp;|&nbsp; 총 ${RECORDS.length}건`;
+  updateRoundStatusBox();
+  updateRoundUI();
+  document.getElementById('pending_wrap').style.display='none';
+  const doneEl=document.getElementById('form_done');
+  doneEl.style.display='block';
+  doneEl.innerHTML=`<div style="font-size:36px;margin-bottom:10px;">✅</div>
+    <div style="font-size:16px;font-weight:700;color:#1A7A4A;margin-bottom:6px;">${newRound}차 반영 완료!</div>
+    <div style="font-size:12px;color:#555;margin-bottom:4px;"><strong>${addedCount}건</strong> 추가 → 누적 총 <strong>${RECORDS.length}건</strong></div>
+    <div style="font-size:12px;color:#555;margin-bottom:16px;">⑤ 전체목록에서 ${newRound}차 필터로 확인 가능합니다.</div>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button onclick="go(0)" style="background:#1A7A4A;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer;">① 종합 현황 보러가기</button>
+      <button onclick="document.getElementById('form_done').style.display='none'" style="background:#F4F2EF;color:#555;border:1px solid #D8D4CF;border-radius:8px;padding:10px 18px;font-size:12px;font-weight:600;cursor:pointer;">계속 입력하기</button>
+    </div>`;
+}
+
+window.addEventListener('DOMContentLoaded',()=>{initAll();inited=true;updateRoundStatusBox();updateRoundUI();});
+</script>
+</body>
+</html>
