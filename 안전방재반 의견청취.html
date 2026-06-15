@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>안전방재반 1:1 의견청취 안내</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    background: #f5f6f8;
+    color: #333;
+  }
+
+  /* ── 헤더 ── */
+  .header {
+    background: linear-gradient(135deg, #a50034, #c70039);
+    color: white;
+    padding: 48px 30px 40px;
+    text-align: center;
+    box-shadow: 0 3px 14px rgba(165,0,52,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    font-size: 12px;
+    padding: 4px 14px;
+    letter-spacing: 0.05em;
+    margin-bottom: 14px;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+  .header p {
+    font-size: 15px;
+    opacity: 0.88;
+    line-height: 1.6;
+  }
+
+  /* ── 컨테이너 ── */
+  .container {
+    max-width: 1060px;
+    margin: 32px auto;
+    padding: 0 20px 40px;
+  }
+
+  /* ── 목적 공지 ── */
+  .notice {
+    background: white;
+    border-left: 6px solid #a50034;
+    padding: 22px 26px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    margin-bottom: 28px;
+  }
+  .notice h2 {
+    color: #a50034;
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .notice h2::before {
+    content: '📋';
+    font-size: 16px;
+  }
+  .notice p {
+    font-size: 14px;
+    line-height: 1.85;
+    color: #444;
+  }
+  .notice p + p { margin-top: 8px; }
+  .highlight {
+    background: #fff0f4;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-weight: 700;
+    color: #a50034;
+  }
+
+  /* ── 카드 그리드 ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 22px 22px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    transition: transform 0.18s, box-shadow 0.18s;
+    border-top: 3px solid transparent;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(165,0,52,0.12);
+    border-top-color: #a50034;
+  }
+  .card h3 {
+    color: #a50034;
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid #f1d4dd;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .card ul {
+    padding-left: 18px;
+    line-height: 1.0;
+  }
+  .card ul li {
+    font-size: 13.5px;
+    color: #444;
+    padding: 5px 0;
+    border-bottom: 1px dashed #f5f5f5;
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .etc {
+    color: #a50034;
+    font-weight: 700;
+  }
+
+  /* ── 진행 방식 카드 (아이콘 강조) ── */
+  .card.method { background: #fff8f9; border: 1.5px solid #f1d4dd; }
+  .card.method h3 { color: #a50034; }
+  .card.method ul li { color: #555; }
+
+  /* ── 푸터 ── */
+  .footer {
+    background: white;
+    border-radius: 14px;
+    padding: 24px 28px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    border-left: 6px solid #a50034;
+  }
+  .footer h2 {
+    color: #a50034;
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .footer h2::before { content: '🎯'; }
+  .footer p {
+    font-size: 14px;
+    line-height: 1.9;
+    color: #444;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">LG전자 평택사업장 · 안전방재반</div>
+  <h1>안전방재반 1:1 의견청취</h1>
+  <p>조직 운영 개선 및 협업 방향 논의를 위한 의견 청취</p>
+</div>
+
+<div class="container">
+
+  <div class="notice">
+    <h2>의견청취 진행 목적</h2>
+    <p>
+      본 의견청취는 <span class="highlight">평가 또는 인사 목적이 아닌</span>,
+      현재 안전방재반 운영 과정에서 느끼는 어려움과 개선 방향을 함께 고민하기 위한 의견 청취 목적입니다.
+    </p>
+    <p>
+      아래 내용들을 참고하여 편하게 생각만 정리해 오시면 됩니다.
+      별도 작성 제출은 없습니다.
+    </p>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>1. 현재 업무 수행 관련</h3>
+      <ul>
+        <li>업무 수행 중 가장 어려운 점</li>
+        <li>업무 부담 또는 반복 스트레스</li>
+        <li>현재 업무 운영상 개선 필요 사항</li>
+        <li>업무 우선순위 관련 의견</li>
+        <li class="etc">기타 의견</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>2. 조직 운영 및 협업</h3>
+      <ul>
+        <li>안전조·방재조 협업 관련 의견</li>
+        <li>업무 공유 또는 인수인계 관련 의견</li>
+        <li>현재 조직 운영상 아쉬운 부분</li>
+        <li>조직 내 소통 관련 의견</li>
+        <li class="etc">기타 의견</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>3. 교육 및 전문성</h3>
+      <ul>
+        <li>필요하다고 생각하는 교육</li>
+        <li>배우고 싶은 업무 또는 분야</li>
+        <li>현재 부족하다고 느끼는 부분</li>
+        <li>교차 교육 관련 의견</li>
+        <li class="etc">기타 의견</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>4. 조직 분위기 및 문화</h3>
+      <ul>
+        <li>현재 조직 분위기에 대한 생각</li>
+        <li>근무 분위기 개선 방향</li>
+        <li>긍정적으로 변화되었으면 하는 부분</li>
+        <li>조직 내 필요한 태도 또는 문화</li>
+        <li class="etc">기타 의견</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>5. 향후 방향 및 제안</h3>
+      <ul>
+        <li>조직이 더 좋아지기 위해 필요한 점</li>
+        <li>개선 아이디어 또는 건의사항</li>
+        <li>반장에게 바라는 점</li>
+        <li>자유 의견</li>
+        <li class="etc">기타 의견</li>
+      </ul>
+    </div>
+
+    <div class="card method">
+      <h3>의견청취 진행 방식</h3>
+      <ul>
+        <li>1:1 개별 진행</li>
+        <li>자유로운 의견 청취 중심</li>
+        <li>별도 작성 제출 없음</li>
+        <li>의견청취 내용은 운영 개선 참고용으로 활용</li>
+
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <h2>운영 방향</h2>
+    <p>
+      안전방재반이 서로 협업하고 이해할 수 있는 조직으로 발전하기 위해
+      구성원들의 다양한 의견을 듣고,
+      현실적인 개선 방향을 함께 고민하고자 합니다.
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>
