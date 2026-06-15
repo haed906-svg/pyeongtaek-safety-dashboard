@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>위험물기능장 필기 벼락치기 대시보드</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --lg-red:#A50034;
+  --lg-red-dark:#7A0026;
+  --lg-red-bg:#FBF0F3;
+  --ink:#1F2228;
+  --ink-soft:#5A6068;
+  --line:#E6E2DD;
+  --paper:#F7F5F2;
+  --card:#FFFFFF;
+  --s-grade:#A50034;
+  --a-grade:#D4691E;
+  --b-grade:#2E6E4E;
+  --c-grade:#6B7280;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== Header ===== */
+header{
+  background:var(--lg-red);
+  color:#fff;
+  padding:22px 20px 0;
+}
+.header-inner{max-width:1080px;margin:0 auto;}
+.eyebrow{
+  font-size:12px;letter-spacing:.18em;font-weight:600;opacity:.85;
+  text-transform:uppercase;margin-bottom:6px;
+}
+header h1{
+  font-size:clamp(21px,4.5vw,30px);
+  font-weight:800;letter-spacing:-.02em;line-height:1.25;
+}
+header h1 small{font-weight:500;font-size:.6em;opacity:.85;display:block;margin-top:4px;}
+.exam-meta{
+  display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 16px;
+}
+.exam-meta span{
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:999px;font-size:12px;font-weight:600;
+  padding:5px 12px;
+}
+/* Tabs */
+.tabs{display:flex;gap:0;max-width:1080px;margin:0 auto;}
+.tab-btn{
+  flex:1;max-width:280px;
+  background:rgba(255,255,255,.12);
+  border:none;color:rgba(255,255,255,.75);
+  font-family:inherit;font-size:14px;font-weight:700;
+  padding:13px 10px;cursor:pointer;
+  border-radius:12px 12px 0 0;
+  transition:background .15s,color .15s;
+}
+.tab-btn .tab-num{
+  display:inline-block;font-size:11px;font-weight:800;
+  border:1.5px solid currentColor;border-radius:50%;
+  width:18px;height:18px;line-height:15px;text-align:center;
+  margin-right:6px;vertical-align:1px;
+}
+.tab-btn.active{background:var(--paper);color:var(--lg-red);}
+.tab-btn:not(.active):hover{background:rgba(255,255,255,.2);color:#fff;}
+
+main{max-width:1080px;margin:0 auto;padding:24px 16px 60px;}
+.page{display:none;}
+.page.active{display:block;animation:fadein .25s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+/* ===== Section titles ===== */
+.sec-title{
+  display:flex;align-items:baseline;gap:10px;
+  margin:30px 0 14px;
+}
+.sec-title h2{font-size:18px;font-weight:800;letter-spacing:-.01em;}
+.sec-title .sub{font-size:12.5px;color:var(--ink-soft);}
+.sec-title::before{
+  content:"";width:5px;height:20px;background:var(--lg-red);
+  border-radius:2px;align-self:center;flex:none;
+}
+
+/* ===== Strategy banner ===== */
+.strategy{
+  background:var(--card);border:1px solid var(--line);
+  border-left:5px solid var(--lg-red);
+  border-radius:12px;padding:16px 18px;margin-top:4px;
+  font-size:14px;
+}
+.strategy b{color:var(--lg-red);}
+
+/* ===== 60-question stacked bar ===== */
+.qbar-wrap{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:10px;}
+.qbar-title{font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:10px;}
+.qbar{
+  display:flex;height:46px;border-radius:10px;overflow:hidden;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.05);
+}
+.qbar .seg{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:#fff;font-weight:800;font-size:13px;line-height:1.15;
+  white-space:nowrap;min-width:0;
+}
+.qbar .seg small{font-size:10px;font-weight:600;opacity:.9;}
+.qbar-legend{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:12px;font-size:12px;color:var(--ink-soft);}
+.qbar-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;}
+
+/* ===== Subject cards ===== */
+.subject-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:10px;}
+.subj-card{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:18px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:10px;
+  transition:transform .15s, box-shadow .15s;
+}
+.subj-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.07);}
+.subj-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.subj-name{font-size:16.5px;font-weight:800;letter-spacing:-.01em;line-height:1.3;}
+.subj-name small{display:block;font-size:11.5px;font-weight:500;color:var(--ink-soft);margin-top:2px;}
+.grade-badge{
+  flex:none;width:44px;height:44px;border-radius:12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:#fff;font-weight:900;font-size:19px;line-height:1;
+}
+.grade-badge small{font-size:8.5px;font-weight:700;margin-top:2px;letter-spacing:.05em;}
+.g-S{background:var(--s-grade);}
+.g-A{background:var(--a-grade);}
+.g-B{background:var(--b-grade);}
+.g-C{background:var(--c-grade);}
+
+.stat-row{display:flex;gap:8px;}
+.stat{
+  flex:1;background:var(--paper);border-radius:10px;padding:8px 10px;text-align:center;
+}
+.stat .v{font-size:17px;font-weight:800;color:var(--lg-red);}
+.stat .v.neutral{color:var(--ink);}
+.stat .k{font-size:10.5px;color:var(--ink-soft);font-weight:600;margin-top:1px;}
+
+.freq-track{height:8px;background:#EEE9E4;border-radius:99px;overflow:hidden;}
+.freq-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--lg-red),#D4356A);}
+.freq-label{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-soft);font-weight:600;margin-top:4px;}
+
+.stars{color:var(--lg-red);font-size:14px;letter-spacing:2px;}
+.stars .dim{color:#DDD5CE;}
+
+.subj-strategy{
+  font-size:12.5px;color:var(--ink-soft);background:var(--lg-red-bg);
+  border-radius:10px;padding:10px 12px;line-height:1.5;
+}
+.subj-strategy b{color:var(--lg-red-dark);}
+.goto-detail{
+  align-self:flex-end;background:none;border:1.5px solid var(--lg-red);
+  color:var(--lg-red);font-family:inherit;font-size:12px;font-weight:700;
+  border-radius:999px;padding:6px 14px;cursor:pointer;
+  transition:background .15s,color .15s;
+}
+.goto-detail:hover{background:var(--lg-red);color:#fff;}
+
+/* ===== D-14 plan ===== */
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:10px;}
+.plan-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;}
+.plan-card .d{font-size:12px;font-weight:800;color:var(--lg-red);letter-spacing:.04em;}
+.plan-card h3{font-size:14.5px;font-weight:800;margin:4px 0 6px;}
+.plan-card p{font-size:12.5px;color:var(--ink-soft);}
+
+/* ===== Page 2 ===== */
+.subj-selector{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;
+  position:sticky;top:0;background:var(--paper);padding:12px 0;z-index:10;
+}
+.subj-chip{
+  border:1.5px solid var(--line);background:var(--card);
+  font-family:inherit;font-size:13px;font-weight:700;color:var(--ink-soft);
+  border-radius:999px;padding:8px 15px;cursor:pointer;
+  transition:all .15s;
+}
+.subj-chip .pct{font-size:11px;font-weight:800;color:var(--lg-red);margin-left:4px;}
+.subj-chip.active{background:var(--lg-red);border-color:var(--lg-red);color:#fff;}
+.subj-chip.active .pct{color:#fff;}
+
+.detail-pane{display:none;}
+.detail-pane.active{display:block;animation:fadein .25s ease;}
+
+.detail-head{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:18px;margin:8px 0 16px;
+  display:flex;gap:16px;align-items:center;flex-wrap:wrap;
+}
+.detail-head .donut{
+  flex:none;width:92px;height:92px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;position:relative;
+}
+.detail-head .donut::after{
+  content:"";position:absolute;inset:13px;border-radius:50%;background:var(--card);
+}
+.detail-head .donut span{
+  position:relative;z-index:1;font-weight:900;font-size:18px;color:var(--lg-red);
+  text-align:center;line-height:1.1;
+}
+.detail-head .donut span small{display:block;font-size:9.5px;font-weight:700;color:var(--ink-soft);}
+.detail-head .info{flex:1;min-width:220px;}
+.detail-head .info h3{font-size:18px;font-weight:800;margin-bottom:4px;}
+.detail-head .info p{font-size:13px;color:var(--ink-soft);}
+
+/* item cards */
+.item-list{display:flex;flex-direction:column;gap:10px;}
+.item{
+  background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:14px 16px;
+  display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;
+}
+.rank{
+  width:34px;height:34px;border-radius:9px;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:14px;color:#fff;
+  grid-row:span 3;margin-top:2px;
+}
+.r-top{background:var(--s-grade);}
+.r-mid{background:var(--a-grade);}
+.r-low{background:var(--c-grade);}
+.item-title-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.item-title{font-size:15px;font-weight:800;letter-spacing:-.01em;}
+.item-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.freq-tag{
+  font-size:10.5px;font-weight:800;border-radius:6px;padding:3px 8px;
+}
+.f-must{background:var(--lg-red-bg);color:var(--lg-red);}
+.f-often{background:#FBF1E8;color:var(--a-grade);}
+.f-some{background:#EFF3F1;color:var(--b-grade);}
+.keywords{font-size:12.5px;color:var(--ink-soft);line-height:1.6;}
+.keywords b{color:var(--ink);font-weight:700;}
+.tip{
+  font-size:12px;color:var(--lg-red-dark);background:var(--lg-red-bg);
+  border-radius:8px;padding:7px 11px;margin-top:4px;line-height:1.5;
+}
+.tip::before{content:"⚡ ";font-weight:800;}
+
+footer{
+  text-align:center;font-size:11.5px;color:var(--ink-soft);
+  padding:30px 16px 40px;border-top:1px solid var(--line);margin-top:40px;
+}
+footer b{color:var(--lg-red);}
+
+@media (max-width:520px){
+  .stat .v{font-size:15px;}
+  .tab-btn{font-size:12.5px;padding:11px 6px;}
+  .item{grid-template-columns:1fr;}
+  .rank{grid-row:auto;margin-bottom:2px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="eyebrow">MASTER CRAFTSMAN · HAZARDOUS MATERIALS</div>
+    <h1>위험물기능장 필기 벼락치기 대시보드
+      <small>출제빈도 × 중요도 기반 2주 집중 공략 — 60문항 / 60분 / 과락 없음 / 60점 합격</small>
+    </h1>
+    <div class="exam-meta">
+      <span>📋 객관식 60문항</span>
+      <span>⏱ 60분 (1문항 1분)</span>
+      <span>✅ 평균 60점 합격</span>
+      <span>🚫 과락 없음</span>
+      <span>📊 최근 6개년 기출 분석 기준</span>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-page="page1"><span class="tab-num">1</span>과목별 공략 우선순위</button>
+      <button class="tab-btn" data-page="page2"><span class="tab-num">2</span>과목별 세부 빈출항목</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ===================== PAGE 1 ===================== -->
+<section id="page1" class="page active">
+
+  <div class="strategy">
+    <b>벼락치기 핵심 전략</b> — 만점이 아니라 <b>60점(36문항)</b>이 목표입니다.
+    출제비중 상위 2개 과목(법령 47% + 성상 31%)이 전체의 <b>약 78%</b>를 차지하므로,
+    이 둘만 70% 정답률로 잡아도 합격선을 넘습니다. 나머지는 빈출 패턴만 챙기세요.
+  </div>
+
+  <div class="sec-title"><h2>60문항은 이렇게 구성됩니다</h2><span class="sub">과목별 예상 문항 분포</span></div>
+  <div class="qbar-wrap">
+    <div class="qbar-title">출제비중 기준 60문항 환산</div>
+    <div class="qbar">
+      <div class="seg" style="flex:47;background:#A50034;">28<small>법령·시설</small></div>
+      <div class="seg" style="flex:31;background:#D4356A;">19<small>성상·취급</small></div>
+      <div class="seg" style="flex:12;background:#D4691E;">7<small>화재이론</small></div>
+      <div class="seg" style="flex:10;background:#2E6E4E;">6<small>공업경영</small></div>
+    </div>
+    <div class="qbar-legend">
+      <span><i style="background:#A50034"></i>위험물안전관리법령·시설기준 47%</span>
+      <span><i style="background:#D4356A"></i>위험물의 성질 및 취급 31%</span>
+      <span><i style="background:#D4691E"></i>화재이론·소화 12%</span>
+      <span><i style="background:#2E6E4E"></i>공업경영 10%</span>
+    </div>
+  </div>
+
+  <div class="sec-title"><h2>과목별 공략 등급</h2><span class="sub">출제빈도 × 중요도 종합</span></div>
+  <div class="subject-grid">
+
+    <!-- 법령 -->
+    <div class="subj-card">
+      <div class="subj-top">
+        <div class="subj-name">위험물안전관리법령 · 시설기준
+          <small>제조소등 기준 / 안전관리 / 행정사항 포함</small>
+        </div>
+        <div class="grade-badge g-S">S<small>최우선</small></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="v">47%</div><div class="k">출제비중</div></div>
+        <div class="stat"><div class="v neutral">28문항</div><div class="k">예상문항</div></div>
+        <div class="stat"><div class="v neutral">7일</div><div class="k">권장투자</div></div>
+      </div>
+      <div>
+        <div class="freq-track"><div class="freq-fill" style="width:94%"></div></div>
+        <div class="freq-label"><span>출제빈도</span><span class="stars">★★★★★</span></div>
+        <div class="freq-track" style="margin-top:6px"><div class="freq-fill" style="width:96%"></div></div>
+        <div class="freq-label"><span>합격기여도</span><span class="stars">★★★★★</span></div>
+      </div>
+      <div class="subj-strategy"><b>전략:</b> 순수 암기 영역 — 공부한 만큼 그대로 점수. 지정수량 표, 보유공지·안전거리 수치, 소화설비 기준을 매일 반복. <b>이 과목 70%만 맞아도 20문항 확보.</b></div>
+      <button class="goto-detail" data-target="d-law">세부 빈출항목 보기 →</button>
+    </div>
+
+    <!-- 성상 -->
+    <div class="subj-card">
+      <div class="subj-top">
+        <div class="subj-name">위험물의 성질 및 취급
+          <small>제1류~제6류 성상 / 화학반응 / 소화방법</small>
+        </div>
+        <div class="grade-badge g-S">S<small>최우선</small></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="v">31%</div><div class="k">출제비중</div></div>
+        <div class="stat"><div class="v neutral">19문항</div><div class="k">예상문항</div></div>
+        <div class="stat"><div class="v neutral">4일</div><div class="k">권장투자</div></div>
+      </div>
+      <div>
+        <div class="freq-track"><div class="freq-fill" style="width:88%"></div></div>
+        <div class="freq-label"><span>출제빈도</span><span class="stars">★★★★★</span></div>
+        <div class="freq-track" style="margin-top:6px"><div class="freq-fill" style="width:88%"></div></div>
+        <div class="freq-label"><span>합격기여도</span><span class="stars">★★★★<span class="dim">★</span></span></div>
+      </div>
+      <div class="subj-strategy"><b>전략:</b> 류별 공통성질 → 대표물질 순으로 암기. 특히 <b>3류(금수성)·4류(인화점)·5류(자기반응성)</b>가 단골. 물과의 반응식은 실기에도 직결되니 지금 외워두면 이중으로 이득.</div>
+      <button class="goto-detail" data-target="d-haz">세부 빈출항목 보기 →</button>
+    </div>
+
+    <!-- 화재이론 -->
+    <div class="subj-card">
+      <div class="subj-top">
+        <div class="subj-name">화재이론 · 소화이론
+          <small>연소 / 폭발 / 소화약제 / 기초 계산</small>
+        </div>
+        <div class="grade-badge g-A">A<small>선별공략</small></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="v">12%</div><div class="k">출제비중</div></div>
+        <div class="stat"><div class="v neutral">7문항</div><div class="k">예상문항</div></div>
+        <div class="stat"><div class="v neutral">2일</div><div class="k">권장투자</div></div>
+      </div>
+      <div>
+        <div class="freq-track"><div class="freq-fill" style="width:60%"></div></div>
+        <div class="freq-label"><span>출제빈도</span><span class="stars">★★★<span class="dim">★★</span></span></div>
+        <div class="freq-track" style="margin-top:6px"><div class="freq-fill" style="width:66%"></div></div>
+        <div class="freq-label"><span>합격기여도</span><span class="stars">★★★<span class="dim">★★</span></span></div>
+      </div>
+      <div class="subj-strategy"><b>전략:</b> 소방방재 업무와 겹치는 영역이라 <b>가장 적은 투자로 점수가 나오는 과목.</b> 계산은 증기비중·르샤틀리에 공식 2개만. 어려운 유체역학 문제는 과감히 버리기.</div>
+      <button class="goto-detail" data-target="d-fire">세부 빈출항목 보기 →</button>
+    </div>
+
+    <!-- 공업경영 -->
+    <div class="subj-card">
+      <div class="subj-top">
+        <div class="subj-name">공업경영
+          <small>품질관리 / 생산관리 / 작업관리 / 신뢰성</small>
+        </div>
+        <div class="grade-badge g-B">B<small>가성비</small></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="v">10%</div><div class="k">출제비중</div></div>
+        <div class="stat"><div class="v neutral">6문항</div><div class="k">예상문항</div></div>
+        <div class="stat"><div class="v neutral">1일</div><div class="k">권장투자</div></div>
+      </div>
+      <div>
+        <div class="freq-track"><div class="freq-fill" style="width:50%"></div></div>
+        <div class="freq-label"><span>출제빈도</span><span class="stars">★★★<span class="dim">★★</span></span></div>
+        <div class="freq-track" style="margin-top:6px"><div class="freq-fill" style="width:55%"></div></div>
+        <div class="freq-label"><span>합격기여도</span><span class="stars">★★★<span class="dim">★★</span></span></div>
+      </div>
+      <div class="subj-strategy"><b>전략:</b> 매회 6문항 고정 출제 + 문제 유형이 거의 재활용되는 <b>가성비 최고 과목.</b> 기출 3개년만 돌려도 4~5문항 확보 가능. 깊게 파지 말고 하루에 끝내기.</div>
+      <button class="goto-detail" data-target="d-ie">세부 빈출항목 보기 →</button>
+    </div>
+  </div>
+
+  <div class="sec-title"><h2>D-14 학습 로드맵</h2><span class="sub">남은 2주 배분안</span></div>
+  <div class="plan-grid">
+    <div class="plan-card">
+      <div class="d">D-14 ~ D-10</div>
+      <h3>법령·시설기준 1회독</h3>
+      <p>지정수량·보유공지·안전거리·방유제·운반혼재 등 핵심 수치표 암기 + 기출 해설 읽기 회독</p>
+    </div>
+    <div class="plan-card">
+      <div class="d">D-9 ~ D-7</div>
+      <h3>성상·취급 1회독</h3>
+      <p>1~6류 공통성질 → 대표물질 → 물 반응식. 4류 인화점 순서는 노래처럼 외우기</p>
+    </div>
+    <div class="plan-card">
+      <div class="d">D-6 ~ D-5</div>
+      <h3>화재이론 + 공업경영</h3>
+      <p>빈출 공식 2~3개와 소화약제 표, 공업경영 기출 3개년 1바퀴로 마무리</p>
+    </div>
+    <div class="plan-card">
+      <div class="d">D-4 ~ D-1</div>
+      <h3>기출 모의 + 오답만 반복</h3>
+      <p>CBT 모의 60분 실전 2회 이상. 새 자료 금지 — 본 것만 다시. 1분 1문제 시간감각 훈련</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PAGE 2 ===================== -->
+<section id="page2" class="page">
+
+  <div class="strategy">
+    <b>세부항목 읽는 법</b> — <b>必</b>(필수): 거의 매회 출제, 무조건 암기 ·
+    <b>빈출</b>: 2회 중 1회꼴 출제 · <b>간헐</b>: 여유 있을 때만. 순번 색이 빨강이면 1순위입니다.
+  </div>
+
+  <div class="subj-selector">
+    <button class="subj-chip active" data-pane="d-law">법령·시설기준<span class="pct">47%</span></button>
+    <button class="subj-chip" data-pane="d-haz">성질·취급<span class="pct">31%</span></button>
+    <button class="subj-chip" data-pane="d-fire">화재·소화이론<span class="pct">12%</span></button>
+    <button class="subj-chip" data-pane="d-ie">공업경영<span class="pct">10%</span></button>
+  </div>
+
+  <!-- ===== 법령 ===== -->
+  <div id="d-law" class="detail-pane active">
+    <div class="detail-head">
+      <div class="donut" style="background:conic-gradient(#A50034 0 47%,#EEE9E4 47% 100%)"><span>47%<small>약 28문항</small></span></div>
+      <div class="info">
+        <h3>위험물안전관리법령 · 시설기준</h3>
+        <p>암기량은 가장 많지만 변형이 적어 "외운 만큼 그대로 점수"가 되는 영역. 수치(거리·공지·배수)를 표로 묶어 매일 아침 10분씩 반복하는 것이 가장 효율적입니다.</p>
+      </div>
+    </div>
+    <div class="item-list">
+      <div class="item">
+        <div class="rank r-top">1</div>
+        <div class="item-title-row"><div class="item-title">지정수량 및 지정수량 배수 계산</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 매회 출제</span><span class="stars">★★★★★</span></div></div>
+        <div class="keywords"><b>핵심:</b> 유별 지정수량 표 전체 암기 (특수인화물 50L, 알코올류 400L, 제4석유류 6,000L 등) · 배수 합산 계산 · 지정수량 미만 시·도 조례</div>
+        <div class="tip">배수 계산은 "저장량 ÷ 지정수량"의 합. 지정수량 표만 완벽하면 계산문제는 보너스 점수입니다.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-top">2</div>
+        <div class="item-title-row"><div class="item-title">제조소 위치·구조·설비 기준</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 매회 출제</span><span class="stars">★★★★★</span></div></div>
+        <div class="keywords"><b>핵심:</b> 안전거리(주거 10m·학교/병원 30m·문화재 50m·고압가스 20m·특고압 3m/5m) · 보유공지(지정수량 10배 이하 3m, 초과 5m) · 환기설비·배출설비 · 피뢰침(10배 이상)</div>
+        <div class="tip">안전거리 "3-5-10-20-30-50" 수치는 숫자 라인으로 통째 암기. 시설기준 문제의 절반이 여기서 나옵니다.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-top">3</div>
+        <div class="item-title-row"><div class="item-title">옥외탱크저장소 · 방유제</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 매회 출제</span><span class="stars">★★★★★</span></div></div>
+        <div class="keywords"><b>핵심:</b> 방유제 용량(1기: 110% / 2기 이상: 최대탱크의 110%) · 높이 0.5m~3m · 면적 8만㎡ 이하 · 탱크 10기 이하 · 통기관·계량장치</div>
+        <div class="tip">"110%"와 "0.5~3m"는 인화성액체 기준. 이황화탄소는 수조(물탱크) 저장 — 예외 문제로 단골.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-top">4</div>
+        <div class="item-title-row"><div class="item-title">운반기준 — 혼재기준 · 운반용기</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 매회 출제</span><span class="stars">★★★★★</span></div></div>
+        <div class="keywords"><b>핵심:</b> 유별 혼재 가능표(423·524·61 조합) · 운반용기 수납률(고체 95%, 액체 98%) · 차광성·방수성 피복 대상 · 위험물 표지</div>
+        <div class="tip">혼재표는 "사이삼(4-2-3), 오이사(5-2-4), 육일(6-1)"로 암기 — 이 한 줄이 매회 1문제입니다.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-top">5</div>
+        <div class="item-title-row"><div class="item-title">소화설비 설치기준 — 소요단위·능력단위</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 매회 출제</span><span class="stars">★★★★★</span></div></div>
+        <div class="keywords"><b>핵심:</b> 소요단위(제조소·취급소 연면적 100㎡, 저장소 150㎡, 위험물 지정수량 10배 = 1단위) · 소화설비 적응성 표 · 옥내소화전(260L/min, 7.8㎥)</div>
+        <div class="tip">"100-150-10배" 세 숫자만 정확하면 소요단위 계산은 다 풀립니다. 전기설비 적응성(이산화탄소·분말)도 체크.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-top">6</div>
+        <div class="item-title-row"><div class="item-title">탱크 내용적 · 공간용적 계산</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 매회 출제</span><span class="stars">★★★★★</span></div></div>
+        <div class="keywords"><b>핵심:</b> 탱크 용량 = 내용적 − 공간용적 · 공간용적 = 내용적의 <b>5~10%</b> · 횡형원통 V=πr²[ℓ+(ℓ₁+ℓ₂)/3] · 종형원통 V=πr²ℓ · 소화약제 방출구 있는 탱크는 방출구 아래 0.3~1m 윗부분이 공간용적</div>
+        <div class="tip">계산 단골 1문제. "용량 = 내용적 × 0.9~0.95"로 바로 환산되는 패턴이 가장 많음 — 공식 두 줄만 외우면 보너스 점수.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-top">7</div>
+        <div class="item-title-row"><div class="item-title">표지 · 게시판 색상 / 주의사항 매칭</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 빈출</span><span class="stars">★★★★<span class="dim">★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 제조소 표지 <b>백색바탕·흑색문자</b> · 물기엄금 <b>청색바탕·백색문자</b> · 화기주의/화기엄금 <b>적색바탕·백색문자</b> · 주유중엔진정지 <b>황색바탕·흑색문자</b></div>
+        <div class="tip">주의사항 매칭 — 물기엄금(1류 알칼리금속과산화물·3류 금수성)/화기주의(2류·인화성고체 제외)/화기엄금(2류 인화성고체·3류 자연발화성·4류·5류). 색깔↔대상 거꾸로도 출제.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-mid">8</div>
+        <div class="item-title-row"><div class="item-title">옥내·옥외저장소 / 지하·이동탱크</div>
+          <div class="item-meta"><span class="freq-tag f-often">빈출</span><span class="stars">★★★★<span class="dim">★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 옥내저장소 처마높이 6m 미만·바닥면적 1,000㎡ 이하 · 옥외저장 가능 위험물(2류 유황, 4류 1석유류 인화점 0℃ 이상 등) · 지하탱크 0.6m 간격 · 이동탱크 칸막이 4,000L</div>
+        <div class="tip">"옥외에 저장할 수 있는 위험물" 고르기가 단골 함정 — 특수인화물은 절대 불가.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-mid">9</div>
+        <div class="item-title-row"><div class="item-title">안전관리자 · 예방규정 · 정기점검</div>
+          <div class="item-meta"><span class="freq-tag f-often">빈출</span><span class="stars">★★★★<span class="dim">★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 안전관리자 선임 14일 이내 / 해임 후 30일 이내 재선임 · 예방규정 대상(제조소 10배, 옥외저장소 100배, 옥외탱크 200배, 일반취급소 10배) · 정기점검 연 1회</div>
+        <div class="tip">"10-100-150-200배" 예방규정 대상 배수는 시설별로 헷갈리게 출제 — 표로 정리해 통암기.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-mid">10</div>
+        <div class="item-title-row"><div class="item-title">위험등급 I · II · III 분류</div>
+          <div class="item-meta"><span class="freq-tag f-often">빈출</span><span class="stars">★★★★<span class="dim">★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> <b>등급I</b> — 6류 전부 · 1류 50kg조 · 3류 칼·나·알킬(10kg)·황린(20kg) · 4류 특수인화물 · 5류 10kg조 / <b>등급II</b> — 1류 300kg조 · 2류(황화린·적린·유황) · 4류 1석유류·알코올류 / <b>등급III</b> — 나머지 전부</div>
+        <div class="tip">"위험등급 I이 아닌 것은?" 형태로 자주 출제 — 6류는 무조건 I, 4류는 특수인화물만 I(1석유류는 II)라는 점이 핵심 함정.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-mid">11</div>
+        <div class="item-title-row"><div class="item-title">자체소방대 · 주유취급소</div>
+          <div class="item-meta"><span class="freq-tag f-often">빈출</span><span class="stars">★★★<span class="dim">★★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 자체소방대(4류 지정수량 3,000배 이상 제조소·일반취급소, 화학소방차 대수·인원표) · 주유취급소 주유공지 너비 15m×길이 6m · 고정주유설비 이격거리</div>
+        <div class="tip">화학소방차 "12만배 미만 1대 5인 → 48만배 이상 4대 20인" 표는 통째로 1문제.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-low">12</div>
+        <div class="item-title-row"><div class="item-title">허가·신고 행정절차 · 벌칙</div>
+          <div class="item-meta"><span class="freq-tag f-some">간헐</span><span class="stars">★★<span class="dim">★★★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 설치허가(시·도지사) · 품명변경 1일 전 신고 · 지위승계 30일 · 용도폐지 14일 · 무허가 벌칙</div>
+        <div class="tip">"1일-14일-30일-90일" 기한 숫자만 따로 모아 시험 전날 훑기 — 투자 대비 1문제 가성비.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 성상 ===== -->
+  <div id="d-haz" class="detail-pane">
+    <div class="detail-head">
+      <div class="donut" style="background:conic-gradient(#D4356A 0 31%,#EEE9E4 31% 100%)"><span>31%<small>약 19문항</small></span></div>
+      <div class="info">
+        <h3>위험물의 성질 및 취급</h3>
+        <p>류별 공통성질을 먼저 잡고 대표물질로 내려가는 순서가 효율적입니다. 물과의 반응식·소화방법은 필기와 실기 모두에 나오므로 지금 외우면 두 번 씁니다.</p>
+      </div>
+    </div>
+    <div class="item-list">
+      <div class="item">
+        <div class="rank r-top">1</div>
+        <div class="item-title-row"><div class="item-title">제4류 인화성액체 — 인화점·품명 분류</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 매회 출제</span><span class="stars">★★★★★</span></div></div>
+        <div class="keywords"><b>핵심:</b> 특수인화물(이황화탄소 -30℃, 디에틸에테르 -45℃) · 1석유류(아세톤·휘발유, 21℃ 미만) · 알코올류 · 2석유류(등유·경유) · 3석유류(중유·글리세린) · 4석유류·동식물유류(요오드값)</div>
+        <div class="tip">인화점 경계 "21-70-200℃"와 대표물질 인화점 순서는 출제 1순위. 수용성/비수용성 구분(지정수량 2배)도 함께.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-top">2</div>
+        <div class="item-title-row"><div class="item-title">제3류 자연발화성·금수성 — 물 반응식</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 매회 출제</span><span class="stars">★★★★★</span></div></div>
+        <div class="keywords"><b>핵심:</b> 칼륨·나트륨(석유 속 보관, 물→수소) · 알킬알루미늄(희석제) · 황린(물속 보관, pH9, 발화점 34℃) · 탄화칼슘(물→아세틸렌) · 인화칼슘(물→포스핀)</div>
+        <div class="tip">"무엇과 반응해 무슨 가스가 나오나"가 단골: 탄화칼슘→아세틸렌, 인화칼슘→포스핀, 수소화물→수소. 황린만 예외적으로 물속 보관!</div>
+      </div>
+      <div class="item">
+        <div class="rank r-top">3</div>
+        <div class="item-title-row"><div class="item-title">제5류 자기반응성물질</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 매회 출제</span><span class="stars">★★★★★</span></div></div>
+        <div class="keywords"><b>핵심:</b> 니트로글리세린(다이너마이트) · TNT · 니트로셀룰로오스(함수상태 저장) · 과산화벤조일 · 셀프산소 보유 → 질식소화 무효, <b>대량 주수 냉각</b></div>
+        <div class="tip">"5류는 자체 산소가 있어 CO₂·분말 소화 불가, 물로 냉각"이 핵심 논리 — 소화방법 문제로 매회 변형 출제.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-top">4</div>
+        <div class="item-title-row"><div class="item-title">제1류 산화성고체</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 빈출</span><span class="stars">★★★★<span class="dim">★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 염소산칼륨·과염소산염류 · 무기과산화물(과산화나트륨: 물과 반응해 산소 발생 → <b>주수 금지, 마른모래</b>) · 질산암모늄(ANFO) · 분해온도</div>
+        <div class="tip">1류 중 "무기과산화물만 물 금지"가 최대 함정. 나머지 1류는 주수 냉각 가능 — 이 구분이 1문제.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-mid">5</div>
+        <div class="item-title-row"><div class="item-title">제2류 가연성고체 · 제6류 산화성액체</div>
+          <div class="item-meta"><span class="freq-tag f-often">빈출</span><span class="stars">★★★★<span class="dim">★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 2류 — 황화린·적린·유황(순도 60% 이상)·마그네슘·철분(53㎛ 기준) / 6류 — 과산화수소(농도 36% 이상, 분해방지 안정제), 질산(비중 1.49 이상), 과염소산</div>
+        <div class="tip">"위험물이 되는 기준 수치"(유황 60%, 과산화수소 36%, 질산 비중 1.49)는 세트로 묶어 암기.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-mid">6</div>
+        <div class="item-title-row"><div class="item-title">유별 저장·취급 공통기준 · 소화방법 매칭</div>
+          <div class="item-meta"><span class="freq-tag f-often">빈출</span><span class="stars">★★★★<span class="dim">★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 유별 "~을 피하여야 한다" 공통기준 · 유별 적응 소화약제(4류=질식/포, 금수성=마른모래·팽창질석, 5류=주수냉각) · 보호액 매칭(칼륨-석유, 황린-물, 이황화탄소-물)</div>
+        <div class="tip">보호액 3종 매칭(석유·물·물)은 거꾸로도 출제됩니다 — "물속에 저장하는 것은?" 형태.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-low">7</div>
+        <div class="item-title-row"><div class="item-title">화학반응식 계산 (연소·분해)</div>
+          <div class="item-meta"><span class="freq-tag f-some">간헐</span><span class="stars">★★★<span class="dim">★★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 탄화수소 완전연소식 균형 맞추기 · 이론산소량/공기량 · 분해 시 발생 기체 부피(22.4L 몰부피)</div>
+        <div class="tip">균형식 못 맞추면 버리는 것도 전략. 단, "아세틸렌 발생량" 같은 단골 반응 2~3개만 풀이 패턴 암기.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 화재이론 ===== -->
+  <div id="d-fire" class="detail-pane">
+    <div class="detail-head">
+      <div class="donut" style="background:conic-gradient(#D4691E 0 12%,#EEE9E4 12% 100%)"><span>12%<small>약 7문항</small></span></div>
+      <div class="info">
+        <h3>화재이론 · 소화이론</h3>
+        <p>현직 소방안전 업무와 가장 많이 겹치는 과목 — 이미 아는 내용을 시험 용어로 정리만 하면 됩니다. 계산은 빈출 공식 2개만 잡고 나머지는 과감히 거르세요.</p>
+      </div>
+    </div>
+    <div class="item-list">
+      <div class="item">
+        <div class="rank r-top">1</div>
+        <div class="item-title-row"><div class="item-title">연소이론 — 인화점·발화점·연소범위</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 빈출</span><span class="stars">★★★★<span class="dim">★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 연소의 3요소/4요소 · 인화점 vs 발화점 vs 연소점 정의 · 주요물질 연소범위(아세틸렌 2.5~81%, 수소 4~75%, 가솔린 1.4~7.6%) · 위험도 공식 H=(U-L)/L</div>
+        <div class="tip">위험도 공식 H=(U-L)/L 은 거의 매회 계산 1문제. 아세틸렌이 위험도 최댓값 단골 정답.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-top">2</div>
+        <div class="item-title-row"><div class="item-title">소화약제 — 할론·분말·포·CO₂</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 빈출</span><span class="stars">★★★★<span class="dim">★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 분말 1~4종 주성분(1종 NaHCO₃, 3종 NH₄H₂PO₄ A·B·C급) · 할론 번호 읽기(1301, 2402) · 포 소화약제 종류 · CO₂ 최소설계농도</div>
+        <div class="tip">"3종 분말 = 제1인산암모늄 = A·B·C 전부 적응"은 무조건 1문제. 할론 숫자는 C-F-Cl-Br 순서.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-mid">3</div>
+        <div class="item-title-row"><div class="item-title">계산 2종 — 증기비중 · 르샤틀리에</div>
+          <div class="item-meta"><span class="freq-tag f-often">빈출</span><span class="stars">★★★<span class="dim">★★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 증기비중 = 분자량/29 · 혼합가스 폭발한계 100/L = Σ(Vn/Ln) · 이상기체 PV=nRT 부피 환산</div>
+        <div class="tip">공식 딱 2개만 외우면 계산문제 2~3점 확보. 분자량 계산(C=12, H=1, O=16)만 정확하면 끝.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-mid">4</div>
+        <div class="item-title-row"><div class="item-title">폭발 — 분진폭발 · BLEVE · 자연발화</div>
+          <div class="item-meta"><span class="freq-tag f-often">빈출</span><span class="stars">★★★<span class="dim">★★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 분진폭발 조건과 영향인자 · 분진폭발 안 하는 물질(시멘트·석회석·모래) · BLEVE/보일오버 정의 · 자연발화 조건(습도·발열·축적)</div>
+        <div class="tip">"분진폭발을 일으키지 않는 것은?" → 시멘트·생석회가 단골 정답.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-low">5</div>
+        <div class="item-title-row"><div class="item-title">유체역학 · 열전달 기초</div>
+          <div class="item-meta"><span class="freq-tag f-some">간헐 — 버려도 OK</span><span class="stars">★★<span class="dim">★★★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 베르누이 정리 개념 · 레이놀즈수(층류/난류 구분) · 전도·대류·복사(스테판-볼츠만 T⁴)</div>
+        <div class="tip">개념 문구만 눈에 익히고, 복잡한 계산이 나오면 과감히 패스 — 60점 전략에서 우선순위 최하위.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 공업경영 ===== -->
+  <div id="d-ie" class="detail-pane">
+    <div class="detail-head">
+      <div class="donut" style="background:conic-gradient(#2E6E4E 0 10%,#EEE9E4 10% 100%)"><span>10%<small>6문항 고정</small></span></div>
+      <div class="info">
+        <h3>공업경영</h3>
+        <p>모든 기능장 시험 공통과목으로 매회 6문항이 고정 출제됩니다. 문제 풀(pool)이 좁아 기출 반복률이 가장 높은 과목 — 하루 투자로 4~5문항을 가져가는 가성비 구간입니다.</p>
+      </div>
+    </div>
+    <div class="item-list">
+      <div class="item">
+        <div class="rank r-top">1</div>
+        <div class="item-title-row"><div class="item-title">관리도 (Control Chart)</div>
+          <div class="item-meta"><span class="freq-tag f-must">必 매회 출제</span><span class="stars">★★★★★</span></div></div>
+        <div class="keywords"><b>핵심:</b> 계량형(x̄-R, x-Rs) vs 계수형(p, np, c, u) 구분 · 어떤 데이터에 어떤 관리도? · 3σ 관리한계</div>
+        <div class="tip">"부적합품률 → p관리도, 부적합수 → c관리도" 매칭이 매회 1문제. 표 하나로 끝.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-top">2</div>
+        <div class="item-title-row"><div class="item-title">샘플링검사 · OC곡선</div>
+          <div class="item-meta"><span class="freq-tag f-must">매회 출제</span><span class="stars">★★★★<span class="dim">★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 샘플링 방식(단순랜덤·층별·취락·계통) · OC곡선의 α(생산자위험)·β(소비자위험) · AQL</div>
+        <div class="tip">α=생산자위험(좋은 로트 불합격), β=소비자위험(나쁜 로트 합격) — 방향만 안 헷갈리면 됩니다.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-mid">3</div>
+        <div class="item-title-row"><div class="item-title">작업측정 · 표준시간</div>
+          <div class="item-meta"><span class="freq-tag f-often">빈출</span><span class="stars">★★★★<span class="dim">★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 표준시간 = 정미시간 × (1+여유율) · 외경법/내경법 · 워크샘플링 · PTS법(MTM, WF)</div>
+        <div class="tip">표준시간 계산식 외경법·내경법 구분 계산이 단골 — 공식 2줄로 1문제.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-mid">4</div>
+        <div class="item-title-row"><div class="item-title">생산관리 — PERT/CPM · 재고</div>
+          <div class="item-meta"><span class="freq-tag f-often">빈출</span><span class="stars">★★★<span class="dim">★★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> PERT 기대시간 te=(a+4m+b)/6 · 주공정(Critical Path) · EOQ 경제적주문량 · 라인밸런싱</div>
+        <div class="tip">te=(a+4m+b)/6 공식 하나로 계산 1문제를 가져갑니다.</div>
+      </div>
+      <div class="item">
+        <div class="rank r-low">5</div>
+        <div class="item-title-row"><div class="item-title">신뢰성 · 보전 · QC 7가지 도구</div>
+          <div class="item-meta"><span class="freq-tag f-some">간헐</span><span class="stars">★★★<span class="dim">★★</span></span></div></div>
+        <div class="keywords"><b>핵심:</b> 직렬/병렬 시스템 신뢰도 계산 · MTBF·MTTR · 예방보전/사후보전 · 파레토도·특성요인도</div>
+        <div class="tip">직렬은 곱하기, 병렬은 1-(1-R)(1-R) — 신뢰도 계산은 이 두 줄이 전부입니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <b>위험물기능장 필기 벼락치기 대시보드</b> · 최근 6개년 기출 출제비중 분석 기준 · 60문항/60분/평균 60점 합격 · 화이팅, 문장군 반장님! 🔥
+</footer>
+
+<script>
+// 상단 탭 전환
+const tabBtns=document.querySelectorAll('.tab-btn');
+const pages=document.querySelectorAll('.page');
+function showPage(id){
+  pages.forEach(p=>p.classList.toggle('active',p.id===id));
+  tabBtns.forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+tabBtns.forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+
+// 과목 칩 전환 (페이지2)
+const chips=document.querySelectorAll('.subj-chip');
+const panes=document.querySelectorAll('.detail-pane');
+function showPane(id){
+  panes.forEach(p=>p.classList.toggle('active',p.id===id));
+  chips.forEach(c=>c.classList.toggle('active',c.dataset.pane===id));
+}
+chips.forEach(c=>c.addEventListener('click',()=>showPane(c.dataset.pane)));
+
+// 페이지1 카드 → 페이지2 해당 과목으로 이동
+document.querySelectorAll('.goto-detail').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    showPage('page2');
+    showPane(btn.dataset.target);
+  });
+});
+</script>
+</body>
+</html>
