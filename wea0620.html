@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS 강수량집계 – 남촌 (446)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f5f5f5;
+    padding: 20px;
+    font-size: 13px;
+    color: #222;
+  }
+  .card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    overflow-x: auto;
+  }
+  .title-block {
+    margin-bottom: 6px;
+  }
+  .title-block h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  .title-block p {
+    font-size: 12px;
+    color: #555;
+    margin-top: 3px;
+  }
+  table {
+    border-collapse: collapse;
+    min-width: 100%;
+    margin-top: 14px;
+    font-size: 12px;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 5px 7px;
+    white-space: nowrap;
+  }
+  /* 날짜 span 헤더 */
+  .th-date {
+    background: #b0cce8;
+    font-weight: 700;
+    font-size: 11px;
+  }
+  /* 시간 헤더 */
+  .th-time {
+    background: #d6e8f7;
+    font-size: 11px;
+  }
+  /* 지점/구분 고정 헤더 */
+  .th-label {
+    background: #e8e8e8;
+    font-weight: 700;
+  }
+  /* 행 구분 배경 */
+  .row-gigan td { background: #fff9c4; }
+  .row-sigan td { background: #e0f0ff; }
+  .row-ilnujeok td { background: #f5f5f5; }
+
+  /* 최신값(첫 번째 데이터 셀) 강조 */
+  .latest {
+    font-weight: 700;
+    color: #c0392b;
+  }
+  .cell-highlight-y { background: #fff176 !important; }
+  .cell-highlight-b { background: #80d4ff !important; }
+
+  .note {
+    margin-top: 10px;
+    font-size: 11px;
+    color: #888;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="title-block">
+    <h2>[ AWS 강수량집계 ] 남촌 (446) &nbsp;|&nbsp; 경기남서내륙</h2>
+    <p>조회기간: 2026.06.19 00:00 ~ 2026.06.20 06:00</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th class="th-label" rowspan="2">지점</th>
+        <th class="th-label" rowspan="2">구분</th>
+        <th class="th-date" colspan="7">6월 20일</th>
+        <th class="th-date" colspan="19">6월 19일</th>
+      </tr>
+      <tr>
+        <!-- 6월 20일 -->
+        <th class="th-time">06:00</th>
+        <th class="th-time">05</th>
+        <th class="th-time">04</th>
+        <th class="th-time">03</th>
+        <th class="th-time">02</th>
+        <th class="th-time">01</th>
+        <th class="th-time">24</th>
+        <!-- 6월 19일 -->
+        <th class="th-time">23</th>
+        <th class="th-time">22</th>
+        <th class="th-time">21</th>
+        <th class="th-time">20</th>
+        <th class="th-time">19</th>
+        <th class="th-time">18</th>
+        <th class="th-time">17</th>
+        <th class="th-time">16</th>
+        <th class="th-time">15</th>
+        <th class="th-time">14</th>
+        <th class="th-time">13</th>
+        <th class="th-time">12</th>
+        <th class="th-time">11</th>
+        <th class="th-time">10</th>
+        <th class="th-time">09</th>
+        <th class="th-time">08</th>
+        <th class="th-time">07</th>
+        <th class="th-time">06</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 기간누적 -->
+      <tr class="row-gigan">
+        <td rowspan="3" style="font-weight:700; background:#f0f0f0;">남촌<br>446</td>
+        <td style="font-weight:600; background:#f9f9f9;">기간누적</td>
+        <td class="latest cell-highlight-y">34.0</td>
+        <td>27.0</td>
+        <td>18.5</td>
+        <td>12.5</td>
+        <td>11.0</td>
+        <td>7.5</td>
+        <td>2.5</td>
+        <td>1.0</td>
+        <td>0.5</td>
+        <td>0.5</td>
+        <td></td><td></td><td></td><td></td><td></td>
+        <td></td><td></td><td></td><td></td><td></td>
+        <td></td><td></td><td></td><td></td>
+      </tr>
+      <!-- 시간누적 -->
+      <tr class="row-sigan">
+        <td style="font-weight:600; background:#f9f9f9;">시간누적</td>
+        <td class="latest cell-highlight-b">7.0</td>
+        <td>8.5</td>
+        <td>6.0</td>
+        <td>1.5</td>
+        <td>3.5</td>
+        <td>5.0</td>
+        <td>1.5</td>
+        <td>0.5</td>
+        <td></td>
+        <td>0.5</td>
+        <td></td><td></td><td></td><td></td><td></td>
+        <td></td><td></td><td></td><td></td><td></td>
+        <td></td><td></td><td></td><td></td>
+      </tr>
+      <!-- 일누적 -->
+      <tr class="row-ilnujeok">
+        <td style="font-weight:600; background:#f9f9f9;">일누적</td>
+        <td class="latest">31.5</td>
+        <td>24.5</td>
+        <td>16.0</td>
+        <td>10.0</td>
+        <td>8.5</td>
+        <td>5.0</td>
+        <td>2.5</td>
+        <td>1.0</td>
+        <td>0.5</td>
+        <td>0.5</td>
+        <td></td><td></td><td></td><td></td><td></td>
+        <td></td><td></td><td></td><td></td><td></td>
+        <td></td><td></td><td></td><td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="note">※ 강수량 단위: mm &nbsp;|&nbsp; 빈 칸: 강수 없음(0mm) &nbsp;|&nbsp; 출처: 기상청 AWS (www.weather.go.kr)</p>
+
+  <!-- 용어 범례 -->
+  <div class="legend">
+    <div class="legend-item legend-gigan">
+      <span class="legend-badge">기간누적</span>
+      <span class="legend-desc">조회 시작(6/19 00:00)부터 해당 시각까지 <strong>누적된 총 강수량</strong>.<br>숫자가 오른쪽(과거)으로 갈수록 줄어드는 구조.<br><em>예) 06:00 → 34.0 mm : 19일 자정~20일 오전 6시까지 총 34.0 mm 내림</em></span>
+    </div>
+    <div class="legend-item legend-sigan">
+      <span class="legend-badge">시간누적</span>
+      <span class="legend-desc">해당 <strong>1시간 동안만</strong> 내린 강수량 (매 시간 단독 측정값).<br>기간누적과 달리 시간대별 강우 강도를 파악할 때 사용.<br><em>예) 05시 → 8.5 mm : 오전 5시 한 시간 동안 8.5 mm 집중 강우</em></span>
+    </div>
+    <div class="legend-item legend-il">
+      <span class="legend-badge">일누적</span>
+      <span class="legend-desc">해당 날짜 <strong>00:00부터 해당 시각까지</strong> 하루 단위 누적량. 자정(00:00)에 리셋됨.<br>기간누적과 달리 날짜가 바뀌면 0부터 다시 시작.<br><em>예) 20일 06:00 → 31.5 mm : 6월 20일 자정~오전 6시까지 내린 비의 합계</em></span>
+    </div>
+  </div>
+
+  <!-- 상황 설명 블록 -->
+  <div class="info-grid">
+
+    <div class="info-item">
+      <div class="info-icon">📍</div>
+      <div class="info-body">
+        <div class="info-label">최근접 기상 관측소</div>
+        <div class="info-value">오산시 오산동 남촌 관측소 (AWS #446)</div>
+        <div class="info-sub">LG전자 평택사업장 기준 가장 인접한 기상청 자동기상관측장비</div>
+      </div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-icon">💧</div>
+      <div class="info-body">
+        <div class="info-label">누수 발견 시점</div>
+        <div class="info-value">R1동 3층 &nbsp;–&nbsp; 06월 20일 AM 04:30 경</div>
+        <div class="info-sub">야간 순회 점검 중 발견 &nbsp;|&nbsp; 발견 당시 시간누적 강수량 <strong>6.0 mm</strong> (04시 기준)</div>
+      </div>
+    </div>
+
+    <div class="info-item info-item--wide">
+      <div class="info-icon">⚠️</div>
+      <div class="info-body">
+        <div class="info-label">강수량 집계 차이 발생 배경</div>
+        <div class="info-value">사업장별 풍수해 점검 보고 준비 과정에서 누적 집계 시간대 기준 불일치 확인</div>
+        <div class="info-sub">
+          각 사업장이 개별적으로 강수량을 집계하는 과정에서 <strong>기간누적 / 시간누적 / 일누적</strong> 중
+          어느 기준을 적용하느냐에 따라 수치 차이가 발생함.<br>
+          → 보고 전 사업장 간 소통을 통해 <strong>동일 기준(기간누적 06:00 기준)</strong>으로 통일하여 개선 완료.
+        </div>
+      </div>
+    </div>
+
+    <div class="info-item info-item--green">
+      <div class="info-icon">🌧️</div>
+      <div class="info-body">
+        <div class="info-label">개선 계획</div>
+        <div class="info-value">간이 강수량계 설치를 통한 사업장 자체 강수량 직접 측정 예정</div>
+        <div class="info-sub">
+          현재 기상청 AWS(남촌 관측소) 데이터에만 의존하는 구조에서 벗어나,<br>
+          <strong>사업장 내 간이 강수량계를 설치</strong>하여 기상청 수치와 <strong>병행 측정·비교</strong>함으로써<br>
+          부지 특성(건물 밀집·배수 조건 등)을 반영한 <strong>실제 강수량 기반 대응 체계</strong>를 구축할 계획.
+        </div>
+        <div class="info-steps">
+          <span class="step">① 기상청 AWS 수치 수신</span>
+          <span class="step-arrow">＋</span>
+          <span class="step">② 사업장 내 간이 강수량계 직접 측정</span>
+          <span class="step-arrow">→</span>
+          <span class="step step-final">③ 두 수치 비교·검증 후 최종 강수량 확정</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .info-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+    border-top: 2px solid #e0e0e0;
+    padding-top: 16px;
+  }
+  .info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #f8f9fb;
+    border: 1px solid #dde3ec;
+    border-radius: 8px;
+    padding: 14px 16px;
+    flex: 1 1 300px;
+  }
+  .info-item--wide {
+    flex: 2 1 500px;
+    background: #fff8f0;
+    border-color: #f0c070;
+  }
+  .info-icon {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .info-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .info-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 5px;
+  }
+  .info-sub {
+    font-size: 11.5px;
+    color: #555;
+    line-height: 1.6;
+  }
+  .info-sub strong {
+    color: #c0392b;
+  }
+</style>
+</body>
+</html>
+<style>
+  /* 범례 */
+  .legend {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+    margin-bottom: 4px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border-left: 4px solid transparent;
+    font-size: 12px;
+    line-height: 1.65;
+  }
+  .legend-gigan { background: #fffde7; border-color: #f9a825; }
+  .legend-sigan { background: #e3f2fd; border-color: #1e88e5; }
+  .legend-il    { background: #f3f3f3; border-color: #757575; }
+  .legend-badge {
+    flex-shrink: 0;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-top: 1px;
+    white-space: nowrap;
+  }
+  .legend-gigan .legend-badge { background: #fff176; color: #5d4037; }
+  .legend-sigan .legend-badge { background: #90caf9; color: #0d47a1; }
+  .legend-il    .legend-badge { background: #e0e0e0; color: #333; }
+  .legend-desc { color: #444; }
+  .legend-desc strong { color: #1a1a1a; }
+  .legend-desc em { color: #888; font-style: normal; }
+</style>
+<style>
+  .info-item--green {
+    background: #f0faf3;
+    border-color: #2e7d32;
+    flex: 2 1 500px;
+  }
+  .info-steps {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .step {
+    background: #fff;
+    border: 1px solid #a5d6a7;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: #1b5e20;
+    font-weight: 600;
+  }
+  .step-final {
+    background: #2e7d32;
+    color: #fff;
+    border-color: #2e7d32;
+  }
+  .step-arrow {
+    font-size: 14px;
+    color: #4caf50;
+    font-weight: 700;
+  }
+</style>
