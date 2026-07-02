@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>평택안전방재반 화재수신기 신호 이력 관리</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#1a1a1a; --muted:#6b7280; --line:#e5e2df; --bg:#f6f4f2; --card:#fff;
+    --brand:#a50034; --brand-dk:#78011f; --brand-lt:#fdeef2;
+    --sf:#a50034; --sw:#e0729a; --hf:#f79009; --hw:#fbd08a;
+    --fix:#0e9f8e; --plan:#98a2b3; --newc:#7c3aed;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Pretendard","Malgun Gothic",-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 16px 60px}
+
+  header{background:linear-gradient(120deg,var(--brand-dk) 0%,var(--brand) 55%,#c8115a 100%);
+    margin:0 -16px;padding:26px 24px 22px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.07)}
+  header::before{content:"";position:absolute;right:40px;bottom:-70px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.05)}
+  header .kick{position:relative;font-size:11.5px;letter-spacing:.18em;color:#ffd6e2;font-weight:700;text-transform:uppercase}
+  header h1{position:relative;margin:6px 0 4px;font-size:22px;font-weight:800;letter-spacing:-.02em;color:#fff}
+  header .sub{position:relative;font-size:12.5px;color:#ffe0e9;margin-top:2px}
+  header .barcode{position:relative;display:flex;gap:3px;margin-top:14px}
+  header .barcode i{display:block;width:22px;height:4px;border-radius:2px;background:rgba(255,255,255,.9)}
+  header .barcode i:nth-child(2){background:rgba(255,255,255,.55)}
+  header .barcode i:nth-child(3){background:rgba(255,255,255,.3)}
+
+  .sec-t{display:flex;align-items:center;gap:9px;font-size:15.5px;font-weight:800;margin:26px 0 10px;color:var(--ink)}
+  .sec-t::before{content:"";width:11px;height:11px;background:var(--brand);border-radius:2px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 1px 4px rgba(120,1,31,.05)}
+  .card.hero-l{border-top:3px solid var(--brand)}
+  .card.hero-r{border-top:3px solid var(--newc)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  .card h3{margin:0 0 2px;font-size:15px;font-weight:800;text-align:center}
+  .card .cap{font-size:11.5px;color:var(--muted);text-align:center;margin:0 0 10px}
+  .chart-box{position:relative;height:210px}
+  .donut-box{position:relative;height:170px}
+  .kline{display:flex;justify-content:center;gap:14px;margin-top:8px;font-size:12px;font-weight:700}
+  .kline .brand{color:var(--brand)} .kline .fix{color:var(--fix)} .kline .newc{color:var(--newc)}
+  .dlegend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 12px;margin-top:8px;font-size:11px;color:var(--muted)}
+  .dlegend span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+  .sw{width:9px;height:9px;border-radius:2px;display:inline-block}
+  .empty-donut{height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;font-weight:700;background:#f8f9fb;border-radius:12px}
+
+  .act{font-size:14.5px;line-height:1.9;padding:6px 8px;margin:0;list-style:none}
+  .act li{margin:2px 0;display:flex;gap:8px}
+  .act .day{font-weight:800;color:var(--brand);min-width:42px}
+
+  /* 입력 패널 */
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:16px}
+  .panel .q{font-size:15px;font-weight:800;margin:0 0 2px}
+  .panel .q-sub{font-size:12px;color:var(--muted);margin:0 0 12px}
+  .daterow{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+  .daterow label{font-size:13px;font-weight:700}
+  .daterow input[type=date]{padding:8px 10px;border:1px solid var(--line);border-radius:9px;font-family:inherit;font-size:14px}
+  .daterow .stat{font-size:12px;color:var(--muted);margin-left:auto}
+  .helper{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .grp{border:1px solid var(--line);border-radius:12px;padding:11px}
+  .grp h4{margin:0 0 8px;font-size:12.5px;font-weight:800}
+  .grp h4.n{color:var(--newc)} .grp h4.b{color:var(--brand)} .grp h4.f{color:var(--fix)}
+  .field{display:flex;justify-content:space-between;align-items:center;margin:5px 0}
+  .field label{font-size:12px;color:var(--muted)}
+  .field .stepper{display:flex;align-items:center;gap:6px}
+  .field .stepper button{width:26px;height:26px;border:1px solid var(--line);background:#f8f9fb;border-radius:7px;font-size:16px;font-weight:800;cursor:pointer;line-height:1;color:var(--ink)}
+  .field .stepper button:active{background:var(--brand-lt)}
+  .field input{width:46px;padding:5px 4px;border:1px solid var(--line);border-radius:7px;font-size:15px;text-align:center;font-family:inherit;font-weight:700}
+  .field input:focus{outline:2px solid var(--brand);outline-offset:1px}
+  .actfield{margin-top:10px}
+  .actfield input{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;font-family:inherit;font-size:14px}
+  .btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .btn{border:none;border-radius:10px;padding:11px 18px;font-size:14px;font-weight:800;font-family:inherit;cursor:pointer}
+  .btn.save{background:var(--brand);color:#fff;flex:1;min-width:140px}
+  .btn.save:active{background:var(--brand-dk)}
+  .btn.del{background:#fff;color:var(--brand);border:1px solid var(--brand)}
+  .btn.ghost{background:#f1eee9;color:var(--ink)}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:30px;font-size:14px;font-weight:700;opacity:0;transition:.25s;pointer-events:none;z-index:99}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:12px}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:640px}
+  th,td{padding:8px 5px;text-align:center;border-bottom:1px solid var(--line)}
+  th{background:#f8f9fb;font-weight:700;color:var(--muted);font-size:11px;white-space:nowrap}
+  td.date{font-weight:800;cursor:pointer;color:var(--brand);text-decoration:underline}
+  tbody tr:hover{background:var(--brand-lt)}
+  .cB{color:var(--brand);font-weight:700}.cN{color:var(--newc);font-weight:700}.cF{color:var(--fix);font-weight:700}
+  .note{font-size:12px;color:var(--muted);line-height:1.7;background:#fbfbfc;border:1px dashed var(--line);border-radius:10px;padding:11px 13px;margin-top:12px}
+  textarea.io{width:100%;height:80px;border:1px solid var(--line);border-radius:9px;font-family:ui-monospace,monospace;font-size:11px;padding:9px;margin-top:8px;display:none}
+
+  @media (max-width:700px){ .grid2,.grid3,.helper{grid-template-columns:1fr} header h1{font-size:18px} }
+  @media print{
+    body{background:#fff}
+    .panel,.note,.iobox{display:none!important}
+    .card{break-inside:avoid;box-shadow:none}
+    header{background:var(--brand)!important}
+    header::after,header::before{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kick">LG Electronics · Pyeongtaek Safety Team</div>
+    <h1>평택안전방재반 화재수신기 신호 이력 관리</h1>
+    <div class="sub" id="stamp">–</div>
+    <div class="barcode"><i></i><i></i><i></i></div>
+  </header>
+
+  <div class="sec-t" id="secT1">개선 현황</div>
+  <div class="grid2">
+    <div class="card hero-l">
+      <h3>7월 개선 목표 관리</h3>
+      <p class="cap">7월 1일 기준 보고한 <b>25건</b>만 추적 — 처리한 만큼만 내려갑니다</p>
+      <div class="chart-box"><canvas id="goalChart"></canvas></div>
+      <div class="kline">
+        <span class="brand" id="kLeft">남음 –건</span>
+        <span class="fix" id="kDone">처리 –건</span>
+        <span id="kPct" style="color:var(--muted)">–%</span>
+      </div>
+    </div>
+    <div class="card hero-r">
+      <h3>7월 신규 발생 관리</h3>
+      <p class="cap">7월 중 새롭게 생긴 문제는 얼마나 되는가?</p>
+      <div class="chart-box"><canvas id="newChart"></canvas></div>
+      <div class="kline">
+        <span class="newc" id="kNew">신규 –건</span>
+        <span class="fix" id="kNewDone">처리 –건</span>
+        <span id="kNewLeft" style="color:var(--muted)">남음 –건</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-t">7월 신규 발생 세부 내용</div>
+  <div class="grid3">
+    <div class="card"><h3>전일</h3><p class="cap" id="capPrev">–</p><div id="wrapPrev"><div class="donut-box"><canvas id="dPrev"></canvas></div></div></div>
+    <div class="card"><h3>당일</h3><p class="cap" id="capToday">–</p><div id="wrapToday"><div class="donut-box"><canvas id="dToday"></canvas></div></div></div>
+    <div class="card"><h3>현재 누적</h3><p class="cap">7월 신규 발생 합계</p><div id="wrapCum"><div class="donut-box"><canvas id="dCum"></canvas></div></div></div>
+  </div>
+  <div class="dlegend">
+    <span><i class="sw" style="background:var(--sf)"></i>지멘스 고장</span>
+    <span><i class="sw" style="background:var(--sw)"></i>지멘스 감시</span>
+    <span><i class="sw" style="background:var(--hf)"></i>하니웰 고장</span>
+    <span><i class="sw" style="background:var(--hw)"></i>하니웰 감시</span>
+  </div>
+
+  <div class="sec-t">7월 신규 발생 현장 개선 활동 내용</div>
+  <div class="card"><ul class="act" id="actList"></ul></div>
+
+  <!-- ===== 입력 패널 (인쇄 시 숨김) ===== -->
+  <div class="panel">
+    <div class="q">＋ 일자별 기록 입력 · 수정</div>
+    <div class="q-sub">날짜를 고르고 숫자를 넣으면 <b>즉시 반영·자동 저장</b>됩니다. 기존 날짜를 고르면 그 값이 불러와져 수정돼요.</div>
+    <div class="daterow">
+      <label>날짜</label>
+      <input type="date" id="dateInp">
+      <span class="stat" id="editStat"></span>
+    </div>
+    <div class="helper">
+      <div class="grp"><h4 class="n">신규 발생 ↑</h4>
+        <div class="field"><label>지멘스 고장</label><div class="stepper"><button data-m="nSF">–</button><input type="number" min="0" id="nSF" value="0"><button data-p="nSF">+</button></div></div>
+        <div class="field"><label>지멘스 감시</label><div class="stepper"><button data-m="nSW">–</button><input type="number" min="0" id="nSW" value="0"><button data-p="nSW">+</button></div></div>
+        <div class="field"><label>하니웰 고장</label><div class="stepper"><button data-m="nHF">–</button><input type="number" min="0" id="nHF" value="0"><button data-p="nHF">+</button></div></div>
+        <div class="field"><label>하니웰 감시</label><div class="stepper"><button data-m="nHW">–</button><input type="number" min="0" id="nHW" value="0"><button data-p="nHW">+</button></div></div>
+      </div>
+      <div class="grp"><h4 class="b">기존25 처리 ↓</h4>
+        <div class="field"><label>지멘스 고장</label><div class="stepper"><button data-m="bSF">–</button><input type="number" min="0" id="bSF" value="0"><button data-p="bSF">+</button></div></div>
+        <div class="field"><label>지멘스 감시</label><div class="stepper"><button data-m="bSW">–</button><input type="number" min="0" id="bSW" value="0"><button data-p="bSW">+</button></div></div>
+        <div class="field"><label>하니웰 고장</label><div class="stepper"><button data-m="bHF">–</button><input type="number" min="0" id="bHF" value="0"><button data-p="bHF">+</button></div></div>
+        <div class="field"><label>하니웰 감시</label><div class="stepper"><button data-m="bHW">–</button><input type="number" min="0" id="bHW" value="0"><button data-p="bHW">+</button></div></div>
+      </div>
+      <div class="grp"><h4 class="f">신규 처리 ↓</h4>
+        <div class="field"><label>지멘스 고장</label><div class="stepper"><button data-m="rSF">–</button><input type="number" min="0" id="rSF" value="0"><button data-p="rSF">+</button></div></div>
+        <div class="field"><label>지멘스 감시</label><div class="stepper"><button data-m="rSW">–</button><input type="number" min="0" id="rSW" value="0"><button data-p="rSW">+</button></div></div>
+        <div class="field"><label>하니웰 고장</label><div class="stepper"><button data-m="rHF">–</button><input type="number" min="0" id="rHF" value="0"><button data-p="rHF">+</button></div></div>
+        <div class="field"><label>하니웰 감시</label><div class="stepper"><button data-m="rHW">–</button><input type="number" min="0" id="rHW" value="0"><button data-p="rHW">+</button></div></div>
+      </div>
+    </div>
+    <div class="actfield"><input type="text" id="actInp" placeholder="현장 개선 활동 (예: R3 3F 감지기 2건 교체 조치함)"></div>
+    <div class="btns">
+      <button class="btn save" id="saveBtn">이 날짜 저장 / 수정</button>
+      <button class="btn del" id="delBtn">이 날짜 삭제</button>
+      <button class="btn ghost" id="clearBtn">입력칸 비우기</button>
+    </div>
+
+    <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr><th rowspan="2">날짜</th><th colspan="4" class="cN">신규 발생</th><th colspan="4" class="cB">기존25 처리</th><th colspan="4" class="cF">신규 처리</th><th rowspan="2">25<br>남음</th></tr>
+          <tr><th>지고</th><th>지감</th><th>하고</th><th>하감</th><th>지고</th><th>지감</th><th>하고</th><th>하감</th><th>지고</th><th>지감</th><th>하고</th><th>하감</th></tr>
+        </thead>
+        <tbody id="logBody"></tbody>
+      </table>
+    </div>
+
+    <div class="btns">
+      <button class="btn ghost" id="exportBtn">📤 백업 내보내기</button>
+      <button class="btn ghost" id="importBtn">📥 백업 불러오기</button>
+      <button class="btn ghost" id="resetBtn" style="color:var(--brand)">전체 초기화</button>
+    </div>
+    <textarea class="io" id="ioBox" placeholder="백업 텍스트"></textarea>
+    <div class="note">
+      데이터는 <b>이 기기·이 브라우저</b>에 자동 저장됩니다. 기기를 바꾸거나 브라우저 기록을 지우면 사라지니, 가끔 <b>[백업 내보내기]</b>로 텍스트를 복사해 메모/메일에 보관하세요. 날짜를 다시 고르면 그날 값이 불러와져 수정·삭제됩니다.
+      <br>인쇄(Ctrl+P / 공유→인쇄)하면 이 입력 영역은 빠지고 보고 화면만 나옵니다.
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast">저장됨</div>
+
+<script>
+const CONFIG={ year:2026, month:7, days:31, 기존25:{지멘스:{고장:16,감시:2},하니웰:{고장:5,감시:2}} };
+const SEED=[
+  { date:'2026-07-01', new:[0,0,0,0], baseFix:[0,0,0,0], newFix:[0,0,0,0], act:'7월 개선 목표 25건 보고' },
+  { date:'2026-07-02', new:[0,0,0,0], baseFix:[1,0,0,0], newFix:[0,0,0,0], act:'지멘스 고장 1건 처리 조치함' }
+];
+const LSKEY='fs_signal_history_v1';
+const $=id=>document.getElementById(id);
+const z=()=>[0,0,0,0];
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const K=CONFIG.기존25, baseArr=[K.지멘스.고장,K.지멘스.감시,K.하니웰.고장,K.하니웰.감시];
+const GOAL=sum(baseArr);
+const COLS=[css('--sf'),css('--sw'),css('--hf'),css('--hw')];
+const NAMES=['지멘스 고장','지멘스 감시','하니웰 고장','하니웰 감시'];
+const FIELDS={new:['nSF','nSW','nHF','nHW'],base:['bSF','bSW','bHF','bHW'],newf:['rSF','rSW','rHF','rHW']};
+
+/* ----- 저장/로드 ----- */
+let DATA=load();
+function load(){
+  try{const s=localStorage.getItem(LSKEY); if(s)return JSON.parse(s);}catch(e){}
+  return JSON.parse(JSON.stringify(SEED));
+}
+function persist(){ try{localStorage.setItem(LSKEY,JSON.stringify(DATA));}catch(e){} }
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1400);}
+
+/* ----- 날짜 유틸 ----- */
+const mmdd=iso=>{const p=iso.split('-');return (+p[1])+'/'+(+p[2]);};
+const sortD=()=>DATA.sort((a,b)=>a.date<b.date?-1:1);
+
+/* ----- 차트 인스턴스 ----- */
+let cGoal,cNew,cP,cT,cC;
+const centerText={id:'ct',afterDraw(c,a,o){const m=c.getDatasetMeta(0);if(!m.data[0])return;
+  const{ctx}=c,x=m.data[0].x,y=m.data[0].y;ctx.save();ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.font='800 26px sans-serif';ctx.fillStyle='#1a1a1a';ctx.fillText(o.total,x,y-6);
+  ctx.font='600 11px sans-serif';ctx.fillStyle='#6b7280';ctx.fillText('건',x,y+14);ctx.restore();}};
+
+function render(){
+  sortD();
+  /* 누적 계산 */
+  let cbF=z(),cN=z(),cnF=z();
+  const rows=DATA.map((d,i)=>{
+    const bf=d.baseFix||z(),nw=d.new||z(),nf=d.newFix||z();
+    for(let k=0;k<4;k++){cbF[k]+=bf[k];cN[k]+=nw[k];cnF[k]+=nf[k];}
+    return {date:d.date,new:nw.slice(),baseFix:bf.slice(),newFix:nf.slice(),act:d.act||'',
+      baseLeftTot:GOAL-sum(cbF),baseDone:sum(cbF),
+      newTot:sum(cN),newDone:sum(cnF),newLeftTot:sum(cN)-sum(cnF)};
+  });
+  const last=rows[rows.length-1]||{date:CONFIG.year+'-07-01',baseLeftTot:GOAL,baseDone:0,new:z(),newTot:0,newDone:0,newLeftTot:0};
+  const prev=rows.length>1?rows[rows.length-2]:null;
+  const cumNew=cN.slice();
+
+  $('stamp').textContent=CONFIG.year+'년 '+CONFIG.month+'월 · '+mmdd(last.date)+' 기준';
+  $('secT1').textContent=mmdd(last.date)+' 17시 기준 개선 현황';
+
+  /* 축 */
+  const labels=[],plan=[];
+  for(let d=1;d<=CONFIG.days;d++){labels.push(CONFIG.month+'/'+d);plan.push(+(GOAL-GOAL*(d-1)/(CONFIG.days-1)).toFixed(1));}
+  const idxOf=r=>labels.indexOf(mmdd(r.date));
+  const left25=labels.map(()=>null);
+  rows.forEach(r=>{const i=idxOf(r);if(i>=0)left25[i]=r.baseLeftTot;});
+  const nb=labels.map(()=>0),nl=labels.map(()=>null);
+  rows.forEach(r=>{const i=idxOf(r);if(i>=0){nb[i]=sum(r.new);nl[i]=r.newLeftTot;}});
+  const xax={grid:{display:false},ticks:{maxRotation:0,autoSkip:true,maxTicksLimit:14,font:{size:10}}};
+
+  /* ① 목표 번다운 */
+  const gd={labels,datasets:[
+    {type:'line',label:'실제 남음',data:left25,borderColor:css('--brand'),backgroundColor:'rgba(165,0,52,.07)',fill:true,borderWidth:3,tension:.2,spanGaps:true,pointRadius:3},
+    {type:'line',label:'계획',data:plan,borderColor:css('--plan'),borderWidth:1.5,borderDash:[5,4],pointRadius:0}]};
+  const go={responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{position:'bottom',labels:{boxWidth:11,font:{size:11}}},tooltip:{callbacks:{label:c=>c.parsed.y===null?null:c.dataset.label+': '+c.parsed.y+'건'}}},
+    scales:{y:{beginAtZero:true,max:GOAL,ticks:{precision:0},grid:{color:'#eef1f4'}},x:xax}};
+  if(cGoal){cGoal.data=gd;cGoal.options=go;cGoal.update();}else cGoal=new Chart($('goalChart'),{data:gd,options:go});
+  $('kLeft').textContent='남음 '+last.baseLeftTot+'건';
+  $('kDone').textContent='처리 '+last.baseDone+'건';
+  $('kPct').textContent=Math.round(last.baseDone/GOAL*100)+'% 완료';
+
+  /* ② 신규 */
+  const nd={labels,datasets:[
+    {type:'bar',label:'그날 신규',data:nb,backgroundColor:css('--newc'),maxBarThickness:14,order:2},
+    {type:'line',label:'신규 미처리(누적)',data:nl,borderColor:'#5b21b6',borderWidth:2,tension:.2,spanGaps:true,pointRadius:2,order:1}]};
+  const no={responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{position:'bottom',labels:{boxWidth:11,font:{size:11}}},tooltip:{callbacks:{label:c=>c.parsed.y===null?null:c.dataset.label+': '+c.parsed.y+'건'}}},
+    scales:{y:{beginAtZero:true,ticks:{precision:0},grid:{color:'#eef1f4'}},x:xax}};
+  if(cNew){cNew.data=nd;cNew.options=no;cNew.update();}else cNew=new Chart($('newChart'),{data:nd,options:no});
+  $('kNew').textContent='신규 '+sum(cumNew)+'건';
+  $('kNewDone').textContent='처리 '+sum(cnF)+'건';
+  $('kNewLeft').textContent='남음 '+last.newLeftTot+'건';
+
+  /* ③ 도넛 */
+  drawDonut('cP','dPrev','wrapPrev',prev?prev.new:z(),'capPrev',prev?mmdd(prev.date)+' 신규':'전일 기록 없음');
+  drawDonut('cT','dToday','wrapToday',last.new,'capToday',mmdd(last.date)+' 신규');
+  drawDonut('cC','dCum','wrapCum',cumNew,null,null);
+
+  /* ④ 활동 */
+  const ul=$('actList');ul.innerHTML='';
+  const acts=rows.filter(r=>r.act).slice(-6).reverse();
+  if(!acts.length)ul.innerHTML='<li style="color:var(--muted)">기록된 활동이 없습니다</li>';
+  acts.forEach(r=>{const li=document.createElement('li');li.innerHTML='<span class="day">'+mmdd(r.date)+'</span><span>'+esc(r.act)+'</span>';ul.appendChild(li);});
+
+  /* 표 */
+  const tb=$('logBody');tb.innerHTML='';
+  rows.slice().reverse().forEach(r=>{
+    const tr=document.createElement('tr');
+    let h='<td class="date" data-d="'+r.date+'">'+mmdd(r.date)+'</td>';
+    r.new.forEach(v=>h+='<td class="cN">'+(v||'·')+'</td>');
+    r.baseFix.forEach(v=>h+='<td class="cB">'+(v||'·')+'</td>');
+    r.newFix.forEach(v=>h+='<td class="cF">'+(v||'·')+'</td>');
+    h+='<td style="font-weight:800">'+r.baseLeftTot+'</td>';
+    tr.innerHTML=h;tb.appendChild(tr);
+  });
+  tb.querySelectorAll('td.date').forEach(td=>td.onclick=()=>{$('dateInp').value=td.dataset.d;loadDate();});
+}
+function esc(s){return (s+'').replace(/[<>&]/g,m=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[m]));}
+function drawDonut(inst,cid,wrapId,data,capId,cap){
+  if(capId&&cap!==null)$(capId).textContent=cap;
+  const tot=sum(data),w=$(wrapId);
+  window[inst]&&window[inst].destroy&&window[inst].destroy();
+  if(tot===0){w.innerHTML='<div class="empty-donut">발생 없음</div>';return;}
+  if(!w.querySelector('canvas'))w.innerHTML='<div class="donut-box"><canvas id="'+cid+'"></canvas></div>';
+  window[inst]=new Chart($(cid),{type:'doughnut',
+    data:{labels:NAMES,datasets:[{data,backgroundColor:COLS,borderWidth:2,borderColor:'#fff'}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+      plugins:{legend:{display:false},ct:{total:tot},tooltip:{callbacks:{label:c=>c.label+': '+c.parsed+'건'}}}},plugins:[centerText]});
+}
+
+/* ----- 입력칸 ↔ 데이터 ----- */
+function readForm(){
+  const g=arr=>arr.map(i=>Math.max(0,+$(i).value||0));
+  return {new:g(FIELDS.new),baseFix:g(FIELDS.base),newFix:g(FIELDS.newf),act:$('actInp').value.trim()};
+}
+function fillForm(rec){
+  const put=(arr,vals)=>arr.forEach((id,k)=>$(id).value=vals?vals[k]:0);
+  put(FIELDS.new,rec&&rec.new);put(FIELDS.base,rec&&rec.baseFix);put(FIELDS.newf,rec&&rec.newFix);
+  $('actInp').value=rec?rec.act||'':'';
+}
+function loadDate(){
+  const iso=$('dateInp').value;if(!iso){$('editStat').textContent='';return;}
+  const rec=DATA.find(d=>d.date===iso);
+  fillForm(rec);
+  $('editStat').textContent=rec?'✏️ 기존 기록 수정 중':'🆕 새 날짜';
+  $('editStat').style.color=rec?'var(--brand)':'var(--muted)';
+}
+function clearForm(){fillForm(null);}
+
+$('saveBtn').onclick=()=>{
+  const iso=$('dateInp').value;
+  if(!iso){toast('날짜를 먼저 고르세요');return;}
+  const f=readForm();
+  const i=DATA.findIndex(d=>d.date===iso);
+  if(i>=0)DATA[i]=Object.assign({date:iso},f);
+  else DATA.push(Object.assign({date:iso},f));
+  persist();render();loadDate();toast('저장됨 ✓');
+};
+$('delBtn').onclick=()=>{
+  const iso=$('dateInp').value;if(!iso)return;
+  const i=DATA.findIndex(d=>d.date===iso);
+  if(i<0){toast('그 날짜 기록이 없습니다');return;}
+  DATA.splice(i,1);persist();render();clearForm();$('editStat').textContent='삭제됨';toast('삭제됨');
+};
+$('clearBtn').onclick=clearForm;
+$('dateInp').onchange=loadDate;
+
+/* 스테퍼 +/- */
+document.querySelectorAll('.stepper button').forEach(b=>{
+  b.onclick=()=>{const id=b.dataset.p||b.dataset.m;const el=$(id);let v=+el.value||0;v+= b.dataset.p?1:-1;el.value=Math.max(0,v);};
+});
+
+/* 백업 */
+$('exportBtn').onclick=()=>{const t=$('ioBox');t.style.display='block';t.value=JSON.stringify(DATA);t.select();
+  if(navigator.clipboard)navigator.clipboard.writeText(t.value);toast('복사됨 — 메모에 붙여넣어 보관');};
+$('importBtn').onclick=()=>{const t=$('ioBox');
+  if(t.style.display!=='block'){t.style.display='block';t.value='';t.placeholder='여기에 백업 텍스트를 붙여넣고 다시 [백업 불러오기]를 누르세요';return;}
+  try{const d=JSON.parse(t.value.trim());if(!Array.isArray(d))throw 0;DATA=d;persist();render();toast('불러왔습니다 ✓');t.style.display='none';}
+  catch(e){toast('형식이 올바르지 않습니다');}};
+$('resetBtn').onclick=()=>{if(confirm('모든 기록을 지우고 초기 상태로 되돌릴까요?')){DATA=JSON.parse(JSON.stringify(SEED));persist();render();clearForm();toast('초기화됨');}};
+
+/* 시작 */
+(function init(){
+  const last=DATA.length?DATA[DATA.length-1].date:CONFIG.year+'-07-02';
+  $('dateInp').value=last;
+  render();loadDate();
+})();
+</script>
+</body>
+</html>
